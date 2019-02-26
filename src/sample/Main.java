@@ -6,8 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
 import java.util.HashMap;
 
 
@@ -18,6 +20,9 @@ public class Main extends Application {
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -33,37 +38,16 @@ public class Main extends Application {
         runGame();
     }
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     private void initContent() {
         Rectangle background = new Rectangle(1280, 720);
-        addEntity(player.createPlayer(0,600,50));
+        addEntity(this.player.createPlayer(60,600,50));
         appRoot.getChildren().addAll(background, gameRoot);
+        Rectangle ground = new Rectangle (1280, 60);
+        ground.setTranslateX(0);
+        ground.setTranslateY(670);
+        ground.setFill(Color.DARKGRAY);
+        addEntity (ground);
     }
-
-    private void addEntity(Node node) {
-        gameRoot.getChildren().add(node);
-    }
-
-    private Boolean isPressed(KeyCode key) {
-        return keys.getOrDefault(key, false);
-    }
-
-    private void update() {
-        if (isPressed(KeyCode.LEFT)) {
-            System.out.println("LEFT");
-        }
-        if (isPressed(KeyCode.RIGHT)) {
-            System.out.println("RIGHT");
-        }
-        if (isPressed(KeyCode.SPACE)) {
-            System.out.println("JUMP");
-        }
-    }
-
     private void runGame() {
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -72,5 +56,31 @@ public class Main extends Application {
             }
         };
         timer.start();
+    }
+
+    private void update() {
+
+        // check for Keys
+        if (isPressed(KeyCode.LEFT)) {
+            this.player.move_X (-5);
+        }
+        if (isPressed(KeyCode.RIGHT)) {
+            this.player.move_X (5);
+        }
+        if (isPressed(KeyCode.SPACE)) {
+            this.player.jump();
+        }
+        this.player.applyGravity();
+        this.player.updateY();
+
+        // check for items pickup/drop
+    }
+
+    private void addEntity(Node node) {
+        gameRoot.getChildren().add(node);
+    }
+
+    private Boolean isPressed(KeyCode key) {
+        return keys.getOrDefault(key, false);
     }
 }
