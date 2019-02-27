@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -19,6 +20,8 @@ public class Main extends Application {
     private Pane gameRoot = new Pane();
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
+    private ArrayList<Item> blocks = new ArrayList<>();
+
 
     public static void main(String[] args) {
         launch(args);
@@ -40,13 +43,17 @@ public class Main extends Application {
 
     private void initContent() {
         Rectangle background = new Rectangle(1280, 720);
-        addEntity(this.player.createPlayer(60,600,50));
+        Item block = new Item ("block");
+        Node ItemNode = createEntity (300, 620, 50, 50, Color.SADDLEBROWN);
+        block.createItem (ItemNode);
+        addItem (block);
+
+        Node PlayerNode = createEntity (60,600,50, 50, Color.DARKGREEN);
+        showEntity(this.player.createPlayer(PlayerNode));
+
+        showEntity(createEntity(0, 670, 1280, 720, Color.DARKGRAY));
         appRoot.getChildren().addAll(background, gameRoot);
-        Rectangle ground = new Rectangle (1280, 60);
-        ground.setTranslateX(0);
-        ground.setTranslateY(670);
-        ground.setFill(Color.DARKGRAY);
-        addEntity (ground);
+
     }
     private void runGame() {
         AnimationTimer timer = new AnimationTimer() {
@@ -74,10 +81,62 @@ public class Main extends Application {
         this.player.updateY();
 
         // check for items pickup/drop
+        handleItems();
+
     }
 
-    private void addEntity(Node node) {
+    /* ---------- Sub methods ----------- */
+
+    private void handleItems () {
+        for (Item block : blocks) {
+            if ((this.player.getPlayer().getBoundsInParent()).intersects(block.getItem().getBoundsInParent())) {
+                /* pickup item */
+                if (block.isAlive ()) {
+                    if (isPressed (KeyCode.A)) {
+                        this.player.getLuggage ().take (block);
+                        removeItem (block);
+                    }
+                }
+            }
+            /* drop item */
+            if (! block.isAlive ()) {
+                if (isPressed (KeyCode.Z)) {
+                    double new_X = this.player.getPlayer().getTranslateX();
+                    double new_Y = this.player.getPlayer().getTranslateY() ;
+                    this.player.getLuggage ().drop (block, new_X, new_Y);
+                    addItem (block);
+                }
+            }
+        }
+    }
+
+    private void addItem (Item item) {
+        /* add Item to Map */
+        if (!this.blocks.contains (item)) {
+            this.blocks.add (item);
+        }
+        showEntity (item.getItem ());
+    }
+
+
+    private void removeItem (Item item) {
+        hideEntity (item.getItem ());
+    }
+
+    private Node createEntity (int x, int y, int w, int h, Color color) {
+        Rectangle entity = new Rectangle(w, h);
+        entity.setTranslateX(x);
+        entity.setTranslateY(y);
+        entity.setFill(color);
+        return entity;
+    }
+
+    private void showEntity(Node node) {
         gameRoot.getChildren().add(node);
+    }
+
+    private void hideEntity (Node node) {
+        gameRoot.getChildren().remove (node);
     }
 
     private Boolean isPressed(KeyCode key) {

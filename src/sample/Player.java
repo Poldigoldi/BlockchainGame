@@ -21,6 +21,13 @@ public class Player {
         this.luggage = new Luggage();
     }
 
+    Node getPlayer() {
+        return this.Player;
+    }
+    Luggage getLuggage () {
+        return this.luggage;
+    }
+
     void move_X(int value) {
         Boolean movingRight = value > 0;
 
@@ -70,16 +77,11 @@ public class Player {
 
     }
 
-    Node createPlayer(int x, int y, int w) {
-        Rectangle entity = new Rectangle(w, w);
-        entity.setTranslateX(x);
-        entity.setTranslateY(y);
-        entity.setFill(Color.RED);
+    Node createPlayer(Node entity) {
         entity.getProperties().put("velocity", Velocity);
         entity.getProperties().put("canJump", CanJump);
         entity.getProperties().put("alive", true);
         this.Player = entity;
         return entity;
     }
-
 }
