@@ -1,11 +1,11 @@
 package sample;
 
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Luggage {
-    ArrayList blocks = new ArrayList ();
+    private Item block;
+    ArrayList<Item> weapons = new ArrayList<> ();
 
     void show() {
         /*Shows items*/
@@ -14,7 +14,7 @@ public class Luggage {
     void take(Item item) {
         /*Picks up item and add it to luggage*/
         item.setAlive (false);
-        this.blocks.add(item);
+        this.block = item;
         System.out.println ("Player picked up:" + item.name);
     }
 
@@ -22,7 +22,11 @@ public class Luggage {
         /*Drops item*/
         item.setAlive (true);
         item.drop (x, y);
-        this.blocks.remove(item);
+        this.block = null;
         System.out.println ("Player dropped:" + item.name);
+    }
+
+    Item getblock () {
+        return this.block;
     }
 }

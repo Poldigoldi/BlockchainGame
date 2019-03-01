@@ -7,12 +7,9 @@ public class Item {
     private Node item;
     private Boolean alive;
 
-    Item(String name) {
-        this.name = name;
-    }
+    Item(String name, Node entity) {
 
-    void createItem(Node entity) {
-        entity.getProperties().put("alive", true);
+        this.name = name;
         this.alive = true;
         this.item = entity;
     }
