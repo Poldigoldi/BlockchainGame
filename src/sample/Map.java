@@ -11,15 +11,18 @@ public class Map {
 
     private ArrayList<Item> blocks = new ArrayList<>();
     private Pane gameRoot = new Pane();
-
+    Grid level = new Grid();
 
     void initialize () {
-        Node ItemNode = createEntity (300, 620, 50, 50, Color.SADDLEBROWN);
+
+        ArrayList<Node> platforms = this.level.getPlatforms ();
+        for (int i = 0; i < level.getPlatforms ().size(); i++){
+            showEntity (platforms.get (i));
+        }
+
+        Node ItemNode = createEntity (100, 600, 60, 60, Color.SADDLEBROWN);
         Item block = new Item ("block", ItemNode);
         addItem (block);
-
-        Node ground = createEntity(0, 670, 1280, 720, Color.DARKGRAY);
-        showEntity(ground);
     }
 
     Pane getGameRoot() {
@@ -28,6 +31,10 @@ public class Map {
 
     ArrayList<Item> getBlocks () {
         return this.blocks;
+    }
+
+    Grid getLevel () {
+        return this.level;
     }
 
 

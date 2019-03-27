@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 
 public class Main extends Application {
-    private Player player = new Player("Come");
+    private Player player = new Player("Come", 40);
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Scene mainScene;
@@ -41,10 +41,10 @@ public class Main extends Application {
     }
 
     private void initContent() {
-        Rectangle background = new Rectangle(1280, 720);
+        Rectangle background = new Rectangle(1280, 720, Color.INDIGO); // create a background
         map.initialize ();
 
-        Node PlayerNode = map.createEntity (60,600,50, 50, Color.DARKGREEN);
+        Node PlayerNode = map.createEntity (100,400,40, 40, Color.DARKGREEN);
         map.showEntity(this.player.createPlayer(PlayerNode));
 
         appRoot.getChildren().addAll(background, map.getGameRoot ());
@@ -61,6 +61,9 @@ public class Main extends Application {
     }
 
     private void update() {
+        /*  Handles all the game events,
+            including player motion and interaction with items
+        */
 
         // check for Keys
         if (isPressed(KeyCode.LEFT)) {
@@ -73,7 +76,7 @@ public class Main extends Application {
             this.player.jump();
         }
         this.player.applyGravity();
-        this.player.updateY();
+        this.player.updateY(map);
 
         // check for items pickup/drop
         handleItems();
@@ -91,9 +94,6 @@ public class Main extends Application {
                         this.player.getLuggage ().take (block);
                         map.removeItem (block);
                         miniGameKey();
-
-
-
                     }
                 }
             }
@@ -113,29 +113,11 @@ public class Main extends Application {
     }
 
     private void miniGameKey() {
-
-
+        /* Mini games activated once player collects a block on the map */
         KeyGame mini = new KeyGame();
         Group game = mini.returnRoot();
-
         mainScene.setRoot(game);
-
-
-
-
-
-
-
        // mainScene.setRoot(appRoot);
-
-
-
-
-
-
-
-
-
     }
 
     private Boolean isPressed(KeyCode key) {
