@@ -2,6 +2,7 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -16,6 +17,7 @@ public class Main extends Application {
     private Player player = new Player("Come");
     private Pane appRoot = new Pane();
     private Map map = new Map();
+    private Scene mainScene;
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
@@ -27,12 +29,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         initContent();
-        Scene scene = new Scene(appRoot);
+        mainScene = new Scene(appRoot);
 
-        scene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
-        scene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
+        mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
+        mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
 
-        primaryStage.setScene(scene);
+        primaryStage.setScene(mainScene);
         primaryStage.show();
 
         runGame();
@@ -88,6 +90,10 @@ public class Main extends Application {
                     if (isPressed (KeyCode.A)) {
                         this.player.getLuggage ().take (block);
                         map.removeItem (block);
+                        miniGameKey();
+
+
+
                     }
                 }
             }
@@ -104,6 +110,32 @@ public class Main extends Application {
                 }
             }
         }
+    }
+
+    private void miniGameKey() {
+
+
+        KeyGame mini = new KeyGame();
+        Group game = mini.returnRoot();
+
+        mainScene.setRoot(game);
+
+
+
+
+
+
+
+       // mainScene.setRoot(appRoot);
+
+
+
+
+
+
+
+
+
     }
 
     private Boolean isPressed(KeyCode key) {
