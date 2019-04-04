@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,6 +19,7 @@ public class Main extends Application {
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Scene mainScene;
+    private GameOver gameOver = new GameOver();
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
@@ -27,7 +29,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         initContent();
         mainScene = new Scene(appRoot);
 
@@ -36,6 +38,7 @@ public class Main extends Application {
 
         primaryStage.setScene(mainScene);
         primaryStage.show();
+
 
         runGame();
     }
@@ -75,12 +78,17 @@ public class Main extends Application {
         if (isPressed(KeyCode.SPACE)) {
             this.player.jump();
         }
+        if (isPressed(KeyCode.ESCAPE)) {
+            mainScene.setRoot(appRoot);
+        }
         this.player.applyGravity();
         this.player.updateY(map);
 
         // check for items pickup/drop
         handleItems();
-
+        if (isPlayerOutOfBounds()) {
+            handleGameOver();
+        }
     }
 
     /* ---------- Sub methods ----------- */
@@ -118,6 +126,27 @@ public class Main extends Application {
         Group game = mini.returnRoot();
         mainScene.setRoot(game);
        // mainScene.setRoot(appRoot);
+    }
+
+    private boolean isPlayerOutOfBounds() {
+        if (player.getPlayer().getTranslateX() > appRoot.getWidth() ||
+                player.getPlayer().getTranslateX() < 0 ||
+                player.getPlayer().getTranslateY() > appRoot.getHeight()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void handleGameOver() {
+        GridPane gameOverScene = gameOver.returnRoot();
+        mainScene.setRoot(gameOverScene);
+
+        if (gameOver.isStartAgain()) {
+            player.getPlayer().setTranslateX(100);
+            player.getPlayer().setTranslateY(400);
+            gameOver.setStartAgain();
+            mainScene.setRoot(appRoot);
+        }
     }
 
     private Boolean isPressed(KeyCode key) {
