@@ -1,10 +1,10 @@
 package sample;
 
 import javafx.scene.Node;
+import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
 
 public class Map {
@@ -20,7 +20,7 @@ public class Map {
             showEntity (platforms.get (i));
         }
 
-        Node ItemNode = createEntity (100, 600, 60, 60, Color.SADDLEBROWN);
+        Node ItemNode = createEntity (100, 400, 64, 64, Color.SADDLEBROWN);
         Item block = new Item ("block", ItemNode);
         addItem (block);
     }

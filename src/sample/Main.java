@@ -5,9 +5,9 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -32,7 +32,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         initContent();
-        mainScene = new Scene(appRoot);
+        mainScene = new Scene(appRoot, 1280, 720);
 
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
@@ -45,13 +45,16 @@ public class Main extends Application {
     }
 
     private void initContent() {
-        Rectangle background = new Rectangle(1280, 720, Color.INDIGO); // create a background
+        Image back1 = new Image("/background1.png", true);
+        BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+                BackgroundPosition.DEFAULT , BackgroundSize.DEFAULT);
+        appRoot.setBackground(new Background(background));
         map.initialize ();
 
-        Node PlayerNode = map.createEntity (100,400,64, 64, Color.TRANSPARENT);
+        Node PlayerNode = map.createEntity (100,200,64, 64, Color.TRANSPARENT);
         map.showEntity(this.player.createPlayer(PlayerNode));
         map.showEntity(this.player.getSprite());
-        appRoot.getChildren().addAll(background, map.getGameRoot ());
+        appRoot.getChildren().addAll(map.getGameRoot ());
 
     }
     private void runGame() {
@@ -137,7 +140,7 @@ public class Main extends Application {
 
     private boolean isPlayerOutOfBounds() {
         if (player.getPlayer().getTranslateX() > appRoot.getWidth() ||
-                player.getPlayer().getTranslateX() < 0 ||
+               // player.getPlayer().getTranslateX() < 0 ||
                 player.getPlayer().getTranslateY() > appRoot.getHeight()) {
             return true;
         }

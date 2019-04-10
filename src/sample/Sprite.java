@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Sprite extends ImageView {
     private Node owner;
+    private Image defaultImage;
     private Image defaultRight;
     private Image defaultLeft;
     private List<Image> motionRight = new ArrayList<>();
@@ -18,6 +19,16 @@ public class Sprite extends ImageView {
     private int frameRate = 5;
     private int frameDelay;
 
+    //for a non-animating sprite
+    public Sprite(Node owner, Image defaultImage){
+        this.owner = owner;
+        this.setX(owner.getTranslateX());
+        this.setY(owner.getTranslateY());
+        this.defaultImage = defaultImage;
+        setImage(this.defaultImage);
+    }
+
+    //for an animated sprite
     public Sprite(Node owner){
         this.owner = owner;
     }
@@ -35,6 +46,7 @@ public class Sprite extends ImageView {
         for(Image image: images) motionRight.add(image);
     }
 
+    //updates position and image
     public void update(int direction, boolean moving){
         if(owner!=null) {
             this.setX(owner.getTranslateX());

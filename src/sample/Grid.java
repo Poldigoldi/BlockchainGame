@@ -3,6 +3,9 @@ import java.util.*;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+
 
 public class Grid {
 
@@ -18,25 +21,34 @@ public class Grid {
       reads the array and creates Node object for every platform found, and store them in an ArrayList
 
   */
-  private final int PlatformHeight = 10;
-  private final int PlatfromWidth = 60;
+  private final int platformHeight = 10;
+  private final int platformWidth = 64;
+
+  private Image platformleft = new Image("/platformleft.png");
+  private ImagePattern platformleftImage = new ImagePattern(platformleft);
+  private Image platformright = new Image("/platformright.png");
+  private ImagePattern platformrightImage = new ImagePattern(platformright);
+  private Image platformmiddle = new Image("/platformmiddle.png");
+  private ImagePattern platformmiddleImage = new ImagePattern(platformmiddle);
+  private Image block = new Image("/block.png");
+  private ImagePattern blockImage = new ImagePattern(block);
 
   private ArrayList<Node> platforms = new ArrayList<> ();
   int width;
   int height;
   private String[] map = new String[]{
-          "0000000000000000000000",
-          "0000000000000000000000",
-          "0000000000000000000000",
-          "0000000000000000000000",
-          "0000000001110000000000",
-          "1110000000000000000000",
-          "0000011000000000000000",
-          "0000000001100000000000",
-          "0000000000000111000000",
-          "0000000001100000000000",
-          "0000011100000000000000",
-          "1111100000000000000000"
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000001230000000004",
+          "4230000000000000000004",
+          "4000013000000000000004",
+          "4000000001300000000004",
+          "4000000000000122230004",
+          "4000000001300000000004",
+          "4444444444444000000004",
+          "4444444444444000004444"
   };
 
   /* Constructor */
@@ -46,8 +58,11 @@ public class Grid {
     for (int i = 0; i < height; i++) {
       int j = 0;
       for (char value : map[i].toCharArray()) {
-        if (value == '1')  {
-          Node platform = createRectangle(i, j, Color.GHOSTWHITE);
+        if(value!= '0'){
+          Node platform = createRectangle(i, j, platformmiddleImage, platformWidth, platformHeight);
+          if (value == '1') platform = createRectangle(i, j, platformleftImage, platformWidth, platformHeight);
+          if (value == '3') platform = createRectangle(i, j, platformrightImage, platformWidth, platformHeight);
+          if (value == '4') platform = createRectangle(i, j, blockImage, 64, 64);
           platforms.add (platform);
         }
         j++;
@@ -55,11 +70,11 @@ public class Grid {
     }
   }
 
-  Node createRectangle(int i, int j, Color colour) {
-    Rectangle platform = new Rectangle(PlatfromWidth, PlatformHeight);
-    platform.setTranslateX(j * 60);
-    platform.setTranslateY(i * 60);
-    platform.setFill(colour);
+  Node createRectangle(int i, int j, ImagePattern fill, int width, int height) {
+    Rectangle platform = new Rectangle(width, height);
+    platform.setTranslateX(j * 64);
+    platform.setTranslateY(i * 64);
+    platform.setFill(fill);
     return platform;
   }
 
@@ -78,6 +93,6 @@ public class Grid {
   }
 
   int getPlatformHeight () {
-    return this.PlatformHeight;
+    return this.platformHeight;
   }
 }
