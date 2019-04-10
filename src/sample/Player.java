@@ -2,7 +2,10 @@ package sample;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Player {
     private String name;
@@ -11,7 +14,7 @@ public class Player {
     private Luggage luggage;
     private Node Player;
     final int height;
-
+    private Sprite sprite;
 
     Player(String name, int height) {
         this.name = name;
@@ -24,13 +27,15 @@ public class Player {
     Node getPlayer() {
         return this.Player;
     }
+
+    Sprite getSprite() { return this.sprite;  }
+
     Luggage getLuggage () {
         return this.luggage;
     }
 
     void move_X(int value) {
         Boolean movingRight = value > 0;
-
         for (int i=0; i<Math.abs(value); i++) {
             Player.setTranslateX(Player.getTranslateX() + (movingRight ? 1 : -1));
         }
@@ -90,6 +95,13 @@ public class Player {
         entity.getProperties().put("canJump", CanJump);
         entity.getProperties().put("alive", true);
         this.Player = entity;
+        sprite = new Sprite(Player);
+        sprite.loadDefaultImages(new Image("/defaultright.png"), new Image("/defaultleft.png"));
+        sprite.loadRightMotionImages(new Image("/motionRight0.png"), new Image("/motionRight1.png"),
+                new Image("/motionRight2.png"), new Image("/motionRight3.png"), new Image("/motionRight4.png"));
+        sprite.loadLeftMotionImages(new Image("/motionLeft0.png"), new Image("/motionLeft1.png"),
+                new Image("/motionLeft2.png"), new Image("/motionLeft3.png"), new Image("/motionLeft4.png"));
         return entity;
     }
+
 }

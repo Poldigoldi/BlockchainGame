@@ -15,11 +15,12 @@ import java.util.HashMap;
 
 
 public class Main extends Application {
-    private Player player = new Player("Come", 40);
+    private Player player = new Player("Come", 64);
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Scene mainScene;
     private GameOver gameOver = new GameOver();
+    private int playerDirection = 1;
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
@@ -47,9 +48,9 @@ public class Main extends Application {
         Rectangle background = new Rectangle(1280, 720, Color.INDIGO); // create a background
         map.initialize ();
 
-        Node PlayerNode = map.createEntity (100,400,40, 40, Color.DARKGREEN);
+        Node PlayerNode = map.createEntity (100,400,64, 64, Color.TRANSPARENT);
         map.showEntity(this.player.createPlayer(PlayerNode));
-
+        map.showEntity(this.player.getSprite());
         appRoot.getChildren().addAll(background, map.getGameRoot ());
 
     }
@@ -64,6 +65,7 @@ public class Main extends Application {
     }
 
     private void update() {
+        boolean playerMoving = false;
         /*  Handles all the game events,
             including player motion and interaction with items
         */
@@ -71,9 +73,14 @@ public class Main extends Application {
         // check for Keys
         if (isPressed(KeyCode.LEFT)) {
             this.player.move_X (-5);
+            playerDirection = -1;
+            playerMoving = true;
+
         }
         if (isPressed(KeyCode.RIGHT)) {
             this.player.move_X (5);
+            playerDirection = 1;
+            playerMoving = true;
         }
         if (isPressed(KeyCode.SPACE)) {
             this.player.jump();
@@ -83,7 +90,7 @@ public class Main extends Application {
         }
         this.player.applyGravity();
         this.player.updateY(map);
-
+        this.player.getSprite().update(playerDirection, playerMoving);
         // check for items pickup/drop
         handleItems();
         if (isPlayerOutOfBounds()) {
