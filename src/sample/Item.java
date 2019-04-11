@@ -1,26 +1,27 @@
 package sample;
 
-import javafx.scene.Node;
+import javafx.scene.image.Image;
 
-public class Item {
+
+/* An item is an object with extra methods*/
+public class Item extends Object {
     final String name;
-    private Node item;
     private Boolean alive;
 
-    Item(String name, Node entity) {
-
+    Item(String name, int STARTX, int STARTY) {
+        super(0, 0, true, Type.ITEM, new Image("/item1.png"));
+        sprite.loadDefaultAnimation(new Image("/item1.png"), new Image("/item2.png"), new Image("/item3.png"),
+                                    new Image("/item4.png"), new Image("/item5.png"), new Image("/item6.png"));
+        setTranslateX(STARTX);
+        setTranslateY(STARTY);
         this.name = name;
         this.alive = true;
-        this.item = entity;
     }
 
-    Node getItem () {
-        return this.item;
-    }
 
     void drop (double x, double y) {
-        this.item.setTranslateX (x);
-        this.item.setTranslateY (y);
+        setTranslateX (x);
+        setTranslateY (y);
     }
 
     Boolean isAlive() {
