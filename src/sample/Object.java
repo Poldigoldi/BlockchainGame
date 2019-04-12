@@ -26,9 +26,12 @@ public class Object extends Group {
     public int height;
     public boolean CanJump = true;
     public Point2D Velocity = new Point2D(0,0);
+    public boolean movingRight;
+    public boolean movingDown;
+    public boolean isMoving;
 
     //choose where the object starts, if its animated, its type, and its initial image.
-    public Object(int x, int y, boolean animated, Type type, Image defaultImage){
+    public Object(double x, double y, boolean animated, Type type, Image defaultImage){
         sprite = new Sprite(defaultImage);
         this.animated = animated;
         this.type = type;
@@ -55,10 +58,12 @@ public class Object extends Group {
 
     //the only objects you'd want to update are animated objects, e.g. anything that can fall, move around
     //this would include the player, enemies, cubes falling from the sky etc.
-    void update(Map map, int direction, boolean moving){
+    void update(Map map){
         applyGravity();
         updateY(map);
-        sprite().update(direction, moving);
+        if(type == Type.PLAYER) sprite.update(movingRight, isMoving);
+        if(type == Type.ITEM) sprite.update();
+        isMoving = false;
     }
 
     void applyGravity() {
@@ -71,23 +76,26 @@ public class Object extends Group {
         move_Y((int)this.Velocity.getY(), map);
     }
 
-    public void move_X(int value, Map map) {
-        Boolean movingRight = value > 0;
+    //returns true if the move is not blocked
+    public boolean move_X(int value, Map map) {
+        isMoving = true;
+        movingRight = value > 0;
         for (Object object : map.level().platforms()) {
             //checks if player at same height as object and its solid first
             if(object.type == Type.SOLID && this.getTranslateY()> object.getTranslateY()-this.height
                     && this.getTranslateY()< object.getTranslateY()+object.height()){
-                if(movingRight && Math.abs(object.getTranslateX() - this.getTranslateX() - this.width) < 5) return;
-                if(!movingRight && Math.abs(object.getTranslateX()+object.width()-this.getTranslateX()) < 5) return;
+                if(movingRight && Math.abs(object.getTranslateX() - this.getTranslateX() - this.width) < 5) return false;
+                if(!movingRight && Math.abs(object.getTranslateX()+object.width()-this.getTranslateX()) < 5) return false;
             }
         }
         for (int i=0; i<Math.abs(value); i++) {
             setTranslateX(getTranslateX() + (movingRight ? 1 : -1));
         }
+        return true;
     }
 
     public void move_Y(int value, Map map) {
-        Boolean movingDown = value > 0; // (Y=0) at the top of the frame
+        movingDown = value > 0; // (Y=0) at the top of the frame
         for (int i=0; i<Math.abs(value); i++) {
             /* Check for collisions between player and platforms */
             for (Object object : map.level().platforms()) {

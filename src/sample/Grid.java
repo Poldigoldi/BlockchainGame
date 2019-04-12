@@ -38,6 +38,8 @@ public class Grid {
           "4000000001300000000004",
           "4000000000000122230004",
           "4000040001300000000004",
+          "4000444000000000000004",
+          "4004444400000000004444",
           "4444444444444000000004",
           "4444444444444000004444"
   };
@@ -68,12 +70,12 @@ public class Grid {
 
    /* ------ Getters ------- */
 
-  int getHeight(){
-    return height;
+  int height(){
+    return height*64;
   }
 
-  int getWidth(){
-    return width;
+  int width(){
+    return width*64;
   }
 
   ArrayList<Object> platforms() {

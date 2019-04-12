@@ -7,20 +7,26 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
+//Nicky uses capitals for variables which he thinks people
+//will want to change frequently and be aware its safe to do so
 public class Main extends Application {
+    private int WIDTH = 960 , HEIGHT = 640;
+    private int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
     private Player player;
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Scene mainScene;
     private GameOver gameOver = new GameOver();
-    private int playerDirection = 1;
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
-
+    private double playerY = PLAYERSTARTY;
+    private List<Object> animatedObjects = new ArrayList<>();
+    private Mode mode = Mode.PLATFORMGAME;
 
     public static void main(String[] args) {
         launch(args);
@@ -28,17 +34,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        player = new Player("Come", 200, 200, primaryStage);
+        player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
         player.initialise();
         initContent();
-        mainScene = new Scene(appRoot, 1280, 720);
+        mainScene = new Scene(appRoot, WIDTH, HEIGHT);
+        mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         primaryStage.setScene(mainScene);
         primaryStage.show();
-
-
-        runGame();
+        runGame(primaryStage);
     }
 
     private void initContent() {
@@ -48,61 +53,73 @@ public class Main extends Application {
         appRoot.setBackground(new Background(background));
         map.initialize ();
         map.showEntity(player);
-        appRoot.getChildren().addAll(map.getGameRoot ());
-
+        appRoot.getChildren().addAll(map.getMapRoot());
+        //for animations
+        animatedObjects.add(player);
+        for(Object block: map.blocks()) animatedObjects.add(block);
     }
-    private void runGame() {
+    private void runGame(Stage stage) {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
+                update(stage);
             }
         };
         timer.start();
     }
 
-    private void update() {
-        boolean playerMoving = false;
-        /*  Handles all the game events, including player motion and interaction with items  */
-        // check for Keys
-        if (isPressed(KeyCode.LEFT)) {
-            player.move_X (-5, map);
-            playerDirection = -1;
-            playerMoving = true;
+    private void update(Stage stage) {
+        if(mode == Mode.PLATFORMGAME) {
+            /*  Handles all the game events, including player motion and interaction with items  */
+            if (isPressed(KeyCode.LEFT)) {
+                if (player.move_X(-5, map)) moveScreenX(-5);
+            }
+            if (isPressed(KeyCode.RIGHT)) {
+                if (player.move_X(5, map)) moveScreenX(5);
+            }
+            if (isPressed(KeyCode.SPACE)) {
+                player.jump();
+            }
+            if (isPressed(KeyCode.ESCAPE)) {
+                mainScene.setRoot(appRoot);
+            }
+            moveScreenY();
+            for (Object object : animatedObjects) {
+                object.update(map);
+            }
+            handleItems();
+            if (isPlayerOutOfBounds()) {/*handleGameOver(); */ }
         }
-        if (isPressed(KeyCode.RIGHT)) {
-            player.move_X (5, map);
-            playerDirection = 1;
-            playerMoving = true;
+    }
+
+    //updates the screen X based on player position
+    private void moveScreenX(int movement){
+        if(player.getTranslateX()>WIDTH/2+5 && player.getTranslateX()<map.level().width()-WIDTH/2-5){
+            map.getMapRoot().setTranslateX(map.getMapRoot().getTranslateX()+(-movement));
         }
-        if (isPressed(KeyCode.SPACE)) {
-            player.jump();
-        }
-        if (isPressed(KeyCode.ESCAPE)) {
-            mainScene.setRoot(appRoot);
-        }
-        player.sprite().setImage(new Image("/motionLeft1.png"));
-        player.update(map, playerDirection, playerMoving);
-        map.getBlocks().get(0).sprite.update(); //updates the item animation, this method will change
-        // check for items pickup/drop
-        handleItems();
-        if (isPlayerOutOfBounds()) {
-          //  handleGameOver();
+    }
+    //updates the screen Y based on player position
+    private void moveScreenY(){
+        double Ydifference;
+        if(player.getTranslateY()>HEIGHT/2+30 && player.getTranslateY()<map.level().height()-HEIGHT/2-30){
+            if(player.getTranslateY() != playerY){
+                Ydifference = playerY -  player.getTranslateY();
+                playerY = player.getTranslateY();
+                map.getMapRoot().setTranslateY(map.getMapRoot().getTranslateY()+Ydifference);
+            }
         }
     }
 
     /* ---------- Sub methods ----------- */
 
     private void handleItems () {
-        for (Item block : map.getBlocks ()) {
+        for (Item block : map.blocks()) {
             if ((this.player.getBoundsInParent()).intersects(block.getBoundsInParent())) {
                 /* pickup item */
-                if (block.isAlive ()) {
-                    if (isPressed (KeyCode.A)) {
-                        this.player.getLuggage ().take (block);
-                        map.removeItem (block);
-                        miniGameKey();
-                    }
+                if (block.isAlive() && isPressed (KeyCode.A)) {
+                    this.player.getLuggage ().take (block);
+                    map.removeItem (block);
+                    miniGameKey();
                 }
             }
         }
@@ -119,6 +136,8 @@ public class Main extends Application {
             }
         }
     }
+
+
 
     private void miniGameKey() {
         /* Mini games activated once player collects a block on the map */

@@ -15,7 +15,7 @@ public class Sprite extends ImageView {
     private int frameRate = 5;
     private int frameDelay;
 
-    public void offset(int x, int y){
+    public void offset(double x, double y){
         setTranslateX(x);
         setTranslateY(y);
     }
@@ -58,16 +58,16 @@ public class Sprite extends ImageView {
         setImage(defaultAnimation.get(animationCycle));
     }
 
-    public void update(int direction, boolean moving){
+    public void update(boolean movingRight, boolean moving){
         if(moving == false){
-            if(direction>0) setImage(defaultRight);
+            if(movingRight) setImage(defaultRight);
             else setImage(defaultLeft);
-        } else animate(direction);
+        } else animate(movingRight);
     }
 
-    private void animate(int direction){
+    private void animate(boolean movingRight){
         updateFrame();
-        if(direction>0){
+        if(movingRight){
             if(animationCycle>=motionRight.size()) animationCycle = 0;
             setImage(motionRight.get(animationCycle));
         } else {

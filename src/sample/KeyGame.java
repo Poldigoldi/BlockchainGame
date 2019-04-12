@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -11,7 +14,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 import static javafx.application.Application.launch;
 
@@ -23,10 +30,19 @@ public class KeyGame extends Application{
     double orgSceneX, orgSceneY;
     double orgTranslateX, orgTranslateY;
     boolean won = false;
+    Group root = new Group();
+
+    public KeyGame(){
+        ImageView backImage = new ImageView(new Image("focusin.png"));
+        backImage.setTranslateX(-270);
+        backImage.setTranslateY(-310);
+        Rectangle sweeper = new Rectangle(115, 75, 0, 530);
+        sweeper.setFill(Color.BLACK);
+        root.getChildren().addAll(backImage, sweeper);
+        sweep(sweeper).play();
+    }
 
     public Group returnRoot(){
-
-        Group root = new Group();
 
         image_Red = new Circle(50.0f, Color.RED);
         image_Red.setCursor(Cursor.HAND);
@@ -47,9 +63,7 @@ public class KeyGame extends Application{
         image_Blue.setOnMousePressed(circleOnMousePressedEventHandler);
         image_Blue.setOnMouseDragged(circleOnMouseDraggedEventHandler);
 
-
         root.getChildren().addAll(image_Red, image_Green, image_Blue);
-
         return root;
 
     }
@@ -60,13 +74,23 @@ public class KeyGame extends Application{
 
     }
 
+    public Timeline sweep(Rectangle rectangle) {
+        Timeline timeline = new Timeline();
+        timeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rectangle.widthProperty(), 0.0f )),
+                new KeyFrame(new Duration(1000),
+                        new KeyValue(rectangle.widthProperty(), 750.0f )));
+        return timeline;
+    }
+
     public void start(Stage primaryStage) throws Exception{
 
         Group root = returnRoot();
         Pane pane = new Pane();
 
-        s = new Scene(root, 400,350);
-
+        s = new Scene(root, 960,640);
+        s.setFill(Color.BLACK);
         primaryStage.setResizable(false);
         primaryStage.setScene(s);
 

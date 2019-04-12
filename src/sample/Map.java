@@ -1,13 +1,15 @@
 package sample;
 
+import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.paint.Color;
 
 public class Map {
 
     private ArrayList<Item> blocks = new ArrayList<>();
-    private Pane gameRoot = new Pane();
+    private Group mapRoot = new Group();
     private Grid level = new Grid();
 
     public void initialize() {
@@ -16,19 +18,20 @@ public class Map {
             showEntity(platform);
         }
         Item block = new Item("block", 300, 300);
+        block.setCollisionBox(16, 16, Color.TURQUOISE);
         addItem(block);
     }
 
-    Pane getGameRoot() {
-        return this.gameRoot;
+    public Group getMapRoot() {
+        return mapRoot;
     }
 
-    ArrayList<Item> getBlocks () {
+    ArrayList<Item> blocks() {
         return this.blocks;
     }
 
-    Grid level() {
-        return this.level;
+    public Grid level() {
+        return level;
     }
 
     public void addItem (Item item) {
@@ -42,10 +45,10 @@ public class Map {
     }
 
     void showEntity(Object object) {
-        gameRoot.getChildren().add(object);
+        mapRoot.getChildren().add(object);
     }
 
     void hideEntity (Object object) {
-        gameRoot.getChildren().remove (object);
+        mapRoot.getChildren().remove (object);
     }
 }
