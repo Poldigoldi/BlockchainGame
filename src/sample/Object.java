@@ -9,11 +9,15 @@ import javafx.geometry.Point2D;
 
 
 /*Objects hold two things, a collision box, and an image.
-Objects can be animated, in which case you will want to call update on them.
-An animated object can move left/right/up/down (when we choose), e.g. for a player that would be when we use the keys
+An animated object can move left/right/up/down (when we choose), e.g. for a player that would be when we use the arrow keys
 but for an enemy we would give it basic instructions to move left/right randomly. If an enemy fell off a platform
 it would also fall, so we still want to apply gravity to it.
-Platforms would be 'not animated' so they dont need to be updated.
+
+If you are making an object, e.g. player, platform, item, first declare the new object and give it an appropriate type,
+then set its collision box. The collision box is the important thing, it has an x and y and tells you 'where' the object
+is, the sprite just follows the collision box.
+If you create a new type of object and have something specific in mind you want it to do during update, you can change
+the update function to include new behaviours for that type of object.
  */
 public class Object  {
     //**NOTE** you can change SHOWCOLLISIONBOXES to true to see collision boxes if you want.
@@ -37,7 +41,7 @@ public class Object  {
     }
 
     //creates a collision box, this is initially a rectangle, but in the future it could be other shapes.
-    public void setCollisionBox(int x, int y, int width, int height, Color colour){
+    public void setCollisionBox(double x, double y, int width, int height, Color colour){
         box = new Rectangle(width, height, colour);
         box.setTranslateX(x);
         box.setTranslateY(y);
@@ -53,17 +57,23 @@ public class Object  {
 
     public Sprite sprite() { return sprite;}
 
-    public void add(Group group) { group.getChildren().addAll(sprite, box);}
+    public void add(Group group) {
+        if(box==null) {
+            System.out.println("please set a collision box for this object");
+            box = new Rectangle(5,5,Color.BLACK);
+        }
+        group.getChildren().addAll(sprite, box);
+    }
 
     //the only objects you'd want to update are animated objects, e.g. anything that can fall, move around
     //this would include the player, enemies, cubes falling from the sky etc.
     void update(Map map){
         sprite.moveTo(box.getTranslateX(), box.getTranslateY());
-        if(type == Type.BACKGROUND){
-            box.setTranslateX(box.getTranslateX()+0.05);
-            if(box.getTranslateX()>map.level().width()) box.setTranslateX(-500);
-            return;
-        }
+        //for background
+        if(type == Type.LAYER3){ circumnavigate(0.05, map); }
+        if(type == Type.LAYER2){ circumnavigate(0.2, map); }
+        if(type == Type.LAYER1 || type == Type.LAYER2 || type == Type.LAYER3 || type == Type.LAYER4){ return; }
+
         applyGravity();
         updateY(map);
         if(type == Type.PLAYER) sprite.update(movingRight, isMoving);
@@ -86,15 +96,13 @@ public class Object  {
         movingRight = value > 0;
         for (Object object : map.level().platforms()) {
             //checks if player at same height as object and its solid first, then block left/right movements
-            if(object.type == Type.SOLID
-                    && box.getTranslateY()>object.box.getTranslateY()-this.height
-            && box.getTranslateY()<object.box.getTranslateY()+this.height){
-                if(movingRight && Math.abs(object.box.getTranslateX() - box.getTranslateX() - this.width) <= 5) return false;
-                if(!movingRight && Math.abs(object.box.getTranslateX()+object.width()- box.getTranslateX()) <= 5) return false;
+            if(object.type == Type.SOLID && this.getY()>object.getY()-this.height && this.getY()<object.getY()+this.height){
+                if(movingRight && Math.abs(object.getX() - this.getX() - this.width) <= 5) return false;
+                if(!movingRight && Math.abs(object.getX()+object.width()- this.getX()) <= 5) return false;
             }
         }
         for (int i=0; i<Math.abs(value); i++) {
-            box.setTranslateX(box.getTranslateX() + (movingRight ? 1 : -1));
+            this.setX(this.getX() + (movingRight ? 1 : -1));
         }
         return true;
     }
@@ -106,21 +114,40 @@ public class Object  {
             for (Object object : map.level().platforms()) {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
-                        if (box.getTranslateY () + this.height == object.box.getTranslateY ()) {
+                        if (this.getY () + this.height == object.getY()) {
                             CanJump = true;
                             return;
                         }
                     } else { // Moving up
-                        if (box.getTranslateY () == object.box.getTranslateY () + object.height() && object.type == Type.SOLID) {
+                        if (this.getY() == object.getY () + object.height() && object.type == Type.SOLID) {
                             return;
                         }
                     }
                 }
             }
             /* Move ! Happens if no collision were detected */
-            box.setTranslateY (box.getTranslateY () + (movingDown ? 1 : -1));
+            this.setY(this.getY () + (movingDown ? 1 : -1));
         }
     }
 
+
+    //for clouds
+    private void circumnavigate(double speed, Map map){
+        box.setTranslateX(box.getTranslateX()+speed);
+        if(box.getTranslateX()>map.level().width()) box.setTranslateX(-sprite.getImage().getWidth());
+    }
+
+    public static double random(double min, double max){ return (Math.random()*((max-min)+1))+min; }
+
+
+    //getters, setters
+
+    public double getX(){ return box.getTranslateX();}
+
+    public double getY(){ return box.getTranslateY();}
+
+    public void setX(double x){ box.setTranslateX(x);}
+
+    public void setY(double y){ box.setTranslateY(y);}
 
 }
