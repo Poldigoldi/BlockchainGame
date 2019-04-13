@@ -7,18 +7,16 @@ import javafx.stage.Stage;
 
 /*Nick made major changes to this class. A player is an Object that can JUMP and hold items */
 public class Player extends Object {
-    private int width = 34, height = 60;
+    private int width = 30, height = 60;
     private String name;
     private Luggage luggage = new Luggage();
     private Stage stage;
 
     public Player(String name, int STARTX, int STARTY, Stage stage) {
-        super(0, 0, true, Type.PLAYER, new Image("/defaultRight.png"));
+        super(Type.PLAYER, new Image("/defaultRight.png"));
+        setCollisionBox(STARTX, STARTY, width, height,Color.BLUE);
         this.stage = stage;
-        setTranslateX(STARTX);
-        setTranslateY(STARTY);
         this.name = name;
-        setCollisionBox(width,height,Color.PINK);
         sprite().offset(-(64-width)/2, -(64-height));
     }
 

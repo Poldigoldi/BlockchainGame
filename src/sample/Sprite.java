@@ -14,10 +14,16 @@ public class Sprite extends ImageView {
     private int animationCycle;
     private int frameRate = 5;
     private int frameDelay;
+    private int xoffset, yoffset;
 
-    public void offset(double x, double y){
-        setTranslateX(x);
-        setTranslateY(y);
+    public void moveTo(double x, double y){
+        setTranslateX(x + xoffset);
+        setTranslateY(y + yoffset);
+    }
+
+    public void offset(int x, int y){
+        xoffset = x;
+        yoffset = y;
     }
 
     //for a non-animating sprite

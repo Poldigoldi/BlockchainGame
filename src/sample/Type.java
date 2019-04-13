@@ -1,7 +1,7 @@
 package sample;
 
 public enum Type {
-    SOLID, PLAYER, PLATFORM, DEFAULT, ITEM
+    SOLID, PLAYER, PLATFORM, DEFAULT, ITEM, BACKGROUND
 }
 
 //Platform means you can jump up through it, but its still solid when you land on it

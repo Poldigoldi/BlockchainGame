@@ -8,20 +8,22 @@ public class Item extends Object {
     final String name;
     private Boolean alive;
 
-    Item(String name, int STARTX, int STARTY) {
-        super(0, 0, true, Type.ITEM, new Image("/item1.png"));
-        sprite.loadDefaultAnimation(new Image("/item1.png"), new Image("/item2.png"), new Image("/item3.png"),
-                                    new Image("/item4.png"), new Image("/item5.png"), new Image("/item6.png"));
-        setTranslateX(STARTX);
-        setTranslateY(STARTY);
+    Item(String name) {
+        super(Type.ITEM, new Image("/item1.png"));
         this.name = name;
-        this.alive = true;
+        alive = true;
+        sprite.offset(-7, -7);
+        sprite.loadDefaultAnimation(new Image("/item1.png"),
+                                    new Image("/item2.png"),
+                                    new Image("/item3.png"),
+                                    new Image("/item4.png"),
+                                    new Image("/item5.png"),
+                                    new Image("/item6.png"));
     }
 
-
     void drop (double x, double y) {
-        setTranslateX (x);
-        setTranslateY (y);
+        box.setTranslateX (x);
+        box.setTranslateY (y);
     }
 
     Boolean isAlive() {

@@ -52,15 +52,15 @@ public class Grid {
       int x = 0;
       for (char value : map[y].toCharArray()) {
           if(value == '4') {
-            Object platform = new Object(x*64, y*64,  false,  Type.SOLID, block);
-            platform.setCollisionBox(64, 64, Color.RED);
+            Object platform = new Object(  Type.SOLID, block);
+            platform.setCollisionBox(x*64, y*64,64, 64, Color.TRANSPARENT);
             platforms.add(platform);
           }
           if(value == '1' || value == '2' || value == '3'){
-            Object platform = new Object(x*64, y*64, false,  Type.PLATFORM, platformleft);
-            if (value == '2') platform = new Object(x*64, y*64, false, Type.PLATFORM, platformmiddle);
-            if (value == '3') platform = new Object(x*64, y*64,  false,  Type.PLATFORM, platformright);
-            platform.setCollisionBox(64, 10, Color.GREEN);
+            Object platform = new Object(  Type.PLATFORM, platformleft);
+            if (value == '2') platform = new Object(  Type.PLATFORM, platformmiddle);
+            if (value == '3') platform = new Object(  Type.PLATFORM, platformright);
+            platform.setCollisionBox(x*64, y*64,64, 10, Color.GREEN);
             platforms.add(platform);
         }
         x++;
