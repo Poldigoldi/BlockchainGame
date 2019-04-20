@@ -33,7 +33,7 @@ public class KeyGame extends Application{
     Group root = new Group();
 
     public KeyGame(){
-        ImageView backImage = new ImageView(new Image("focusin.png"));
+        ImageView backImage = new ImageView(new Image("/graphics/focusin.png"));
         backImage.setTranslateX(-270);
         backImage.setTranslateY(-310);
         Rectangle sweeper = new Rectangle(115, 75, 0, 530);

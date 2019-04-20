@@ -4,18 +4,27 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Shape;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Main extends Application {
+    //music
+    String musicFile = "src/sound/song1.mp3";
+    javafx.scene.media.Media musicMedia = new javafx.scene.media.Media(new File(musicFile).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(musicMedia);
+
+
     //global variables
     private int WIDTH = 960 , HEIGHT = 640;
     private int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
@@ -39,6 +48,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        mediaPlayer.play();
+        mediaPlayer.setVolume(50);
 
         //initialise player, the 'player' is the collision box of the playerInstance
         player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
@@ -57,7 +68,7 @@ public class Main extends Application {
 
     private void initContent() {
         //initialise background
-        Image back1 = new Image("/background1.png", true);
+        Image back1 = new Image("/graphics/background1.png", true);
         BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT , BackgroundSize.DEFAULT);
         appRoot.setBackground(new Background(background));

@@ -12,12 +12,12 @@ public class Map {
     private Group mapRoot = new Group();
     private Grid level = new Grid();
     private Image[] L2Clouds = {
-            new Image("/smallcloud1.png"),    new Image("/smallcloud2.png"),
-            new Image("/smallcloud3.png"),    new Image("/smallcloud4.png"),
-            new Image("/smallcloud5.png"),    new Image("/smallcloud6.png"),
-            new Image("/smallcloud7.png"),    new Image("/smallcloud8.png"),
-            new Image("/smallcloud9.png"),    new Image("/smallcloud10.png"),
-            new Image("/smallcloud11.png")};
+            new Image("/graphics/smallcloud1.png"),    new Image("/graphics/smallcloud2.png"),
+            new Image("/graphics/smallcloud3.png"),    new Image("/graphics/smallcloud4.png"),
+            new Image("/graphics/smallcloud5.png"),    new Image("/graphics/smallcloud6.png"),
+            new Image("/graphics/smallcloud7.png"),    new Image("/graphics/smallcloud8.png"),
+            new Image("/graphics/smallcloud9.png"),    new Image("/graphics/smallcloud10.png"),
+            new Image("/graphics/smallcloud11.png")};
 
 
     public void initialize() {
@@ -66,11 +66,11 @@ public class Map {
     //Nick's functions for making the background graphics
 
     private void createLayer3Clouds(){
-        Object cloud = new Object(Type.LAYER3, new Image("/clouds1.png"));
+        Object cloud = new Object(Type.LAYER3, new Image("/graphics/clouds1.png"));
         cloud.setCollisionBox(0,0, 5, 5, Color.CORAL);
-        Object cloud2 = new Object(Type.LAYER3, new Image("/clouds2.png"));
+        Object cloud2 = new Object(Type.LAYER3, new Image("/graphics/clouds2.png"));
         cloud2.setCollisionBox(400,200, 5, 5, Color.CORAL);
-        Object cloud3 = new Object(Type.LAYER3, new Image("/clouds3.png"));
+        Object cloud3 = new Object(Type.LAYER3, new Image("/graphics/clouds3.png"));
         cloud3.setCollisionBox(-300,250, 5, 5, Color.CORAL);
         addAnimatedObjects(cloud, cloud2, cloud3);
     }
@@ -84,21 +84,21 @@ public class Map {
     }
 
     private void createLayer1Mountains(){
-        Object mountain = new Object(Type.LAYER1, new Image("/mountain1.png"));
+        Object mountain = new Object(Type.LAYER1, new Image("/graphics/mountain1.png"));
         mountain.setCollisionBox(0, level.height()-mountain.sprite().getImage().getHeight(), 5, 5, Color.SILVER);
-        Object mountain2 = new Object(Type.LAYER1, new Image("/mountain2.png"));
+        Object mountain2 = new Object(Type.LAYER1, new Image("/graphics/mountain2.png"));
         mountain2.setCollisionBox(700, level.height()-600, 5, 5, Color.SILVER);
-        Object mountain3 = new Object(Type.LAYER1, new Image("/mountain3.png"));
+        Object mountain3 = new Object(Type.LAYER1, new Image("/graphics/mountain3.png"));
         mountain3.setCollisionBox(1000, level.height()-400, 5, 5, Color.SILVER);
         addAnimatedObjects(mountain, mountain2, mountain3);
     }
 
     private void createLayer4Mountains(){
-        Object mountain = new Object(Type.LAYER4, new Image("/distant1.png"));
+        Object mountain = new Object(Type.LAYER4, new Image("/graphics/distant1.png"));
         mountain.setCollisionBox(200, level.height()-300, 5, 5, Color.SILVER);
-        Object mountain2 = new Object(Type.LAYER4, new Image("/distant2.png"));
+        Object mountain2 = new Object(Type.LAYER4, new Image("/graphics/distant2.png"));
         mountain2.setCollisionBox(850, 450, 5, 5, Color.SILVER);
-        Object mountain3 = new Object(Type.LAYER4, new Image("/distant2.png"));
+        Object mountain3 = new Object(Type.LAYER4, new Image("/graphics/distant2.png"));
         mountain3.setCollisionBox(100, 300, 5, 5, Color.SILVER);
         addAnimatedObjects(mountain, mountain2, mountain3);
     }

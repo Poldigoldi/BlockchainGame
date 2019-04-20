@@ -1,11 +1,16 @@
 package sample;
 
 import javafx.scene.Group;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 
 /*Objects hold two things, a collision box, and an image.
@@ -23,8 +28,11 @@ public class Object  {
     //**NOTE** you can change SHOWCOLLISIONBOXES to true to see collision boxes if you want.
     private boolean SHOWCOLLISIONBOXES = true;
 
+    //Object components
     public Shape box;
     public Sprite sprite;
+
+    //Object variables
     public Type type;
     public int width;
     public int height;
@@ -33,6 +41,10 @@ public class Object  {
     public boolean movingRight;
     public boolean movingDown;
     public boolean isMoving;
+    public boolean isLanded;
+
+    //sounds
+    AudioClip landSound = new AudioClip(Paths.get("src/sound/land.wav").toUri().toString());
 
     //choose where the object starts, if its animated, its type, and its initial image.
     public Object(Type type, Image defaultImage){
@@ -115,7 +127,9 @@ public class Object  {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
+                            if(isLanded==false && this.type == Type.PLAYER) landSound.play();
                             CanJump = true;
+                            isLanded = true;
                             return;
                         }
                     } else { // Moving up
@@ -127,6 +141,7 @@ public class Object  {
             }
             /* Move ! Happens if no collision were detected */
             this.setY(this.getY () + (movingDown ? 1 : -1));
+            isLanded = false;
         }
     }
 

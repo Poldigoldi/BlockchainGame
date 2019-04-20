@@ -9,16 +9,16 @@ public class Item extends Object {
     private Boolean alive;
 
     Item(String name) {
-        super(Type.ITEM, new Image("/item1.png"));
+        super(Type.ITEM, new Image("/graphics/item1.png"));
         this.name = name;
         alive = true;
         sprite.offset(-7, -7);
-        sprite.loadDefaultAnimation(new Image("/item1.png"),
-                                    new Image("/item2.png"),
-                                    new Image("/item3.png"),
-                                    new Image("/item4.png"),
-                                    new Image("/item5.png"),
-                                    new Image("/item6.png"));
+        sprite.loadDefaultAnimation(new Image("/graphics/item1.png"),
+                                    new Image("/graphics/item2.png"),
+                                    new Image("/graphics/item3.png"),
+                                    new Image("/graphics/item4.png"),
+                                    new Image("/graphics/item5.png"),
+                                    new Image("/graphics/item6.png"));
     }
 
     void drop (double x, double y) {
