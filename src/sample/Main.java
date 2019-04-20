@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Shape;
 import javafx.scene.image.Image;
@@ -13,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,8 @@ public class Main extends Application {
     String musicFile = "src/sound/song1.mp3";
     javafx.scene.media.Media musicMedia = new javafx.scene.media.Media(new File(musicFile).toURI().toString());
     MediaPlayer mediaPlayer = new MediaPlayer(musicMedia);
-
+    //sounds
+    AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
 
     //global variables
     private int WIDTH = 960 , HEIGHT = 640;
@@ -31,12 +34,13 @@ public class Main extends Application {
     private double playerY = PLAYERSTARTY;
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
+    private boolean gameisOver;
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Player player;
     private Scene mainScene;
-    private GameOver gameOver = new GameOver();
+    private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -117,16 +121,16 @@ public class Main extends Application {
                 object.update(map);
             }
             handleItems();
-            if (isPlayerOutOfBounds()) {/*handleGameOver(); */ }
+            if (isPlayerOutOfBounds()) { handleGameOver(); }
         }
     }
 
     //updates the screen X based on player position
     private void moveScreenX(int movement){
-        if(player.getX()>WIDTH/2+10 && player.getX()<map.level().width()-WIDTH/2-10){
+        if(player.getX()>WIDTH/2+32 && player.getX()<map.level().width()-WIDTH/2-32){
             counter++;
             //this moves everything in the screen with the character
-            map.mapRoot().setTranslateX(map.mapRoot().getTranslateX()+(-movement));
+            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             //this is for parallax scrolling of background elements
             if(counter == 5|| counter == 10){
                 for(Object object: animatedObjects) if(object.type==Type.LAYER1) object.setX(object.getX()-movement/5);
@@ -140,14 +144,10 @@ public class Main extends Application {
 
     //updates the screen Y based on player position
     private void moveScreenY(){
-        double Ydifference;
-        if(player.getY()>HEIGHT/2+30 && player.getY()<map.level().height()-HEIGHT/2-30){
-            if(player.getY() != playerY){
-                Ydifference = playerY -  player.getY();
-                playerY = player.getY();
-                map.mapRoot().setTranslateY(map.mapRoot().getTranslateY()+Ydifference);
-            }
+        if(player.getY()>HEIGHT/2+64 && player.getY()<map.level().height()-HEIGHT/2-64){
+            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
         }
+
     }
 
     /* ---------- Sub methods ----------- */
@@ -186,21 +186,28 @@ public class Main extends Application {
     }
 
     private boolean isPlayerOutOfBounds() {
-        if (player.getX() > appRoot.getWidth() ||
-               // player.getPlayer().getTranslateX() < 0 ||
-                player.getY() > appRoot.getHeight()) {
+        if (player.getY() > map.level().height()){
             return true;
         }
         return false;
     }
 
     private void handleGameOver() {
-        GridPane gameOverScene = gameOver.returnRoot();
-        mainScene.setRoot(gameOverScene);
-
+        if(!gameisOver) {
+            mainScene.setRoot(gameOver.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            defeatSound.play();
+            mediaPlayer.stop();
+            gameisOver = true;
+        }
         if (gameOver.isStartAgain()) {
-            player.setX(100);
-            player.setY(400);
+            gameisOver=false;
+            mediaPlayer.play();
+            player.setX(PLAYERSTARTX);
+            player.setY(PLAYERSTARTY);
+            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
+            moveScreenY();
             gameOver.setStartAgain();
             mainScene.setRoot(appRoot);
         }
@@ -209,4 +216,7 @@ public class Main extends Application {
     private Boolean isPressed(KeyCode key) {
         return keys.getOrDefault(key, false);
     }
+
+
 }
+
