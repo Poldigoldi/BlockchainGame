@@ -127,7 +127,7 @@ public class Main extends Application {
 
     //updates the screen X based on player position
     private void moveScreenX(int movement){
-        if(player.getX()>WIDTH/2+32 && player.getX()<map.level().width()-WIDTH/2-32){
+        if(player.getX()>WIDTH/2+8 && player.getX()<map.level().width()-WIDTH/2-32){
             counter++;
             //this moves everything in the screen with the character
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
@@ -144,7 +144,7 @@ public class Main extends Application {
 
     //updates the screen Y based on player position
     private void moveScreenY(){
-        if(player.getY()>HEIGHT/2+64 && player.getY()<map.level().height()-HEIGHT/2-64){
+        if(player.getY()>HEIGHT/2+40 && player.getY()<map.level().height()-HEIGHT/2-64){
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
         }
 
