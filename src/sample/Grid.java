@@ -19,10 +19,10 @@ public class Grid {
 
   */
 
-  private Image platformleft = new Image("/graphics/platformleft.png");
-  private Image platformright = new Image("/graphics/platformright.png");
-  private Image platformmiddle = new Image("/graphics/platformmiddle.png");
-  private Image block = new Image("/graphics/block.png");
+  private Frame platformleft = new Frame("/graphics/platformleft.png");
+  private Frame platformright = new Frame("/graphics/platformright.png");
+  private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
+  private Frame block = new Frame("/graphics/block.png");
 
   private ArrayList<Object> platforms = new ArrayList<> ();
   int width;

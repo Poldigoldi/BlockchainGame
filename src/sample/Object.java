@@ -2,14 +2,11 @@ package sample;
 
 import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 
-import java.io.File;
 import java.nio.file.Paths;
 
 
@@ -47,10 +44,11 @@ public class Object  {
     AudioClip landSound = new AudioClip(Paths.get("src/sound/land.wav").toUri().toString());
 
     //choose where the object starts, if its animated, its type, and its initial image.
-    public Object(Type type, Image defaultImage){
-        sprite = new Sprite(defaultImage);
+    public Object(Type type, Frame... defaultFrame){
+        sprite = new Sprite(type, defaultFrame);
         this.type = type;
     }
+
 
     //creates a collision box, this is initially a rectangle, but in the future it could be other shapes.
     public void setCollisionBox(double x, double y, int width, int height, Color colour){
@@ -80,16 +78,15 @@ public class Object  {
     //the only objects you'd want to update are animated objects, e.g. anything that can fall, move around
     //this would include the player, enemies, cubes falling from the sky etc.
     void update(Map map){
-        sprite.moveTo(box.getTranslateX(), box.getTranslateY());
-        //for background
+        //update Sprite position and animation
+        sprite.update(movingRight, isMoving, box.getTranslateX(), box.getTranslateY());
+        //for Clouds
         if(type == Type.LAYER3){ circumnavigate(0.05, map); }
-        if(type == Type.LAYER2){ circumnavigate(0.2, map); }
-        if(type == Type.LAYER1 || type == Type.LAYER2 || type == Type.LAYER3 || type == Type.LAYER4){ return; }
-
+        if(type == Type.LAYER1){ circumnavigate(0.2, map); }
+        if(!type.hasGravity()) return;
+        //for Everything else that has gravity
         applyGravity();
         updateY(map);
-        if(type == Type.PLAYER) sprite.update(movingRight, isMoving);
-        if(type == Type.ITEM) sprite.update();
         isMoving = false;
     }
     void applyGravity() {

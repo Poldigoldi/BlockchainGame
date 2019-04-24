@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.shape.Shape;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -53,7 +52,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mediaPlayer.play();
-        mediaPlayer.setVolume(50);
+        mediaPlayer.setVolume(20);
 
         //initialise player, the 'player' is the collision box of the playerInstance
         player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
@@ -133,7 +132,7 @@ public class Main extends Application {
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             //this is for parallax scrolling of background elements
             if(counter == 5|| counter == 10){
-                for(Object object: animatedObjects) if(object.type==Type.LAYER1) object.setX(object.getX()-movement/5);
+                for(Object object: animatedObjects) if(object.type==Type.LAYER2) object.setX(object.getX()-movement/5);
             }
             if(counter == 10){
                 for(Object object: animatedObjects) if(object.type==Type.LAYER4) object.setX(object.getX()-movement/5);

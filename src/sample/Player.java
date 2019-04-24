@@ -20,7 +20,7 @@ public class Player extends Object {
     private Stage stage;
 
     public Player(String name, int STARTX, int STARTY, Stage stage) {
-        super(Type.PLAYER, new Image("/graphics/defaultRight.png"));
+        super(Type.PLAYER);
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
         this.stage = stage;
         this.name = name;
@@ -47,21 +47,24 @@ public class Player extends Object {
 
     //set up the images for walking etc.
     public void initialise() {
-        sprite.loadDefaultImages(
-                new Image("/graphics/defaultright.png"),
-                new Image("/graphics/defaultleft.png"));
+        sprite.loadDefaultLeftImages(
+                new Frame("/graphics/defaultleft.png", 150),
+                new Frame("/graphics/defaultleft2.png", 10));
+        sprite.loadDefaultRightImages(
+                new Frame("/graphics/defaultright.png", 150),
+                new Frame("/graphics/defaultright2.png", 10));
         sprite.loadRightMotionImages(
-                new Image("/graphics/motionRight0.png"),
-                new Image("/graphics/motionRight1.png"),
-                new Image("/graphics/motionRight2.png"),
-                new Image("/graphics/motionRight3.png"),
-                new Image("/graphics/motionRight4.png"));
+                new Frame("/graphics/motionRight0.png"),
+                new Frame("/graphics/motionRight1.png"),
+                new Frame("/graphics/motionRight2.png"),
+                new Frame("/graphics/motionRight3.png"),
+                new Frame("/graphics/motionRight4.png"));
         sprite.loadLeftMotionImages(
-                new Image("/graphics/motionLeft0.png"),
-                new Image("/graphics/motionLeft1.png"),
-                new Image("/graphics/motionLeft2.png"),
-                new Image("/graphics/motionLeft3.png"),
-                new Image("/graphics/motionLeft4.png"));
+                new Frame("/graphics/motionLeft0.png"),
+                new Frame("/graphics/motionLeft1.png"),
+                new Frame("/graphics/motionLeft2.png"),
+                new Frame("/graphics/motionLeft3.png"),
+                new Frame("/graphics/motionLeft4.png"));
     }
 
 }
