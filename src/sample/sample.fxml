@@ -185,7 +185,22 @@
             <Font name="Courier New" size="48.0" />
          </font>
       </Label>
-      <Group fx:id="help" layoutX="72.0" layoutY="58.0" visible="false">
+      <Label layoutX="355.0" layoutY="553.0" prefHeight="19.0" prefWidth="270.0" text="Press enter to view instructions again" textFill="WHITE">
+         <font>
+            <Font name="Courier New" size="11.0" />
+         </font>
+      </Label>
+      <Label layoutX="158.0" layoutY="435.0" prefHeight="19.0" prefWidth="206.0" text="Use Clueso's to go RIGHT" textFill="WHITE">
+         <font>
+            <Font name="Courier New" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="589.0" layoutY="432.0" prefHeight="19.0" prefWidth="206.0" text="Use yours to go LEFT" textFill="WHITE">
+         <font>
+            <Font name="Courier New" size="14.0" />
+         </font>
+      </Label>
+      <Group fx:id="help" layoutX="72.0" layoutY="58.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" height="522.0" stroke="BLACK" strokeType="INSIDE" width="816.0" />
             <ImageView fitHeight="279.0" fitWidth="194.0" layoutX="48.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
@@ -205,20 +220,5 @@
             </Text>
          </children>
       </Group>
-      <Label layoutX="355.0" layoutY="553.0" prefHeight="19.0" prefWidth="270.0" text="Press enter to view instructions again" textFill="WHITE">
-         <font>
-            <Font name="Courier New" size="11.0" />
-         </font>
-      </Label>
-      <Label layoutX="158.0" layoutY="435.0" prefHeight="19.0" prefWidth="206.0" text="Use Clueso's to go RIGHT" textFill="WHITE">
-         <font>
-            <Font name="Courier New" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="589.0" layoutY="432.0" prefHeight="19.0" prefWidth="206.0" text="Use yours to go LEFT" textFill="WHITE">
-         <font>
-            <Font name="Courier New" size="14.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
