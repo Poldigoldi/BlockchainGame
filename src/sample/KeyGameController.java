@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -38,6 +39,9 @@ public class KeyGameController implements Initializable {
     @FXML
     private Group help;
 
+    @FXML
+    private Pane image;
+
 
     double SPIN_VALUE = 13.8;
     int index=0;
@@ -66,10 +70,6 @@ public class KeyGameController implements Initializable {
 
     @FXML
     void spinWheel(KeyEvent event) {
-
-        System.out.println(myCircle.getRotate());
-
-
 
         if (event.getCode() == KeyCode.LEFT) {
             if (alphaIndex == 0) {
@@ -109,6 +109,10 @@ public class KeyGameController implements Initializable {
         if (event.getCode() == KeyCode.ENTER) {
             if (instruction1.isVisible()){
                 instruction1.setVisible(false);
+                image.setVisible(true);
+            }
+            else if (image.isVisible()) {
+                image.setVisible(false);
                 instruction2.setVisible(true);
             }
             else if (instruction2.isVisible()){
@@ -119,7 +123,7 @@ public class KeyGameController implements Initializable {
             }
         }
 
-
+        System.out.println(alphaIndex);
       /*  if (event.getEventType() == KeyEvent.KEY_PRESSED) {
 
             if (isPressed(KeyCode.LEFT)) {

@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
@@ -67,7 +68,6 @@
             </Label>
          </children>
       </HBox>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="112.0" layoutY="233.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
       <Label layoutX="84.0" layoutY="475.0" prefHeight="19.0" prefWidth="160.0" text="Public key:" textFill="WHITE" underline="true">
          <font>
             <Font name="Courier New" size="18.0" />
@@ -78,16 +78,11 @@
             <Font name="Courier New Bold" size="48.0" />
          </font>
       </Label>
-      <ImageView fitHeight="115.0" fitWidth="62.0" layoutX="716.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="115.0" fitWidth="62.0" layoutX="755.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true" rotate="20.0">
          <image>
             <Image url="@../graphics/minigameimages/key.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="78.0" layoutY="376.0" prefHeight="19.0" prefWidth="160.0" text="Generating public key..." textFill="WHITE">
-         <font>
-            <Font name="Courier New" size="11.0" />
-         </font>
-      </Label>
       <Label layoutX="802.0" layoutY="496.0" prefHeight="59.0" prefWidth="32.0" text="4" textFill="WHITE">
          <font>
             <Font name="Courier New Bold" size="48.0" />
@@ -132,18 +127,12 @@
             <Font name="Courier New" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="829.0" layoutY="120.0" prefHeight="59.0" prefWidth="32.0" text="3" textFill="WHITE">
+      <Label layoutX="841.0" layoutY="143.0" prefHeight="59.0" prefWidth="32.0" text="3" textFill="WHITE">
          <font>
             <Font name="Courier New Bold" size="48.0" />
          </font>
       </Label>
-      <ImageView fitHeight="86.0" fitWidth="58.0" layoutX="90.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphics/minigameimages/key.jpg" />
-         </image>
-      </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="112.0" layoutY="233.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
-      <Label layoutX="139.0" layoutY="146.0" prefHeight="19.0" prefWidth="81.0" text="It's a secret!" textFill="WHITE">
+      <Label layoutX="169.0" layoutY="161.0" prefHeight="19.0" prefWidth="81.0" text="It's a secret!" textFill="WHITE">
          <font>
             <Font size="12.0" />
          </font>
@@ -153,28 +142,6 @@
             <Font name="Courier New" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="86.0" fitWidth="81.0" layoutX="85.0" layoutY="275.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphics/focusin.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="79.0" layoutY="329.0" prefHeight="19.0" prefWidth="43.0" rotate="20.0" text="Beep" textFill="WHITE">
-         <font>
-            <Font size="12.0" />
-         </font>
-      </Label>
-      <Label layoutX="157.0" layoutY="283.0" prefHeight="19.0" prefWidth="43.0" rotate="-20.0" text="Bop" textFill="WHITE">
-         <font>
-            <Font size="11.0" />
-         </font>
-      </Label>
-      <Label layoutX="150.0" layoutY="339.0" prefHeight="19.0" prefWidth="66.0" rotate="20.0" text="Calculating..." textFill="WHITE">
-         <font>
-            <Font size="11.0" />
-         </font>
-      </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="112.0" layoutY="398.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="112.0" layoutY="413.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
       <Label layoutX="757.0" layoutY="475.0" prefHeight="23.0" prefWidth="122.0" text="Public key:" textFill="WHITE" underline="true">
          <font>
             <Font name="Courier New" size="18.0" />
@@ -190,12 +157,17 @@
             <Font name="Courier New" size="11.0" />
          </font>
       </Label>
-      <Label layoutX="158.0" layoutY="435.0" prefHeight="19.0" prefWidth="206.0" text="Use Clueso's to go RIGHT" textFill="WHITE">
+      <Label layoutX="84.0" layoutY="286.0" prefHeight="19.0" prefWidth="206.0" text="Use Clueso's to go RIGHT" textFill="WHITE">
          <font>
             <Font name="Courier New" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="589.0" layoutY="432.0" prefHeight="19.0" prefWidth="206.0" text="Use yours to go LEFT" textFill="WHITE">
+      <ImageView fitHeight="115.0" fitWidth="62.0" layoutX="88.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true" rotate="20.0">
+         <image>
+            <Image url="@../graphics/minigameimages/key.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="673.0" layoutY="286.0" prefHeight="19.0" prefWidth="206.0" text="Use yours to go LEFT" textFill="WHITE">
          <font>
             <Font name="Courier New" size="14.0" />
          </font>
@@ -203,7 +175,7 @@
       <Group fx:id="help" layoutX="72.0" layoutY="58.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" height="522.0" stroke="BLACK" strokeType="INSIDE" width="816.0" />
-            <ImageView fitHeight="279.0" fitWidth="194.0" layoutX="48.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="274.0" fitWidth="149.0" layoutX="38.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../graphics/minigameimages/key.jpg" />
                </image>
@@ -218,6 +190,54 @@
                   <Font name="Courier New" size="24.0" />
                </font>
             </Text>
+            <Pane fx:id="image" layoutX="224.0" layoutY="21.0" prefHeight="409.0" prefWidth="584.0" style="-fx-background-color: BLACK;" visible="false">
+               <children>
+                  <Label layoutX="73.0" layoutY="111.0" prefHeight="28.0" prefWidth="367.0" text="Generating public key..." textFill="WHITE">
+                     <font>
+                        <Font name="Courier New" size="14.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="235.0" fitWidth="238.0" layoutX="50.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/focusin.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="238.0" layoutY="296.0" prefHeight="20.0" prefWidth="94.0" rotate="20.0" text="Calculating..." textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="31.0" layoutY="153.0" prefHeight="19.0" prefWidth="43.0" rotate="-20.0" text="Bop" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="51.0" layoutX="24.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+                  <Label layoutX="287.0" layoutY="146.0" prefHeight="19.0" prefWidth="43.0" rotate="20.0" text="Beep" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="51.0" layoutX="25.0" layoutY="198.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="51.0" layoutX="353.0" layoutY="179.0" rotate="9090.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="51.0" layoutX="353.0" layoutY="203.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+                  <ImageView fitHeight="175.0" fitWidth="108.0" layoutX="426.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/minigameimages/publickey.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="394.0" layoutY="56.0" prefHeight="69.0" prefWidth="173.0" text="Public Key" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Courier New Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="505.0" layoutY="132.0" prefHeight="20.0" prefWidth="65.0" text="Hey boyz" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
          </children>
       </Group>
    </children>
