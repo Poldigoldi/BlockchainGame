@@ -72,17 +72,24 @@ public class KeyGameController implements Initializable {
     void spinWheel(KeyEvent event) {
 
         if (event.getCode() == KeyCode.LEFT) {
+
+            if (alphaIndex == 1) {
+                myCircle.setRotate(0);
+            }
+            else {
+                myCircle.setRotate(myCircle.getRotate() + SPIN_VALUE);
+            }
+
             if (alphaIndex == 0) {
                 alphaIndex = 25;
             }
             else {
                 alphaIndex--;
             }
-            if (alphaIndex == 1) {
-                myCircle.setRotate(0);
-            }
 
-            myCircle.setRotate(myCircle.getRotate() + SPIN_VALUE);
+
+
+
         }
         if (event.getCode() == KeyCode.RIGHT) {
 
@@ -91,7 +98,13 @@ public class KeyGameController implements Initializable {
                 myCircle.setRotate(0);
             }
             else {
-                myCircle.setRotate(myCircle.getRotate() - SPIN_VALUE);
+                if (myCircle.getRotate() > SPIN_VALUE) {
+                    myCircle.setRotate(myCircle.getRotate() - SPIN_VALUE);
+                }
+                else {
+                    myCircle.setRotate(myCircle.getRotate() + 360 - SPIN_VALUE);
+                }
+
                 alphaIndex++;
             }
         }

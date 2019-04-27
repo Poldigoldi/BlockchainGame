@@ -147,7 +147,7 @@
             <Font name="Courier New" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="372.0" layoutY="505.0" text="LHTUVW" textFill="WHITE">
+      <Label layoutX="372.0" layoutY="505.0" text="LHVUXW" textFill="WHITE">
          <font>
             <Font name="Courier New" size="48.0" />
          </font>
