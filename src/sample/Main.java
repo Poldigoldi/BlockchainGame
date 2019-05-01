@@ -72,6 +72,9 @@ public class Main extends Application {
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         primaryStage.setScene(mainScene);
+        mainScene.setRoot(gameMenu.returnRoot());
+        gameisMenu = true;
+        handleMenu();
         primaryStage.show();
         runGame(primaryStage);
     }
@@ -129,6 +132,14 @@ public class Main extends Application {
             }
             handleItems();
             if (isPlayerOutOfBounds()) { handleGameOver(); }
+
+            if (gameMenu.isStartGame()) {
+                handleMenu();
+            }
+            if (gameMenu.isInstructionsPressed()) {
+                handleInstructions();
+                System.out.println("TEST");
+            }
         }
     }
 
@@ -230,6 +241,7 @@ public class Main extends Application {
         }
         if (gameMenu.isStartGame()) {
             gameisMenu=false;
+            menuSound.stop();
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
@@ -250,15 +262,12 @@ public class Main extends Application {
             gameisInstructions = true;
         }
         if (instructionScreen.isReturn_to_menu()) {
+            gameMenu.resetInstructionPress();
+            instructionSound.stop();
             gameisInstructions=false;
             mediaPlayer.play();
-            player.setX(PLAYERSTARTX);
-            player.setY(PLAYERSTARTY);
-            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
-            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
-            moveScreenY();
             instructionScreen.setReturn_to_menu();
-            mainScene.setRoot(appRoot);
+            mainScene.setRoot(gameMenu.returnRoot());
         }
     }
 

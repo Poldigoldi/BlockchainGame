@@ -81,6 +81,8 @@ public class GameMenu {
         }.start();
         root.getChildren().addAll(backgroundView, adventureView, creators, gameInfo, startGame, instructions);
         startGame.setOnAction(this::startPress);
+        instructions.setOnAction(this::instructionPress);
+
     }
 
     public boolean isStartGame() {
@@ -93,6 +95,8 @@ public class GameMenu {
 
     public boolean isInstructionsPressed() {return instructions;}
 
+    public void resetInstructionPress() {instructions = false;}
+
     public Group returnRoot() {
         return root;
     }
@@ -100,6 +104,11 @@ public class GameMenu {
     public void startPress(ActionEvent e) {
         System.out.println("click");
         startGame = true;
+    }
+
+    public void instructionPress(ActionEvent e) {
+        System.out.println("Instruction click");
+        instructions = true;
     }
 
     private void initialiseFonts(){

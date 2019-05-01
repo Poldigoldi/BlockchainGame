@@ -43,7 +43,7 @@ public class InstructionScreen {
                         "pick up a block you need to complete a puzzle. Well, it would\n" +
                         "defeat the purpose to give you the answer, so go ahead an pick up\n" +
                         "a block and get puzzling.\n" +
-                        "Oh, before I forget. Beware of the vicious enemy robots\n\n" +
+                        "Oh, before I forget. Beware of the vicious enemy robots...\n\n" +
                         "Let's learn some Blockchain!");
         instructionsText.setFont(tinyFont);
         instructionsText.setTranslateX(5);
@@ -74,7 +74,7 @@ public class InstructionScreen {
             }
         }.start();
         root.getChildren().addAll(backgroundView, instructionsText, header, returnToMenu);
-        returnToMenu.setOnAction(this::startPress);
+        returnToMenu.setOnAction(this::returnPress);
     }
 
     public Group returnRoot() {
@@ -89,7 +89,7 @@ public class InstructionScreen {
         this.return_to_menu = false;
     }
 
-    public void startPress(ActionEvent e) {
+    public void returnPress(ActionEvent e) {
         System.out.println("click");
         return_to_menu = true;
     }
