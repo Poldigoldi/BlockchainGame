@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sprite extends ImageView {
-    private Image defaultImage;
-    private Image defaultRight;
-    private Image defaultLeft;
-    private List<Image> defaultAnimation = new ArrayList<>();
-    private List<Image> motionRight = new ArrayList<>();
-    private List<Image> motionLeft = new ArrayList<>();
+    private List<Frame> defaultAnimation = new ArrayList<>();
+    private List<Frame> defaultLeftAnimation = new ArrayList<>();
+    private List<Frame> defaultRightAnimation = new ArrayList<>();
+    private List<Frame> motionRightAnimation = new ArrayList<>();
+    private List<Frame> motionLeftAnimation = new ArrayList<>();
     private int animationCycle;
-    private int frameRate = 5;
+    private Frame currentFrame;
     private int frameDelay;
     private int xoffset, yoffset;
+    private Type type;
 
     public void moveTo(double x, double y){
         setTranslateX(x + xoffset);
@@ -27,58 +27,67 @@ public class Sprite extends ImageView {
     }
 
     //for a non-animating sprite
-    public Sprite(Image defaultImage){
-        this.defaultImage = defaultImage;
-        setImage(this.defaultImage);
+    public Sprite(Type type, Frame... defaultFrame){
+        this.type = type;
+        if(defaultFrame.length == 0) {
+            Frame noDefaultSpecified = new Frame("/graphics/noimage.png");
+            setImage(noDefaultSpecified);
+            currentFrame = noDefaultSpecified;
+        }
+        else {
+            setImage(defaultFrame[0]);
+            currentFrame = defaultFrame[0];
+        }
     }
+
+
 
     //for an animated sprite
 
-    public void loadDefaultImages(Image defaultRight, Image defaultLeft){
-        this.defaultRight = defaultRight;
-        this.defaultLeft = defaultLeft;
+    public void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
+
+    public void loadDefaultLeftImages(Frame... images){ for(Frame image: images) defaultLeftAnimation.add(image); }
+
+    public void loadDefaultImages(Frame... images){
+        for(Frame image: images)
+            defaultAnimation.add(image);
     }
 
-    public void loadDefaultAnimation(Image... images){ for(Image image: images) defaultAnimation.add(image); }
+    public void loadLeftMotionImages(Frame... images){ for(Frame image: images) motionLeftAnimation.add(image); }
 
-    public void loadLeftMotionImages(Image... images){
-        for(Image image: images) motionLeft.add(image);
-    }
-
-    public void loadRightMotionImages(Image... images){
-        for(Image image: images) motionRight.add(image);
-    }
+    public void loadRightMotionImages(Frame... images){ for(Frame image: images) motionRightAnimation.add(image); }
 
     //updates images
     private void updateFrame(){
-        if(frameDelay > frameRate){
+        if(frameDelay > currentFrame.framerate()){
             frameDelay = 0;
             animationCycle++;
         }
         frameDelay++;
     }
 
-    public void update(){
-        updateFrame();
-        if(animationCycle>=defaultAnimation.size()) animationCycle = 0;
-        setImage(defaultAnimation.get(animationCycle));
-    }
-
-    public void update(boolean movingRight, boolean moving){
-        if(moving == false){
-            if(movingRight) setImage(defaultRight);
-            else setImage(defaultLeft);
-        } else animate(movingRight);
-    }
-
-    private void animate(boolean movingRight){
-        updateFrame();
-        if(movingRight){
-            if(animationCycle>=motionRight.size()) animationCycle = 0;
-            setImage(motionRight.get(animationCycle));
-        } else {
-            if(animationCycle>=motionLeft.size()) animationCycle = 0;
-            setImage(motionLeft.get(animationCycle));
+    public void update(boolean movingRight, boolean moving, double x, double y) {
+        moveTo(x, y);
+        if (!type.hasMovementAnimation() && defaultAnimation.size()>0){
+            animate(defaultAnimation);
         }
+        if (type.hasMovementAnimation()) {
+            if(!moving) {
+                if (movingRight) animate(defaultRightAnimation);
+                else animate(defaultLeftAnimation);
+            }
+            if(moving) {
+                if (movingRight) animate(motionRightAnimation);
+                else animate(motionLeftAnimation);
+            }
+        }
+    }
+
+    private void animate(List<Frame> images){
+        updateFrame();
+        if(images.size()==0) return;
+        if(animationCycle>=images.size()) animationCycle = 0;
+        currentFrame = images.get(animationCycle);
+        setImage(images.get(animationCycle));
     }
 }
