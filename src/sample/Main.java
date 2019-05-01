@@ -100,6 +100,7 @@ public class Main extends Application {
     //boolean keypressed stops people holding both left and right down at same time
     private void update(Stage stage) {
         boolean keypressed = false;
+
         if(mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
@@ -117,8 +118,8 @@ public class Main extends Application {
                 mainScene.setRoot(appRoot);
             }
             moveScreenY();
-
             moveEnemies ();
+
             for (Object object : animatedObjects) {
                 object.update(map);
             }

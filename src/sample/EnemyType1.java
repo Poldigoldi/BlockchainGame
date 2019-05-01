@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -12,12 +13,16 @@ public class EnemyType1 extends Object {
     private int countMoveLeft;
     private int countMoveRight;
 
-    private int MAX_MOVE = 150;
-    private int MOVE_SPEED = 1;
+    private final int HEIGHT = 48;
+
+    private final int MOVE_SPEED = 1;
+    private final int JUMP_SPEED_X = 2;
+    private final int MIN_MOVE = 50;
+    private int MAX_MOVE = 300;
 
     public EnemyType1(int startx, int starty, boolean canMove) {
         super(Type.ENEMY1);
-        this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
+        this.setCollisionBox(startx, starty , 38, HEIGHT, Color.INDIANRED);
         this.canMove = canMove;
         this.alive = true;
         this.countMoveLeft=0;
@@ -30,23 +35,96 @@ public class EnemyType1 extends Object {
         sprite.offset(-5, -16);
     }
 
-    // Assign random motion to Enemy
-    // Will move a certain amount right - once reach the counter limit, it will move to the left (and again)
+
     public void giveMotion (Map map) {
+        /** rules:
+         // - if cannot fall, generate random nb to move left/right
+         // - if can fall, and no ground after - turn back
+         // - if can fall, and platform/ground after - jump!
+         // - if finds a constrain, try to jump over **/
+
+
+        // reset horizontal speed after a jump
+        if (isLanded ) {
+            this.Velocity = new Point2D (0, this.Velocity.getY ());
+        }
+
         if (countMoveRight < MAX_MOVE) {
+            if (CanFallRight (map) || CanJumpRight (map)) {
+                jump (JUMP_SPEED_X);
+                return;
+            }
             move_X (MOVE_SPEED, map);
             countMoveRight++;
         }
         if (countMoveRight == MAX_MOVE && countMoveLeft < MAX_MOVE) {
+            if (CanFallLeft (map) || CanJumpLeft (map)) {
+                jump (-JUMP_SPEED_X);
+                return;
+            }
             move_X (-MOVE_SPEED, map);
             countMoveLeft++;
         }
         if (countMoveLeft == MAX_MOVE && countMoveRight == MAX_MOVE) {
             countMoveRight=0;
             countMoveLeft=0;
-            MAX_MOVE = 50 + new Random ().nextInt(150);
+            MAX_MOVE = MIN_MOVE + new Random ().nextInt(150);
         }
     }
+    private void jump (int value) {
+        if (CanJump) {
+            this.Velocity = this.Velocity.add (value, -27);
+            CanJump=false;
+        }
+    }
+
+    private boolean CanFallRight (Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+            if (Math.abs (platform.getY () - getY ()) > 150
+                && platform.getX () > getX () && platform.getX () < getX () + 100) {
+                return false;
+            }
+        }
+        System.out.println ("CAN FALL RIGHT");
+        return true;
+    }
+
+    private boolean CanFallLeft(Map map) {
+        for (Object platform : map.getLevel ().platforms () ) {
+            if (Math.abs (platform.getY () - getY ()) > 150
+                    && platform.getX () < getX () && platform.getX () > getX () - 100) {
+                return false;
+            }
+        }
+        System.out.println ("CAN FALL LEFT");
+        return true;
+    }
+
+    private boolean CanJumpRight (Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+
+            if (    (platform.getX () - getX() - width) > 0 && (platform.getX () - getX() - width) <= 5 &&
+                    (platform.getY() - getY() - height) > 0 && (platform.getY() - getY() - height) <= platform.height){
+                System.out.println ("CAN JUMP RIGHT");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean CanJumpLeft(Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+            if (    (getX () - platform.getX() - platform.width) > 0 && (getX () - platform.getX() - platform.width) <= 5 &&
+                    platform.getY() > getY()){
+                System.out.println ("CAN JUMP LEFT");
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /* ------------ GETTERS & SETTERS -------------- */
 
     public boolean isCanMove() {
         return canMove;

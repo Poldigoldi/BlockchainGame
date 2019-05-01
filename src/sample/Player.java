@@ -3,7 +3,6 @@ package sample;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.nio.file.Paths;

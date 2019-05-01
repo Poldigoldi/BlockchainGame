@@ -61,7 +61,7 @@ public class Map {
 
     //Enemies
     private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(550, 620, true);
+        EnemyType1 enemy1 = new EnemyType1(100, 644, true);
         addAnimatedObjects(enemy1);
         enemiestype1.add (enemy1);
     }
@@ -128,5 +128,8 @@ public class Map {
         return enemiestype1;
     }
 
+    public Grid getLevel () {
+        return this.level;
+    }
 
 }
