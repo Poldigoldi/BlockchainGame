@@ -34,12 +34,17 @@ public class Main extends Application {
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
     private boolean gameisOver;
+    private boolean gameisMenu;
+    private boolean gameisInstructions;
+    private static boolean firstCall = true;
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Player player;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
+    private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
+    private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -208,6 +213,48 @@ public class Main extends Application {
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
             moveScreenY();
             gameOver.setStartAgain();
+            mainScene.setRoot(appRoot);
+        }
+    }
+
+    private void handleMenu() {
+        if(!gameisMenu) {
+            mainScene.setRoot(gameMenu.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            defeatSound.play();
+            mediaPlayer.stop();
+            gameisMenu = true;
+        }
+        if (gameMenu.isStartGame()) {
+            gameisMenu=false;
+            mediaPlayer.play();
+            player.setX(PLAYERSTARTX);
+            player.setY(PLAYERSTARTY);
+            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
+            moveScreenY();
+            gameMenu.setStartAgain();
+            mainScene.setRoot(appRoot);
+        }
+    }
+
+    private void handleInstructions() {
+        if(!gameisInstructions) {
+            mainScene.setRoot(instructionScreen.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            defeatSound.play();
+            mediaPlayer.stop();
+            gameisInstructions = true;
+        }
+        if (instructionScreen.isReturn_to_menu()) {
+            gameisInstructions=false;
+            mediaPlayer.play();
+            player.setX(PLAYERSTARTX);
+            player.setY(PLAYERSTARTY);
+            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
+            moveScreenY();
+            instructionScreen.setReturn_to_menu();
             mainScene.setRoot(appRoot);
         }
     }
