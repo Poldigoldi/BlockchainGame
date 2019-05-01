@@ -18,7 +18,7 @@ public class EnemyType1 extends Object {
     private final int MOVE_SPEED = 1;
     private final int JUMP_SPEED_X = 2;
     private final int MIN_MOVE = 50;
-    private int MAX_MOVE = 500;
+    private int MAX_MOVE = 400;
 
     public EnemyType1(int startx, int starty, boolean canMove) {
         super(Type.ENEMY1);
@@ -40,7 +40,7 @@ public class EnemyType1 extends Object {
         /** rules:
          // - if cannot fall, generate random nb to move left/right
          // - if can fall, and no ground after - turn back
-         // - if can fall, and platform/ground after - jump!
+         // - if can fall, and platform/ground after - has 1/8 chance to jump
          // - if finds a constrain, try to jump over **/
 
         // reset horizontal speed after a jump
@@ -53,7 +53,8 @@ public class EnemyType1 extends Object {
                 countMoveRight = MAX_MOVE;
                 return;
             }
-            if (CanJumpGapRight (map) || CanJumpBlockRight (map)) {
+            if ( (CanJumpGapRight (map) && decideToJump ())
+                || CanJumpBlockRight (map)) {
                 jump (JUMP_SPEED_X);
                 return;
             }
@@ -66,7 +67,8 @@ public class EnemyType1 extends Object {
                 countMoveLeft = MAX_MOVE;
                 return;
             }
-            if (CanJumpGapLeft (map) || CanJumpBlockLeft (map)) {
+            if ( (CanJumpGapLeft (map) && decideToJump ())
+                    || CanJumpBlockLeft (map)) {
                 jump (-JUMP_SPEED_X);
                 return;
             }
@@ -77,7 +79,7 @@ public class EnemyType1 extends Object {
         if (countMoveLeft == MAX_MOVE && countMoveRight == MAX_MOVE) {
             countMoveRight=0;
             countMoveLeft=0;
-            MAX_MOVE = MIN_MOVE + new Random ().nextInt(500);
+            MAX_MOVE = MIN_MOVE + new Random ().nextInt(700);
         }
     }
     private void jump (int value) {
@@ -85,19 +87,6 @@ public class EnemyType1 extends Object {
             this.Velocity = this.Velocity.add (value, -27);
             CanJump=false;
         }
-    }
-
-    private boolean CanJumpGapRight (Map map) {
-        for (Object platform : map.getLevel ().platforms ()) {
-
-            if (Math.abs (platform.getY () - getY ()) > 100
-                    || platform.getX () > getX () + 96
-                    || getX () > platform.getX ()) {
-                return false;
-            }
-        }
-        System.out.println ("CAN FALL RIGHT");
-        return true;
     }
 
     private boolean isGapRightTooBig (Map map) {
@@ -124,24 +113,48 @@ public class EnemyType1 extends Object {
         return true;
     }
 
-    private boolean CanJumpGapLeft(Map map) {
-        for (Object platform : map.getLevel ().platforms () ) {
-            if (Math.abs (platform.getY () - getY ()) > 100
-                    || getX () > platform.getX () - 96
-                    || getX () < platform.getX () ) {
+    private boolean CanJumpGapRight (Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+            if (platform.getX () == getX () + width
+                    || platform.getY () >= getY () + width) {
                 return false;
             }
+
+            if (Math.abs (platform.getY () - getY ()) <= platform.width
+                    && getX () + width < map.getLevel ().width() - platform.width - 10
+                    && platform.getX () < getX () + width + platform.width + 10
+                    && platform.getX () > getX () + width + 10) {
+                System.out.println ("CAN JUMP GAP RIGHT");
+                return true;
+            }
         }
-        System.out.println ("CAN FALL LEFT");
-        return true;
+        return false;
+    }
+
+    private boolean CanJumpGapLeft(Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+            if (platform.getX () == getX () + width
+                || platform.getY () >= getY () + width) {
+                return false;
+            }
+
+            if (Math.abs (platform.getY () - getY ()) < platform.width
+                    && getX () > platform.width + 10
+                    && getX () < platform.getX () + platform.width * 2
+                    && getX () > platform.getX () + platform.width) {
+                System.out.println ("CAN JUMP GAP LEFT");
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean CanJumpBlockRight (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
 
-            if (    getX () < (map.getLevel ().height - 1) * platform.width - 10 &&
-                    (platform.getX () - getX() - width) > 0 && (platform.getX () - getX() - width) <= 5 &&
-                    (platform.getY() < getY()) && (getY() - platform.getY()) <= platform.height*1.5){
+            if (    getX () + width < map.getLevel ().width() - platform.width - 10
+                    && (platform.getX () > getX() + width) && (platform.getX () <= getX() + width + 5)
+                    && (platform.getY() < getY()) && (getY() - platform.getY()) <= platform.height*1.5){
                 System.out.println ("CAN JUMP RIGHT");
                 return true;
             }
@@ -157,6 +170,15 @@ public class EnemyType1 extends Object {
                 System.out.println ("CAN JUMP LEFT");
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean decideToJump () {
+        int rand = new Random ().nextInt(2);
+        if (rand == 1) {
+            System.out.println ("DECIDE TO JUMP THE GAP: ");
+            return true;
         }
         return false;
     }
