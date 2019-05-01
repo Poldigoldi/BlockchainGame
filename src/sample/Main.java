@@ -101,6 +101,7 @@ public class Main extends Application {
     private void update(Stage stage) {
         boolean keypressed = false;
         if(mode == Mode.PLATFORMGAME) {
+
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed(KeyCode.LEFT)) {
                 keypressed = true;
@@ -116,11 +117,17 @@ public class Main extends Application {
                 mainScene.setRoot(appRoot);
             }
             moveScreenY();
+
+            moveEnemies ();
             for (Object object : animatedObjects) {
                 object.update(map);
             }
+
             handleItems();
-            if (isPlayerOutOfBounds()) { handleGameOver(); }
+
+            if ( EnemyKillPlayer () || isPlayerOutOfBounds() ) {
+                handleGameOver();
+            }
         }
     }
 
@@ -209,6 +216,24 @@ public class Main extends Application {
             moveScreenY();
             gameOver.setStartAgain();
             mainScene.setRoot(appRoot);
+        }
+    }
+
+    /* ----------- ENEMIES ------------ */
+    private boolean EnemyKillPlayer () {
+        for (EnemyType1 enemy: map.getEnemies ()) {
+            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void moveEnemies () {
+        for (EnemyType1 enemy : map.getEnemies ()) {
+            if (enemy.isCanMove ()) {
+                enemy.giveMotion (map);
+            }
         }
     }
 

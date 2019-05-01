@@ -87,6 +87,7 @@ public class Object  {
         //for Everything else that has gravity
         applyGravity();
         updateY(map);
+        updateX (map);
         isMoving = false;
     }
     void applyGravity() {
@@ -98,6 +99,11 @@ public class Object  {
     void updateY (Map map) {
         move_Y((int)this.Velocity.getY(), map);
     }
+
+    void updateX (Map map) {
+        move_X((int)this.Velocity.getX(), map);
+    }
+
 
     //returns true if the move is not blocked
     public boolean move_X(int value, Map map) {
