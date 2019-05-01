@@ -47,10 +47,8 @@ public class EnemyType1 extends Object {
         if (isLanded ) {
             this.Velocity = new Point2D (0, this.Velocity.getY ());
         }
-
+        // Enemy now goes RIGHT if he is allowed
         if (countMoveRight < MAX_MOVE) {
-            isGapRightTooBig (map);
-
             if (isGapRightTooBig (map)) {
                 countMoveRight = MAX_MOVE;
                 return;
@@ -62,8 +60,8 @@ public class EnemyType1 extends Object {
             move_X (MOVE_SPEED, map);
             countMoveRight++;
         }
+        // Enemy now goes LEFT if he is allowed
         if (countMoveRight == MAX_MOVE && countMoveLeft < MAX_MOVE) {
-
             if (isGapLeftTooBig (map)) {
                 countMoveLeft = MAX_MOVE;
                 return;
@@ -72,10 +70,10 @@ public class EnemyType1 extends Object {
                 jump (-JUMP_SPEED_X);
                 return;
             }
-
             move_X (-MOVE_SPEED, map);
             countMoveLeft++;
         }
+        // Reset counter
         if (countMoveLeft == MAX_MOVE && countMoveRight == MAX_MOVE) {
             countMoveRight=0;
             countMoveLeft=0;
@@ -104,7 +102,8 @@ public class EnemyType1 extends Object {
 
     private boolean isGapRightTooBig (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
-            if (platform.getY () - getY () - height <= 5
+
+            if ( (platform.getY () >= (getY () + height) )
                 && platform.getX () > getX ()
                 && platform.getX () < getX () + width + 2*platform.width) {
                 return false;
@@ -115,7 +114,7 @@ public class EnemyType1 extends Object {
     }
     private boolean isGapLeftTooBig (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
-            if (platform.getY () - getY () - height <= 5
+            if ( (platform.getY () >= (getY () + height) )
                     && platform.getX () < getX ()
                     && platform.getX () > getX () - width - 2*platform.width) {
                 return false;

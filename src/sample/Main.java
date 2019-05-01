@@ -52,7 +52,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mediaPlayer.play();
-        mediaPlayer.setVolume(20);
+        mediaPlayer.setVolume(0);
 
         //initialise player, the 'player' is the collision box of the playerInstance
         player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
