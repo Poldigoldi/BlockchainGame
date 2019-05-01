@@ -18,7 +18,7 @@ public class EnemyType1 extends Object {
     private final int MOVE_SPEED = 1;
     private final int JUMP_SPEED_X = 2;
     private final int MIN_MOVE = 50;
-    private int MAX_MOVE = 500;
+    private int MAX_MOVE = 200;
 
     public EnemyType1(int startx, int starty, boolean canMove) {
         super(Type.ENEMY1);
@@ -79,19 +79,23 @@ public class EnemyType1 extends Object {
 
     private boolean CanFallRight (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
-            if (Math.abs (platform.getY () - getY ()) > 150
-                && platform.getX () > getX () && platform.getX () < getX () + 100) {
+
+            if (Math.abs (platform.getY () - getY ()) > 100
+                    || platform.getX () > getX () + 96
+                    || getX () > platform.getX ()) {
                 return false;
             }
         }
         System.out.println ("CAN FALL RIGHT");
+
         return true;
     }
 
     private boolean CanFallLeft(Map map) {
         for (Object platform : map.getLevel ().platforms () ) {
-            if (Math.abs (platform.getY () - getY ()) > 150
-                    && platform.getX () < getX () && platform.getX () > getX () - 100) {
+            if (Math.abs (platform.getY () - getY ()) > 100
+                    || getX () > platform.getX () - 96
+                    || getX () < platform.getX () ) {
                 return false;
             }
         }
@@ -104,7 +108,7 @@ public class EnemyType1 extends Object {
 
             if (    getX () < (map.getLevel ().height - 1) * platform.width - 10 &&
                     (platform.getX () - getX() - width) > 0 && (platform.getX () - getX() - width) <= 5 &&
-                    (platform.getY() > getY()) && (platform.getY() - getY()) <= platform.height){
+                    (platform.getY() < getY()) && (getY() - platform.getY()) <= platform.height*1.5){
                 System.out.println ("CAN JUMP RIGHT");
                 return true;
             }
@@ -116,7 +120,7 @@ public class EnemyType1 extends Object {
         for (Object platform : map.getLevel ().platforms ()) {
             if (    getX () > platform.width + 10 &&
                     (getX () - platform.getX() - platform.width) > 0 && (getX () - platform.getX() - platform.width) <= 5 &&
-                    (platform.getY() > getY()) && (platform.getY() - getY()) <= platform.height){
+                    (platform.getY() < getY()) && (getY() - platform.getY()) <= platform.height*1.5){
                 System.out.println ("CAN JUMP LEFT");
                 return true;
             }
