@@ -18,7 +18,7 @@ public class EnemyType1 extends Object {
     private final int MOVE_SPEED = 1;
     private final int JUMP_SPEED_X = 2;
     private final int MIN_MOVE = 50;
-    private int MAX_MOVE = 200;
+    private int MAX_MOVE = 500;
 
     public EnemyType1(int startx, int starty, boolean canMove) {
         super(Type.ENEMY1);
@@ -49,7 +49,13 @@ public class EnemyType1 extends Object {
         }
 
         if (countMoveRight < MAX_MOVE) {
-            if (CanFallRight (map) || CanJumpRight (map)) {
+            isGapRightTooBig (map);
+
+            if (isGapRightTooBig (map)) {
+                countMoveRight = MAX_MOVE;
+                return;
+            }
+            if (CanJumpGapRight (map) || CanJumpBlockRight (map)) {
                 jump (JUMP_SPEED_X);
                 return;
             }
@@ -57,10 +63,16 @@ public class EnemyType1 extends Object {
             countMoveRight++;
         }
         if (countMoveRight == MAX_MOVE && countMoveLeft < MAX_MOVE) {
-            if (CanFallLeft (map) || CanJumpLeft (map)) {
+
+            if (isGapLeftTooBig (map)) {
+                countMoveLeft = MAX_MOVE;
+                return;
+            }
+            if (CanJumpGapLeft (map) || CanJumpBlockLeft (map)) {
                 jump (-JUMP_SPEED_X);
                 return;
             }
+
             move_X (-MOVE_SPEED, map);
             countMoveLeft++;
         }
@@ -77,7 +89,7 @@ public class EnemyType1 extends Object {
         }
     }
 
-    private boolean CanFallRight (Map map) {
+    private boolean CanJumpGapRight (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
 
             if (Math.abs (platform.getY () - getY ()) > 100
@@ -87,11 +99,33 @@ public class EnemyType1 extends Object {
             }
         }
         System.out.println ("CAN FALL RIGHT");
-
         return true;
     }
 
-    private boolean CanFallLeft(Map map) {
+    private boolean isGapRightTooBig (Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+            if (platform.getY () - getY () - height <= 5
+                && platform.getX () > getX ()
+                && platform.getX () < getX () + width + 2*platform.width) {
+                return false;
+            }
+        }
+        System.out.println ("GAP RIGHT TOO BIG");
+        return true;
+    }
+    private boolean isGapLeftTooBig (Map map) {
+        for (Object platform : map.getLevel ().platforms ()) {
+            if (platform.getY () - getY () - height <= 5
+                    && platform.getX () < getX ()
+                    && platform.getX () > getX () - width - 2*platform.width) {
+                return false;
+            }
+        }
+        System.out.println ("GAP LEFT TOO BIG");
+        return true;
+    }
+
+    private boolean CanJumpGapLeft(Map map) {
         for (Object platform : map.getLevel ().platforms () ) {
             if (Math.abs (platform.getY () - getY ()) > 100
                     || getX () > platform.getX () - 96
@@ -103,7 +137,7 @@ public class EnemyType1 extends Object {
         return true;
     }
 
-    private boolean CanJumpRight (Map map) {
+    private boolean CanJumpBlockRight (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
 
             if (    getX () < (map.getLevel ().height - 1) * platform.width - 10 &&
@@ -116,7 +150,7 @@ public class EnemyType1 extends Object {
         return false;
     }
 
-    private boolean CanJumpLeft(Map map) {
+    private boolean CanJumpBlockLeft(Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
             if (    getX () > platform.width + 10 &&
                     (getX () - platform.getX() - platform.width) > 0 && (getX () - platform.getX() - platform.width) <= 5 &&
