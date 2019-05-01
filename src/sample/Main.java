@@ -159,6 +159,10 @@ public class Main extends Application {
 
     /* ---------- Sub methods ----------- */
 
+    private Boolean isPressed(KeyCode key) {
+        return keys.getOrDefault(key, false);
+    }
+
     private void handleItems () {
         for (Item block : map.blocks()) {
             if ((this.player.box.getBoundsInParent()).intersects(block.box.getBoundsInParent())) {
@@ -232,16 +236,10 @@ public class Main extends Application {
 
     private void moveEnemies () {
         for (EnemyType1 enemy : map.getEnemies ()) {
-            if (enemy.isCanMove ()) {
+            if (enemy.getCanMove ()) {
                 enemy.giveMotion (map);
             }
         }
     }
-
-    private Boolean isPressed(KeyCode key) {
-        return keys.getOrDefault(key, false);
-    }
-
-
 }
 

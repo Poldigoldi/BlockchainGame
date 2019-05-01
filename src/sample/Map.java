@@ -61,9 +61,17 @@ public class Map {
 
     //Enemies
     private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(600, 100, true);
+        EnemyType1 enemy1 = new EnemyType1(200, 100, true, 500);
         addAnimatedObjects(enemy1);
         enemiestype1.add (enemy1);
+
+        EnemyType1 enemy2 = new EnemyType1(600, 500, true, 800);
+        addAnimatedObjects(enemy2);
+        enemiestype1.add (enemy2);
+
+        EnemyType1 enemy3 = new EnemyType1(1000, 500, true, 300);
+        addAnimatedObjects(enemy3);
+        enemiestype1.add (enemy3);
     }
 
 

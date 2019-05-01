@@ -18,15 +18,17 @@ public class EnemyType1 extends Object {
     private final int MOVE_SPEED = 1;
     private final int JUMP_SPEED_X = 2;
     private final int MIN_MOVE = 50;
-    private int MAX_MOVE = 400;
+    private int MAX_MOVES_AMPLITUDE;
+    private int LIMIT_MOVES = 400;
 
-    public EnemyType1(int startx, int starty, boolean canMove) {
+    public EnemyType1(int startx, int starty, boolean canMove, int move_amplitude) {
         super(Type.ENEMY1);
         this.setCollisionBox(startx, starty , 38, HEIGHT, Color.INDIANRED);
         this.canMove = canMove;
         this.alive = true;
         this.countMoveLeft=0;
         this.countMoveRight=0;
+        this.MAX_MOVES_AMPLITUDE = move_amplitude;
         sprite.loadDefaultLeftImages(new Frame("/graphics/enemy1.png"),
                 new Frame("/graphics/enemy1.png"));
         sprite.loadDefaultRightImages((new Frame("/graphics/enemy1.png")),(new Frame("/graphics/enemy1.png")));
@@ -35,22 +37,36 @@ public class EnemyType1 extends Object {
         sprite.offset(-5, -16);
     }
 
+    public boolean getCanMove() {
+        return canMove;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
 
     public void giveMotion (Map map) {
-        /** rules:
-         // - if cannot fall, generate random nb to move left/right
-         // - if can fall, and no ground after - turn back
-         // - if can fall, and platform/ground after - has 1/8 chance to jump
-         // - if finds a constrain, try to jump over **/
+        /**
+         This method defines the motion logic of the enemy
+
+         @rules:
+         * At start, if cannot fall, move RIGHT
+         * Once reach the 'moves limit' in one direction, change to other direction
+         * Once has reach limit for both LEFT and RIGHT, reset counter and generate a new random 'moves limit'
+         * if can fall, and gap too big to be jumped - turn back
+         * if can fall, and platform/ground after - 1/2 chance to jump!
+         * if finds a block constrain, jump over!
+
+         **/
 
         // reset horizontal speed after a jump
         if (isLanded ) {
             this.Velocity = new Point2D (0, this.Velocity.getY ());
         }
-        // Enemy now goes RIGHT if he is allowed
-        if (countMoveRight < MAX_MOVE) {
+        // Enemy goes RIGHT if he is allowed
+        if (countMoveRight < LIMIT_MOVES) {
             if (isGapRightTooBig (map)) {
-                countMoveRight = MAX_MOVE;
+                countMoveRight = LIMIT_MOVES;
                 return;
             }
             if ( (CanJumpGapRight (map) && decideToJump ())
@@ -61,10 +77,10 @@ public class EnemyType1 extends Object {
             move_X (MOVE_SPEED, map);
             countMoveRight++;
         }
-        // Enemy now goes LEFT if he is allowed
-        if (countMoveRight == MAX_MOVE && countMoveLeft < MAX_MOVE) {
+        // Enemy goes LEFT if he is allowed
+        if (countMoveRight == LIMIT_MOVES && countMoveLeft < LIMIT_MOVES) {
             if (isGapLeftTooBig (map)) {
-                countMoveLeft = MAX_MOVE;
+                countMoveLeft = LIMIT_MOVES;
                 return;
             }
             if ( (CanJumpGapLeft (map) && decideToJump ())
@@ -75,13 +91,16 @@ public class EnemyType1 extends Object {
             move_X (-MOVE_SPEED, map);
             countMoveLeft++;
         }
-        // Reset counter
-        if (countMoveLeft == MAX_MOVE && countMoveRight == MAX_MOVE) {
+        // Reset directions counters & generate new 'moves limit'
+        if (countMoveLeft == LIMIT_MOVES && countMoveRight == LIMIT_MOVES) {
             countMoveRight=0;
             countMoveLeft=0;
-            MAX_MOVE = MIN_MOVE + new Random ().nextInt(700);
+            LIMIT_MOVES = MIN_MOVE + new Random ().nextInt(MAX_MOVES_AMPLITUDE);
         }
     }
+
+    /* -------------------- PRIVATE METHODS ------------------------- */
+
     private void jump (int value) {
         if (CanJump) {
             this.Velocity = this.Velocity.add (value, -27);
@@ -181,16 +200,5 @@ public class EnemyType1 extends Object {
             return true;
         }
         return false;
-    }
-
-
-    /* ------------ GETTERS & SETTERS -------------- */
-
-    public boolean isCanMove() {
-        return canMove;
-    }
-
-    public void setCanMove(boolean canMove) {
-        this.canMove = canMove;
     }
 }
