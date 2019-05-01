@@ -26,6 +26,8 @@ public class Main extends Application {
     MediaPlayer mediaPlayer = new MediaPlayer(musicMedia);
     //sounds
     AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
+    AudioClip menuSound = new AudioClip(Paths.get("src/sound/menuSong.mp3").toUri().toString());
+    AudioClip instructionSound = new AudioClip(Paths.get("src/sound/instructionSong.mp3").toUri().toString());
 
     //global variables
     private int WIDTH = 960 , HEIGHT = 640;
@@ -105,6 +107,7 @@ public class Main extends Application {
     //boolean keypressed stops people holding both left and right down at same time
     private void update(Stage stage) {
         boolean keypressed = false;
+
         if(mode == Mode.PLATFORMGAME) {
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed(KeyCode.LEFT)) {
@@ -221,7 +224,7 @@ public class Main extends Application {
         if(!gameisMenu) {
             mainScene.setRoot(gameMenu.returnRoot());
             mainScene.setFill(Color.BLACK);
-            defeatSound.play();
+            menuSound.play();
             mediaPlayer.stop();
             gameisMenu = true;
         }
@@ -242,7 +245,7 @@ public class Main extends Application {
         if(!gameisInstructions) {
             mainScene.setRoot(instructionScreen.returnRoot());
             mainScene.setFill(Color.BLACK);
-            defeatSound.play();
+            instructionSound.play();
             mediaPlayer.stop();
             gameisInstructions = true;
         }
