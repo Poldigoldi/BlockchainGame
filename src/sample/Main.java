@@ -34,17 +34,12 @@ public class Main extends Application {
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
     private boolean gameisOver;
-    private boolean gameisMenu;
-    private boolean gameisInstructions;
-    private static boolean firstCall = true;
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Player player;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
-    private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
-    private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -105,7 +100,9 @@ public class Main extends Application {
     //boolean keypressed stops people holding both left and right down at same time
     private void update(Stage stage) {
         boolean keypressed = false;
+
         if(mode == Mode.PLATFORMGAME) {
+
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed(KeyCode.LEFT)) {
                 keypressed = true;
@@ -121,11 +118,17 @@ public class Main extends Application {
                 mainScene.setRoot(appRoot);
             }
             moveScreenY();
+            moveEnemies ();
+
             for (Object object : animatedObjects) {
                 object.update(map);
             }
+
             handleItems();
-            if (isPlayerOutOfBounds()) { handleGameOver(); }
+
+            if ( EnemyKillPlayer () || isPlayerOutOfBounds() ) {
+                handleGameOver();
+            }
         }
     }
 
@@ -151,6 +154,7 @@ public class Main extends Application {
         if(player.getY()>HEIGHT/2+40 && player.getY()<map.level().height()-HEIGHT/2-64){
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
         }
+
     }
 
     /* ---------- Sub methods ----------- */
@@ -182,18 +186,9 @@ public class Main extends Application {
 
     private void miniGameKey() {
         /* Mini games activated once player collects a block on the map */
-        try {
-            KeyGame mini = new KeyGame();
-
-            AnchorPane game = mini.returnRoot();
-            mainScene.setRoot(game);
-            mainScene.getRoot().requestFocus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
+        KeyGame mini = new KeyGame();
+        Group game = mini.returnRoot();
+        mainScene.setRoot(game);
        // mainScene.setRoot(appRoot);
     }
 
@@ -225,45 +220,21 @@ public class Main extends Application {
         }
     }
 
-    private void handleMenu() {
-        if(!gameisMenu) {
-            mainScene.setRoot(gameMenu.returnRoot());
-            mainScene.setFill(Color.BLACK);
-            defeatSound.play();
-            mediaPlayer.stop();
-            gameisMenu = true;
+    /* ----------- ENEMIES ------------ */
+    private boolean EnemyKillPlayer () {
+        for (EnemyType1 enemy: map.getEnemies ()) {
+            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+                return true;
+            }
         }
-        if (gameMenu.isStartGame()) {
-            gameisMenu=false;
-            mediaPlayer.play();
-            player.setX(PLAYERSTARTX);
-            player.setY(PLAYERSTARTY);
-            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
-            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
-            moveScreenY();
-            gameMenu.setStartAgain();
-            mainScene.setRoot(appRoot);
-        }
+        return false;
     }
 
-    private void handleInstructions() {
-        if(!gameisInstructions) {
-            mainScene.setRoot(instructionScreen.returnRoot());
-            mainScene.setFill(Color.BLACK);
-            defeatSound.play();
-            mediaPlayer.stop();
-            gameisInstructions = true;
-        }
-        if (instructionScreen.isReturn_to_menu()) {
-            gameisInstructions=false;
-            mediaPlayer.play();
-            player.setX(PLAYERSTARTX);
-            player.setY(PLAYERSTARTY);
-            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
-            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
-            moveScreenY();
-            instructionScreen.setReturn_to_menu();
-            mainScene.setRoot(appRoot);
+    private void moveEnemies () {
+        for (EnemyType1 enemy : map.getEnemies ()) {
+            if (enemy.isCanMove ()) {
+                enemy.giveMotion (map);
+            }
         }
     }
 

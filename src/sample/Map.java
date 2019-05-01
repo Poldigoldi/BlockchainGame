@@ -9,6 +9,7 @@ public class Map {
 
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Object> animatedObjects = new ArrayList<>();
+    private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
     private Group mapRoot = new Group();
     private Grid level = new Grid();
 
@@ -60,8 +61,9 @@ public class Map {
 
     //Enemies
     private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(400, 200);
+        EnemyType1 enemy1 = new EnemyType1(100, 144, true);
         addAnimatedObjects(enemy1);
+        enemiestype1.add (enemy1);
     }
 
 
@@ -114,6 +116,20 @@ public class Map {
     }
 
 
-
     public static double random(double min, double max){ return (Math.random()*((max-min)+1))+min; }
+
+    /* ----------------- GETTERS & SETTERS --------------- */
+
+    public ArrayList<Object> getAnimatedObjects() {
+        return animatedObjects;
+    }
+
+    public ArrayList<EnemyType1> getEnemies () {
+        return enemiestype1;
+    }
+
+    public Grid getLevel () {
+        return this.level;
+    }
+
 }

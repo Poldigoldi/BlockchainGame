@@ -72,8 +72,7 @@ public class GameOver {
         return root;
     }
 
-    public void  tryAgainPress(ActionEvent e) {
-        System.out.println("click");
+    public void tryAgainPress(ActionEvent e) {
         startAgain = true;
     }
 
