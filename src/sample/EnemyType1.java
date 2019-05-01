@@ -18,7 +18,7 @@ public class EnemyType1 extends Object {
     private final int MOVE_SPEED = 1;
     private final int JUMP_SPEED_X = 2;
     private final int MIN_MOVE = 50;
-    private int MAX_MOVE = 300;
+    private int MAX_MOVE = 500;
 
     public EnemyType1(int startx, int starty, boolean canMove) {
         super(Type.ENEMY1);
@@ -42,7 +42,6 @@ public class EnemyType1 extends Object {
          // - if can fall, and no ground after - turn back
          // - if can fall, and platform/ground after - jump!
          // - if finds a constrain, try to jump over **/
-
 
         // reset horizontal speed after a jump
         if (isLanded ) {
@@ -68,7 +67,7 @@ public class EnemyType1 extends Object {
         if (countMoveLeft == MAX_MOVE && countMoveRight == MAX_MOVE) {
             countMoveRight=0;
             countMoveLeft=0;
-            MAX_MOVE = MIN_MOVE + new Random ().nextInt(150);
+            MAX_MOVE = MIN_MOVE + new Random ().nextInt(500);
         }
     }
     private void jump (int value) {
@@ -103,8 +102,9 @@ public class EnemyType1 extends Object {
     private boolean CanJumpRight (Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
 
-            if (    (platform.getX () - getX() - width) > 0 && (platform.getX () - getX() - width) <= 5 &&
-                    (platform.getY() - getY() - height) > 0 && (platform.getY() - getY() - height) <= platform.height){
+            if (    getX () < (map.getLevel ().height - 1) * platform.width - 10 &&
+                    (platform.getX () - getX() - width) > 0 && (platform.getX () - getX() - width) <= 5 &&
+                    (platform.getY() > getY()) && (platform.getY() - getY()) <= platform.height){
                 System.out.println ("CAN JUMP RIGHT");
                 return true;
             }
@@ -114,8 +114,9 @@ public class EnemyType1 extends Object {
 
     private boolean CanJumpLeft(Map map) {
         for (Object platform : map.getLevel ().platforms ()) {
-            if (    (getX () - platform.getX() - platform.width) > 0 && (getX () - platform.getX() - platform.width) <= 5 &&
-                    platform.getY() > getY()){
+            if (    getX () > platform.width + 10 &&
+                    (getX () - platform.getX() - platform.width) > 0 && (getX () - platform.getX() - platform.width) <= 5 &&
+                    (platform.getY() > getY()) && (platform.getY() - getY()) <= platform.height){
                 System.out.println ("CAN JUMP LEFT");
                 return true;
             }
