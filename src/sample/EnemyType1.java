@@ -15,9 +15,6 @@ public class EnemyType1 extends Object {
           3) allow enemy to attack (either rockets/contact)
           4) reduce collision box size
      */
-
-
-    private boolean alive;
     private boolean canMove;
     private int countMoveLeft;
     private int countMoveRight;

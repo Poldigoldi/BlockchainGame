@@ -25,6 +25,7 @@ public class Map {
         for (Object platform : level.platforms()) {
             showEntity(platform);
         }
+        // Add block to pick-up
         Item block = new Item("block");
         block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
         addItem(block);
@@ -46,11 +47,9 @@ public class Map {
         showEntity(item);
     }
 
-    void removeItem (Item item) { hideEntity(item); }
+    public void showEntity(Object object) { object.add(mapRoot); }
 
-    void showEntity(Object object) { object.add(mapRoot); }
-
-    void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
+    public void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
 
     void addAnimatedObjects(Object... objects) {
         for(Object object: objects){

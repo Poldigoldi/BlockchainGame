@@ -118,15 +118,16 @@ public class Main extends Application {
                 mainScene.setRoot(appRoot);
             }
             moveScreenY();
-            handleEnemies ();
 
+            handleEnemies ();
             for (Object object : animatedObjects) {
                 object.update(map);
             }
 
             handleItems();
 
-            if ( EnemyKillPlayer () || isPlayerOutOfBounds() ) {
+
+            if (isObjectOutOfBounds(player) ) {
                 handleGameOver();
             }
         }
@@ -169,7 +170,7 @@ public class Main extends Application {
                 /* pickup item */
                 if (block.isAlive() && isPressed (KeyCode.A)) {
                     player.getLuggage ().take (block);
-                    map.removeItem (block);
+                    map.hideEntity (block);
                     miniGameKey();
                 }
             }
@@ -196,12 +197,13 @@ public class Main extends Application {
        // mainScene.setRoot(appRoot);
     }
 
-    private boolean isPlayerOutOfBounds() {
-        if (player.getY() > map.level().height()){
+    private boolean isObjectOutOfBounds(Object object) {
+        if (object.getY() > map.level().height()){
             return true;
         }
         return false;
     }
+
 
     private void handleGameOver() {
         if(!gameisOver) {
@@ -235,16 +237,23 @@ public class Main extends Application {
         }
         return false;
     }
+    private boolean PlayerKillEnemy (EnemyType1 enemy) {
+        if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+            return true;
+        }
+        return false;
+    }
 
     private void handleEnemies () {
         for (EnemyType1 enemy : map.getEnemies ()) {
-            // hide dead enemies
-            if ( !enemy.isAlive ()) {
+
+            // check if enemy died
+            if (PlayerKillEnemy (enemy) || isObjectOutOfBounds (enemy) ) {
+                enemy.setAlive (false);
                 map.hideEntity (enemy);
-                return;
             }
-            // give motion
-            if (enemy.getCanMove ()) {
+            // if enemy alive - give motion
+            if (enemy.isAlive () && enemy.getCanMove ()) {
                 enemy.giveMotion (map);
             }
         }
