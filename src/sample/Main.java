@@ -118,7 +118,7 @@ public class Main extends Application {
                 mainScene.setRoot(appRoot);
             }
             moveScreenY();
-            moveEnemies ();
+            handleEnemies ();
 
             for (Object object : animatedObjects) {
                 object.update(map);
@@ -209,6 +209,7 @@ public class Main extends Application {
             mainScene.setFill(Color.BLACK);
             defeatSound.play();
             mediaPlayer.stop();
+            map.setEnemiesAlive (false);
             gameisOver = true;
         }
         if (gameOver.isStartAgain()) {
@@ -216,6 +217,7 @@ public class Main extends Application {
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
+            map.setEnemiesAlive (true);
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
             moveScreenY();
@@ -234,8 +236,14 @@ public class Main extends Application {
         return false;
     }
 
-    private void moveEnemies () {
+    private void handleEnemies () {
         for (EnemyType1 enemy : map.getEnemies ()) {
+            // hide dead enemies
+            if ( !enemy.isAlive ()) {
+                map.hideEntity (enemy);
+                return;
+            }
+            // give motion
             if (enemy.getCanMove ()) {
                 enemy.giveMotion (map);
             }

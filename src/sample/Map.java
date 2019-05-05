@@ -140,4 +140,9 @@ public class Map {
         return this.level;
     }
 
+    public void setEnemiesAlive (boolean state) {
+        for (EnemyType1 enemy : this.enemiestype1) {
+            enemy.setAlive (state);
+        }
+    }
 }
