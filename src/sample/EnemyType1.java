@@ -248,11 +248,5 @@ public class EnemyType1 extends Object {
         return canMove;
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
 }

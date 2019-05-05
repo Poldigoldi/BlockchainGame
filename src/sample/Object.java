@@ -77,11 +77,11 @@ public class Object  {
         group.getChildren().addAll(sprite, box);
     }
 
+    //shows or hide object on the screen
     public void setVisible (boolean visible) {
         sprite.setVisible (visible);
         box.setVisible (visible);
     }
-
 
     //the only objects you'd want to update are animated objects, e.g. anything that can fall, move around
     //this would include the player, enemies, cubes falling from the sky etc.
@@ -183,4 +183,11 @@ public class Object  {
 
     public void setY(double y){ box.setTranslateY(y);}
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
 }

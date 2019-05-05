@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.scene.image.Image;
-
 
 /* An item is an object with extra methods*/
 public class Item extends Object {
@@ -25,11 +23,4 @@ public class Item extends Object {
         box.setTranslateY (y);
     }
 
-    Boolean isAlive() {
-        return this.alive;
-    }
-
-    void setAlive(Boolean value) {
-        this.alive = value;
-    }
 }

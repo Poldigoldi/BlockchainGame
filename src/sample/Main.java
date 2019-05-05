@@ -28,8 +28,9 @@ public class Main extends Application {
     AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
 
     //global variables
-    private int WIDTH = 960 , HEIGHT = 640;
-    private int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
+    private final int WIDTH = 960 , HEIGHT = 640;
+    private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
+    private final int PLAYER_START_LIVES = 2;
     private double playerY = PLAYERSTARTY;
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
@@ -55,7 +56,7 @@ public class Main extends Application {
         mediaPlayer.setVolume(0);
 
         //initialise player, the 'player' is the collision box of the playerInstance
-        player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
+        player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage, PLAYER_START_LIVES);
         player.initialise();
 
         //initialise Scene/game
@@ -118,16 +119,14 @@ public class Main extends Application {
                 mainScene.setRoot(appRoot);
             }
             moveScreenY();
+            ListenerEnemies ();
+            ListenerItemsEvent();
+            ListenerPlayerLives ();
 
-            handleEnemies ();
             for (Object object : animatedObjects) {
                 object.update(map);
             }
-
-            handleItems();
-
-
-            if (isObjectOutOfBounds(player) ) {
+            if (player.getLives () == 0 || isObjectOutOfBounds(player) ) {
                 handleGameOver();
             }
         }
@@ -158,13 +157,13 @@ public class Main extends Application {
 
     }
 
-    /* ---------- Sub methods ----------- */
+    /* ---------- PLAYER ----------- */
 
     private Boolean isPressed(KeyCode key) {
         return keys.getOrDefault(key, false);
     }
 
-    private void handleItems () {
+    private void ListenerItemsEvent () {
         for (Item block : map.blocks()) {
             if ((this.player.box.getBoundsInParent()).intersects(block.box.getBoundsInParent())) {
                 /* pickup item */
@@ -189,13 +188,51 @@ public class Main extends Application {
         }
     }
 
-    private void miniGameKey() {
-        /* Mini games activated once player collects a block on the map */
-        KeyGame mini = new KeyGame();
-        Group game = mini.returnRoot();
-        mainScene.setRoot(game);
-       // mainScene.setRoot(appRoot);
+    private void ListenerPlayerLives () {
+        int collision=0;
+        for (EnemyType1 enemy: map.getEnemies ()) {
+            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+                collision++;
+                // Waits that player moves out from the enemy to loose another life
+                if (player.isCanDie ()) {
+                    System.out.println ("PLAYER LOST A LIFE");
+                    player.LooseOneLive ();
+                    player.setCanDie (false);
+                }
+            }
+        }
+        // if player not on any enemy
+        if (collision == 0) {
+            player.setCanDie (true);
+        }
     }
+    private boolean PlayerKillEnemy (EnemyType1 enemy) {
+        /*
+        if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+            return true;
+        }*/
+        return false;
+    }
+
+    /* ----------- ENEMIES ------------ */
+
+
+    private void ListenerEnemies () {
+        for (EnemyType1 enemy : map.getEnemies ()) {
+
+            // check if enemy died
+            if (PlayerKillEnemy (enemy) || isObjectOutOfBounds (enemy) ) {
+                enemy.setAlive (false);
+                map.hideEntity (enemy);
+            }
+            // if enemy alive - give motion
+            if (enemy.isAlive () && enemy.getCanMove ()) {
+                enemy.giveMotion (map);
+            }
+        }
+    }
+
+    /* ----------------- GAME OVER ------------------- */
 
     private boolean isObjectOutOfBounds(Object object) {
         if (object.getY() > map.level().height()){
@@ -203,7 +240,6 @@ public class Main extends Application {
         }
         return false;
     }
-
 
     private void handleGameOver() {
         if(!gameisOver) {
@@ -219,6 +255,7 @@ public class Main extends Application {
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
+            player.setLives (PLAYER_START_LIVES);
             map.setEnemiesAlive (true);
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
@@ -228,35 +265,16 @@ public class Main extends Application {
         }
     }
 
-    /* ----------- ENEMIES ------------ */
-    private boolean EnemyKillPlayer () {
-        for (EnemyType1 enemy: map.getEnemies ()) {
-            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private boolean PlayerKillEnemy (EnemyType1 enemy) {
-        if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
-            return true;
-        }
-        return false;
+    /* ----------------- MINI GAME ------------------- */
+
+    private void miniGameKey() {
+        /* Mini games activated once player collects a block on the map */
+        KeyGame mini = new KeyGame();
+        Group game = mini.returnRoot();
+        mainScene.setRoot(game);
+        // mainScene.setRoot(appRoot);
     }
 
-    private void handleEnemies () {
-        for (EnemyType1 enemy : map.getEnemies ()) {
 
-            // check if enemy died
-            if (PlayerKillEnemy (enemy) || isObjectOutOfBounds (enemy) ) {
-                enemy.setAlive (false);
-                map.hideEntity (enemy);
-            }
-            // if enemy alive - give motion
-            if (enemy.isAlive () && enemy.getCanMove ()) {
-                enemy.giveMotion (map);
-            }
-        }
-    }
 }
 
