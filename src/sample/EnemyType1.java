@@ -10,10 +10,8 @@ import java.util.concurrent.TimeUnit;
 public class EnemyType1 extends Object {
 
     /*
-    TODO: 1) consider when Enemy dies (ex: fall / killed)
-          2) consider when Enemy kills player: attribute lifes amount & remove 1 life
-          3) allow enemy to attack (either rockets/contact)
-          4) reduce collision box size
+    TODO: 1) allow enemy to attack (either rockets/contact)
+          2) reduce collision box size
      */
     private boolean canMove;
     private int countMoveLeft;
@@ -21,22 +19,25 @@ public class EnemyType1 extends Object {
     private int limitMoves = 400;
 
     // Global variables
-    private final int OFFSET = 10;
+    private final int OFFSET = 5;
     private final int MOVE_SPEED = 1;
-    private final int JUMP_SPEED_X = 2;
+    private final int JUMP_SPEED_Y = 27;
+    private final int JUMP_SPEED_X = 3;
+    private final int JUMP_PROBA_RANGE;
     private final int MIN_MOVE = 50;
     private final int MAX_MOVES_AMPLITUDE;
 
-    public EnemyType1(int startx, int starty, boolean canMove, int move_amplitude) {
+    public EnemyType1(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
         super(Type.ENEMY1);
         this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
         this.canMove = canMove;
         this.alive = true;
         this.countMoveLeft=0;
         this.countMoveRight=0;
-        this.MAX_MOVES_AMPLITUDE = move_amplitude;
-        sprite.loadDefaultLeftImages(new Frame("/graphics/enemy1.png"),
-                new Frame("/graphics/enemy1.png"));
+        this.MAX_MOVES_AMPLITUDE = moveAmplitude;
+        this.JUMP_PROBA_RANGE = jumpProbRange;
+
+        sprite.loadDefaultLeftImages(new Frame("/graphics/enemy1.png"), new Frame("/graphics/enemy1.png"));
         sprite.loadDefaultRightImages((new Frame("/graphics/enemy1.png")),(new Frame("/graphics/enemy1.png")));
         sprite.loadLeftMotionImages((new Frame("/graphics/enemy1.png")));
         sprite.loadRightMotionImages((new Frame("/graphics/enemy1.png")));
@@ -67,7 +68,7 @@ public class EnemyType1 extends Object {
                 countMoveRight = limitMoves;
                 return;
             }
-            if ( (CanJumpGapRight (map) && decideToJump ())
+            if ( (CanJumpGapRight (map) && decideToJump (map, "RIGHT"))
                 || CanJumpBlockRight (map)) {
                 jump (JUMP_SPEED_X);
                 return;
@@ -81,7 +82,7 @@ public class EnemyType1 extends Object {
                 countMoveLeft = limitMoves;
                 return;
             }
-            if ( (CanJumpGapLeft (map) && decideToJump ())
+            if ( (CanJumpGapLeft (map) && decideToJump (map, "LEFT"))
                     || CanJumpBlockLeft (map)) {
                 jump (-JUMP_SPEED_X);
                 return;
@@ -101,7 +102,7 @@ public class EnemyType1 extends Object {
 
     private void jump (int value) {
         if (CanJump) {
-            this.Velocity = this.Velocity.add (value, -27);
+            this.Velocity = this.Velocity.add (value, -JUMP_SPEED_Y);
             CanJump=false;
         }
     }
@@ -147,15 +148,16 @@ public class EnemyType1 extends Object {
          **/
         for (Object platform : map.getLevel ().platforms ()) {
             // case 1: enemy has no gap on his RIGHT
-            if (platform.getX () == getX () + width
-                    || platform.getY () >= getY () + width) {
+            if (    platform.getX() >= getX()
+                    && platform.getX () < getX () + 2 * platform.width
+                    && platform.getY () >= getY() + height){
                 return false;
             }
             // case 2: enemy has a gap on his RIGHT, small enough to jump
-            if (Math.abs (platform.getY () - getY ()) <= platform.height
+            if (    platform.getY () >= getY () - 2 * platform.height
                     && getX () + width < map.getLevel ().width() - platform.width - OFFSET
-                    && platform.getX () < getX () + width + platform.width + OFFSET
-                    && platform.getX () > getX () + width + OFFSET) {
+                    && getX () < platform.getX() - platform.width
+                    && getX () > platform.getX () - 2 * platform.width) {
                 System.out.println ("CAN JUMP GAP RIGHT");
                 return true;
             }
@@ -175,15 +177,16 @@ public class EnemyType1 extends Object {
          **/
         for (Object platform : map.getLevel ().platforms ()) {
             // case 1: enemy has no gap on his LEFT
-            if (platform.getX () == getX () + width
-                || platform.getY () >= getY () + width) {
+            if (platform.getX () <= getX ()
+                && platform.getX () >= getX () - platform.width
+                    && platform.getY () >= getY ()) {
                 return false;
             }
             // case 2: enemy has a gap on his LEFT, small enough to jump
-            if (Math.abs (platform.getY () - getY ()) < platform.height
-                    && getX () > platform.width + OFFSET
-                    && getX () < platform.getX () + platform.width * 2
-                    && getX () > platform.getX () + platform.width) {
+            if (    platform.getY () >= getY () - 2 * platform.height
+                    && platform.getX () > platform.width + OFFSET
+                    && getX () < platform.getX () + platform.width * 3
+                    && getX () > platform.getX () + platform.width * 2) {
                 System.out.println ("CAN JUMP GAP LEFT");
                 return true;
             }
@@ -203,8 +206,7 @@ public class EnemyType1 extends Object {
             if (    getX () + width < map.getLevel ().width() - platform.width - OFFSET
                     && (platform.getX () > getX() + width)
                     && (platform.getX () <= getX() + width + OFFSET)
-                    && (platform.getY() < getY())
-                    && (getY() - platform.getY()) <= platform.height*1.5){
+                    && (platform.getY() + platform.height == getY() + height) ){
                 System.out.println ("CAN JUMP RIGHT");
                 return true;
             }
@@ -221,11 +223,12 @@ public class EnemyType1 extends Object {
           * if the block is just above him (condition 4 and 5)
          */
         for (Object platform : map.getLevel ().platforms ()) {
+
+
             if (    getX () > platform.width + OFFSET
-                    && (getX () - platform.getX() - platform.width) > 0
-                    && (getX () - platform.getX() - platform.width) <= OFFSET
-                    && (platform.getY() < getY())
-                    && (getY() - platform.getY()) <= platform.height*1.5){
+                    && (getX () >= platform.getX())
+                    && (getX () <= platform.getX() + platform.width + OFFSET)
+                    && (platform.getY() + platform.height == getY() + height) ){
                 System.out.println ("CAN JUMP LEFT");
                 return true;
             }
@@ -233,13 +236,27 @@ public class EnemyType1 extends Object {
         return false;
     }
 
-    private boolean decideToJump () {
+    private boolean decideToJump (Map map, String side) {
         /**
-            If the enemy can jump to a new platform - here has 1/2 chance to actually do it
+            If the enemy can jump to a new platform - here has 1/45 chance to actually do it
+            Because this function is called 60 times per second. It gives more chance to the enemy to actually jump
             @output: 'true' if rand = 1, 'false' if rand = 0
          **/
-        int rand = new Random ().nextInt(2);
-        return rand == 1;
+        int rand = new Random ().nextInt(JUMP_PROBA_RANGE);
+        if (rand != 1) {
+            for (Object p : map.getLevel ().platforms ()) {
+                // only jump if there is a platform so he doesn't die
+                if (p.getY () > getY () + height) {
+                    if (   (side == "RIGHT" && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
+                        || (side == "LEFT" && getX () > p.getX () + p.width - width && (getX () < p.getX () + p.width + width))   ){
+                        System.out.println ("SAFE TO ABORT JUMP " + side);
+                        return false;
+                    }
+                }
+            }
+            System.out.println ("WASN'T SAFE TO NOT JUMP " + side);
+        }
+        return true;
     }
 
     /* -------------------------- GETTERS & SETTERS -------------------------- */

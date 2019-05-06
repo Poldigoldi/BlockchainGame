@@ -31,7 +31,6 @@ public class Main extends Application {
     private final int WIDTH = 960 , HEIGHT = 640;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
     private final int PLAYER_START_LIVES = 2;
-    private double playerY = PLAYERSTARTY;
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
     private boolean gameisOver;
@@ -56,7 +55,7 @@ public class Main extends Application {
         mediaPlayer.setVolume(0);
 
         //initialise player, the 'player' is the collision box of the playerInstance
-        player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage, PLAYER_START_LIVES);
+        player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, primaryStage, PLAYER_START_LIVES);
         player.initialise();
 
         //initialise Scene/game
