@@ -21,10 +21,10 @@ public class EnemyType1 extends Object {
     // Global variables
     private final int OFFSET = 5;
     private final int MOVE_SPEED = 1;
-    private final int JUMP_SPEED_Y = 27;
-    private final int JUMP_SPEED_X = 3;
+    private final double JUMP_SPEED_Y = 28;
+    private final double JUMP_SPEED_X = 2.6;
     private final int JUMP_PROBA_RANGE;
-    private final int MIN_MOVE = 50;
+    private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
 
     public EnemyType1(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
@@ -57,7 +57,6 @@ public class EnemyType1 extends Object {
          * if finds a block constrain, jump over!
 
          **/
-
         // reset horizontal speed after a jump
         if (isLanded ) {
             this.Velocity = new Point2D (0, this.Velocity.getY ());
@@ -100,7 +99,7 @@ public class EnemyType1 extends Object {
 
     /* -------------------- PRIVATE METHODS ------------------------- */
 
-    private void jump (int value) {
+    private void jump (double value) {
         if (CanJump) {
             this.Velocity = this.Velocity.add (value, -JUMP_SPEED_Y);
             CanJump=false;
@@ -155,7 +154,7 @@ public class EnemyType1 extends Object {
             }
             // case 2: enemy has a gap on his RIGHT, small enough to jump
             if (    platform.getY () >= getY () - 2 * platform.height
-                    && getX () + width < map.getLevel ().width() - platform.width - OFFSET
+                    && platform.getX () < map.getLevel ().width() - platform.width - OFFSET
                     && getX () < platform.getX() - platform.width
                     && getX () > platform.getX () - 2 * platform.width) {
                 System.out.println ("CAN JUMP GAP RIGHT");
@@ -178,7 +177,7 @@ public class EnemyType1 extends Object {
         for (Object platform : map.getLevel ().platforms ()) {
             // case 1: enemy has no gap on his LEFT
             if (platform.getX () <= getX ()
-                && platform.getX () >= getX () - platform.width
+                && platform.getX () >= getX () - 2 * platform.width
                     && platform.getY () >= getY ()) {
                 return false;
             }
