@@ -101,6 +101,13 @@ public class Main extends Application {
     private void update(Stage stage) {
         boolean keypressed = false;
 
+        if (mode == Mode.MINIGAME) {
+            if (isPressed(KeyCode.ESCAPE)) {
+                mode = Mode.PLATFORMGAME;
+                mainScene.setRoot(appRoot);
+            }
+        }
+
         if(mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
@@ -114,9 +121,7 @@ public class Main extends Application {
             if (isPressed(KeyCode.SPACE)) {
                 player.jump();
             }
-            if (isPressed(KeyCode.ESCAPE)) {
-                mainScene.setRoot(appRoot);
-            }
+
             moveScreenY();
             ListenerEnemies ();
             ListenerItemsEvent();
@@ -271,6 +276,7 @@ public class Main extends Application {
         KeyGame mini = new KeyGame();
         Group game = mini.returnRoot();
         mainScene.setRoot(game);
+        mode = Mode.MINIGAME;
         // mainScene.setRoot(appRoot);
     }
 
