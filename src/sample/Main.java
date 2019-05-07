@@ -178,7 +178,6 @@ public class Main extends Application {
         if(player.getY()>HEIGHT/2+40 && player.getY()<map.level().height()-HEIGHT/2-64){
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
         }
-
     }
 
     /* ---------- PLAYER ----------- */
@@ -208,6 +207,22 @@ public class Main extends Application {
             }
         }
     }
+
+    private void miniGameKey() {
+        /* Mini games activated once player collects a block on the map */
+        try {
+            KeyGame mini = new KeyGame();
+
+            AnchorPane game = mini.returnRoot();
+            mainScene.setRoot(game);
+            mainScene.getRoot().requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+       // mainScene.setRoot(appRoot);
 
     private void ListenerPlayerLives () {
         int collision=0;
@@ -332,14 +347,6 @@ public class Main extends Application {
     }
     /* ----------------- MINI GAME ------------------- */
 
-    private void miniGameKey() {
-        /* Mini games activated once player collects a block on the map */
-        KeyGame mini = new KeyGame();
-        Group game = mini.returnRoot();
-        mainScene.setRoot(game);
-        mode = Mode.MINIGAME;
-        // mainScene.setRoot(appRoot);
-    }
 
 
 
