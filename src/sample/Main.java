@@ -131,10 +131,11 @@ public class Main extends Application {
 
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.LEFT)) {
-                keypressed = true;
-                if (player.move_X (-5, map)) moveScreenX (-5);
+                player.setXDirection(false);
+                if (player.move_X (-5, map))moveScreenX (-5);
             }
-            if (isPressed (KeyCode.RIGHT) && keypressed == false) {
+            else if (isPressed (KeyCode.RIGHT)){
+                player.setXDirection(true);
                 if (player.move_X (5, map)) moveScreenX (5);
             }
             if (isPressed (KeyCode.SPACE)) {

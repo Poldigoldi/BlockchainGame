@@ -66,6 +66,17 @@ public class Player extends Object {
                 new Frame("/graphics/motionLeft2.png"),
                 new Frame("/graphics/motionLeft3.png"),
                 new Frame("/graphics/motionLeft4.png"));
+        sprite.loadfallLeftImages(
+                new Frame("/graphics/main_char_fallLeft1.png", 10),
+                new Frame("/graphics/main_char_fallLeft2.png", 10));
+        sprite.loadfallRightImages(
+                new Frame("/graphics/main_char_fallRight1.png", 10),
+                new Frame("/graphics/main_char_fallRight2.png", 10));
+        sprite.loadjumpLeftImages(
+                new Frame("/graphics/main_char_jumpLeft1.png", 10));
+        sprite.loadjumpRightImages(
+                new Frame("/graphics/main_char_jumpRight1.png", 10));
+
     }
 
     /* ------------ GETTERS & SETTERS -------------- */

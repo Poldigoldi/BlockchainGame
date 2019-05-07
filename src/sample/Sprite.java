@@ -10,6 +10,10 @@ public class Sprite extends ImageView {
     private List<Frame> defaultRightAnimation = new ArrayList<>();
     private List<Frame> motionRightAnimation = new ArrayList<>();
     private List<Frame> motionLeftAnimation = new ArrayList<>();
+    private List<Frame> fallRightAnimation = new ArrayList<>();
+    private List<Frame> fallLeftAnimation = new ArrayList<>();
+    private List<Frame> jumpRightAnimation = new ArrayList<>();
+    private List<Frame> jumpLeftAnimation = new ArrayList<>();
     private int animationCycle;
     private Frame currentFrame;
     private int frameDelay;
@@ -44,18 +48,22 @@ public class Sprite extends ImageView {
 
     //for an animated sprite
 
-    public void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
-
-    public void loadDefaultLeftImages(Frame... images){ for(Frame image: images) defaultLeftAnimation.add(image); }
-
     public void loadDefaultImages(Frame... images){
         for(Frame image: images)
             defaultAnimation.add(image);
     }
 
-    public void loadLeftMotionImages(Frame... images){ for(Frame image: images) motionLeftAnimation.add(image); }
+    public void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
+    public void loadDefaultLeftImages(Frame... images){ for(Frame image: images) defaultLeftAnimation.add(image); }
 
+    public void loadLeftMotionImages(Frame... images){ for(Frame image: images) motionLeftAnimation.add(image); }
     public void loadRightMotionImages(Frame... images){ for(Frame image: images) motionRightAnimation.add(image); }
+
+    public void loadfallLeftImages(Frame... images){ for(Frame image: images) fallLeftAnimation.add(image); }
+    public void loadfallRightImages(Frame... images){ for(Frame image: images) fallRightAnimation.add(image); }
+
+    public void loadjumpLeftImages(Frame... images){ for(Frame image: images) jumpLeftAnimation.add(image); }
+    public void loadjumpRightImages(Frame... images){ for(Frame image: images) jumpRightAnimation.add(image); }
 
     //updates images
     private void updateFrame(){
@@ -66,17 +74,31 @@ public class Sprite extends ImageView {
         frameDelay++;
     }
 
-    public void update(boolean movingRight, boolean moving, double x, double y) {
+    public void update(boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
         moveTo(x, y);
+        //for non-moving animations
         if (!type.hasMovementAnimation() && defaultAnimation.size()>0){
             animate(defaultAnimation);
         }
+        //for moving animations
+        //jumping
         if (type.hasMovementAnimation()) {
-            if(!moving) {
+            if(!movingDown) {
+                if (movingRight) animate(jumpRightAnimation);
+                else animate(jumpLeftAnimation);
+            }
+            //falling
+            else if(!isLanded) {
+                if (movingRight) animate(fallRightAnimation);
+                else animate(fallLeftAnimation);
+            }
+            //default (not currently moving)
+            else if(!moving) {
                 if (movingRight) animate(defaultRightAnimation);
                 else animate(defaultLeftAnimation);
             }
-            if(moving) {
+            //moving left/right
+            else if(moving) {
                 if (movingRight) animate(motionRightAnimation);
                 else animate(motionLeftAnimation);
             }
