@@ -25,6 +25,7 @@ public class Map {
         for (Object platform : level.platforms()) {
             showEntity(platform);
         }
+        // Add block to pick-up
         Item block = new Item("block");
         block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
         addItem(block);
@@ -46,11 +47,9 @@ public class Map {
         showEntity(item);
     }
 
-    void removeItem (Item item) { hideEntity(item); }
+    public void showEntity(Object object) { object.add(mapRoot); }
 
-    void showEntity(Object object) { object.add(mapRoot); }
-
-    void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
+    public void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
 
     void addAnimatedObjects(Object... objects) {
         for(Object object: objects){
@@ -61,9 +60,17 @@ public class Map {
 
     //Enemies
     private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(100, 144, true);
+        EnemyType1 enemy1 = new EnemyType1(200, 100, true, 800, 100);
         addAnimatedObjects(enemy1);
         enemiestype1.add (enemy1);
+
+        EnemyType1 enemy2 = new EnemyType1(600, 500, true, 800, 10);
+        addAnimatedObjects(enemy2);
+        enemiestype1.add (enemy2);
+
+        EnemyType1 enemy3 = new EnemyType1(1300, 500, true, 800, 50);
+        addAnimatedObjects(enemy3);
+        enemiestype1.add (enemy3);
     }
 
 
@@ -132,4 +139,9 @@ public class Map {
         return this.level;
     }
 
+    public void setEnemiesAlive (boolean state) {
+        for (EnemyType1 enemy : this.enemiestype1) {
+            enemy.setAlive (state);
+        }
+    }
 }

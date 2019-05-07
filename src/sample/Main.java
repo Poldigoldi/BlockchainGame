@@ -26,20 +26,27 @@ public class Main extends Application {
     MediaPlayer mediaPlayer = new MediaPlayer(musicMedia);
     //sounds
     AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
+    AudioClip menuSound = new AudioClip(Paths.get("src/sound/menuSong.mp3").toUri().toString());
+    AudioClip instructionSound = new AudioClip(Paths.get("src/sound/instructionSong.mp3").toUri().toString());
 
     //global variables
-    private int WIDTH = 960 , HEIGHT = 640;
-    private int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
-    private double playerY = PLAYERSTARTY;
-    private Mode mode = Mode.PLATFORMGAME;
+    private final int WIDTH = 960 , HEIGHT = 640;
+    private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
+    private final int PLAYER_START_LIVES = 2;
+    private Mode mode = Mode.STARTMENU;
     private int counter;
     private boolean gameisOver;
+    private boolean gameisMenu;
+    private boolean gameisInstructions;
+    private static boolean firstCall = true;
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Player player;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
+    private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
+    private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -52,10 +59,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mediaPlayer.play();
-        mediaPlayer.setVolume(20);
+        mediaPlayer.setVolume(0);
 
         //initialise player, the 'player' is the collision box of the playerInstance
-        player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
+        player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, primaryStage, PLAYER_START_LIVES);
         player.initialise();
 
         //initialise Scene/game
@@ -65,6 +72,9 @@ public class Main extends Application {
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         primaryStage.setScene(mainScene);
+        mainScene.setRoot(gameMenu.returnRoot());
+        gameisMenu = true;
+        handleMenu();
         primaryStage.show();
         runGame(primaryStage);
     }
@@ -101,33 +111,47 @@ public class Main extends Application {
     private void update(Stage stage) {
         boolean keypressed = false;
 
-        if(mode == Mode.PLATFORMGAME) {
+        if (mode == Mode.MINIGAME) {
+            if (isPressed (KeyCode.ESCAPE)) {
+                mode = Mode.PLATFORMGAME;
+                mainScene.setRoot (appRoot);
+            }
+        }
+
+        if (mode == Mode.STARTMENU) {
+            if (gameMenu.isStartGame ()) {
+                handleMenu ();
+            }
+            if (gameMenu.isInstructionsPressed ()) {
+                handleInstructions ();
+            }
+        }
+
+        if (mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
-            if (isPressed(KeyCode.LEFT)) {
+            if (isPressed (KeyCode.LEFT)) {
                 keypressed = true;
-                if (player.move_X(-5, map)) moveScreenX(-5);
+                if (player.move_X (-5, map)) moveScreenX (-5);
             }
-            if (isPressed(KeyCode.RIGHT) && keypressed == false) {
-                if (player.move_X(5, map)) moveScreenX(5);
+            if (isPressed (KeyCode.RIGHT) && keypressed == false) {
+                if (player.move_X (5, map)) moveScreenX (5);
             }
-            if (isPressed(KeyCode.SPACE)) {
-                player.jump();
+            if (isPressed (KeyCode.SPACE)) {
+                player.jump ();
             }
-            if (isPressed(KeyCode.ESCAPE)) {
-                mainScene.setRoot(appRoot);
-            }
-            moveScreenY();
-            moveEnemies ();
+
+            moveScreenY ();
+            ListenerEnemies ();
+            ListenerItemsEvent ();
+            ListenerPlayerLives ();
 
             for (Object object : animatedObjects) {
-                object.update(map);
+                object.update (map);
             }
 
-            handleItems();
-
-            if ( EnemyKillPlayer () || isPlayerOutOfBounds() ) {
-                handleGameOver();
+            if (player.getLives () == 0 || isObjectOutOfBounds (player)) {
+                handleGameOver ();
             }
         }
     }
@@ -154,18 +178,18 @@ public class Main extends Application {
         if(player.getY()>HEIGHT/2+40 && player.getY()<map.level().height()-HEIGHT/2-64){
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
         }
-
     }
 
-    /* ---------- Sub methods ----------- */
+    /* ---------- PLAYER ----------- */
 
-    private void handleItems () {
+
+    private void ListenerItemsEvent () {
         for (Item block : map.blocks()) {
             if ((this.player.box.getBoundsInParent()).intersects(block.box.getBoundsInParent())) {
                 /* pickup item */
                 if (block.isAlive() && isPressed (KeyCode.A)) {
                     player.getLuggage ().take (block);
-                    map.removeItem (block);
+                    map.hideEntity (block);
                     miniGameKey();
                 }
             }
@@ -186,14 +210,68 @@ public class Main extends Application {
 
     private void miniGameKey() {
         /* Mini games activated once player collects a block on the map */
-        KeyGame mini = new KeyGame();
-        Group game = mini.returnRoot();
-        mainScene.setRoot(game);
+        try {
+            KeyGame mini = new KeyGame();
+
+            AnchorPane game = mini.returnRoot();
+            mainScene.setRoot(game);
+            mainScene.getRoot().requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
        // mainScene.setRoot(appRoot);
+
+    private void ListenerPlayerLives () {
+        int collision=0;
+        for (EnemyType1 enemy: map.getEnemies ()) {
+            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+                collision++;
+                // Waits that player moves out from the enemy to loose another life
+                if (player.isCanDie ()) {
+                    System.out.println ("PLAYER LOST A LIFE");
+                    player.LooseOneLive ();
+                    player.setCanDie (false);
+                }
+            }
+        }
+        // if player not on any enemy
+        if (collision == 0) {
+            player.setCanDie (true);
+        }
+    }
+    private boolean PlayerKillEnemy (EnemyType1 enemy) {
+        /*
+        if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+            return true;
+        }*/
+        return false;
     }
 
-    private boolean isPlayerOutOfBounds() {
-        if (player.getY() > map.level().height()){
+    /* ----------- ENEMIES ------------ */
+
+
+    private void ListenerEnemies () {
+        for (EnemyType1 enemy : map.getEnemies ()) {
+
+            // check if enemy died
+            if (PlayerKillEnemy (enemy) || isObjectOutOfBounds (enemy) ) {
+                enemy.setAlive (false);
+                map.hideEntity (enemy);
+            }
+            // if enemy alive - give motion
+            if (enemy.isAlive () && enemy.getCanMove ()) {
+                enemy.giveMotion (map);
+            }
+        }
+    }
+
+    /* ----------------- GAME OVER ------------------- */
+
+    private boolean isObjectOutOfBounds(Object object) {
+        if (object.getY() > map.level().height()){
             return true;
         }
         return false;
@@ -205,6 +283,7 @@ public class Main extends Application {
             mainScene.setFill(Color.BLACK);
             defeatSound.play();
             mediaPlayer.stop();
+            map.setEnemiesAlive (false);
             gameisOver = true;
         }
         if (gameOver.isStartAgain()) {
@@ -212,6 +291,8 @@ public class Main extends Application {
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
+            player.setLives (PLAYER_START_LIVES);
+            map.setEnemiesAlive (true);
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
             moveScreenY();
@@ -220,28 +301,60 @@ public class Main extends Application {
         }
     }
 
-    /* ----------- ENEMIES ------------ */
-    private boolean EnemyKillPlayer () {
-        for (EnemyType1 enemy: map.getEnemies ()) {
-            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
-                return true;
-            }
+    private void handleMenu() {
+        if(!gameisMenu) {
+            mainScene.setRoot(gameMenu.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            menuSound.play();
+            mediaPlayer.stop();
+            gameisMenu = true;
         }
-        return false;
+        if (gameMenu.isStartGame()) {
+            gameisMenu=false;
+            mode = Mode.PLATFORMGAME;
+            menuSound.stop();
+            mediaPlayer.play();
+            player.setX(PLAYERSTARTX);
+            player.setY(PLAYERSTARTY);
+            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
+            moveScreenY();
+            gameMenu.setStartAgain();
+            mainScene.setRoot(appRoot);
+        }
     }
 
-    private void moveEnemies () {
-        for (EnemyType1 enemy : map.getEnemies ()) {
-            if (enemy.isCanMove ()) {
-                enemy.giveMotion (map);
-            }
+    private void handleInstructions() {
+        if(!gameisInstructions) {
+            mainScene.setRoot(instructionScreen.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            instructionSound.play();
+            mediaPlayer.stop();
+            gameisInstructions = true;
+        }
+        if (instructionScreen.isReturn_to_menu()) {
+            gameMenu.resetInstructionPress();
+            instructionSound.stop();
+            gameisInstructions=false;
+            mediaPlayer.play();
+            instructionScreen.setReturn_to_menu();
+            mainScene.setRoot(gameMenu.returnRoot());
         }
     }
 
     private Boolean isPressed(KeyCode key) {
-        return keys.getOrDefault(key, false);
+        return keys.getOrDefault (key, false);
     }
+    /* ----------------- MINI GAME ------------------- */
 
+
+
+
+    /* --------------- GETTERS AND SETTERS --------------------- */
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
 
 }
 
