@@ -141,16 +141,14 @@ public class Main extends Application {
                 object.update (map);
             }
 
+            if (player.getLives () == 0 || isObjectOutOfBounds (player)) {
+                handleGameOver ();
+            }
             if (gameMenu.isStartGame ()) {
                 handleMenu ();
             }
             if (gameMenu.isInstructionsPressed ()) {
                 handleInstructions ();
-                System.out.println ("TEST");
-
-                if (player.getLives () == 0 || isObjectOutOfBounds (player)) {
-                    handleGameOver ();
-                }
             }
         }
     }
