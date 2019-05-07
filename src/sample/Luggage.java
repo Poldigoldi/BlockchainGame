@@ -15,15 +15,13 @@ public class Luggage {
         /*Picks up item and add it to luggage*/
         item.setAlive (false);
         this.block = item;
-        System.out.println ("Player picked up:" + item.name);
     }
 
     void drop(Item item, double x, double y) {
         /*Drops item*/
         item.setAlive (true);
-        item.drop (x, y);
+        item.drop (x, y - 20);
         this.block = null;
-        System.out.println ("Player dropped:" + item.name);
     }
 
     Item getblock () {

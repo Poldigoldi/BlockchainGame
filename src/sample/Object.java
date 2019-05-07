@@ -30,6 +30,7 @@ public class Object  {
     public Sprite sprite;
 
     //Object variables
+    public boolean alive;
     public Type type;
     public int width;
     public int height;
@@ -47,6 +48,7 @@ public class Object  {
     public Object(Type type, Frame... defaultFrame){
         sprite = new Sprite(type, defaultFrame);
         this.type = type;
+        this.alive = true;
     }
 
 
@@ -75,19 +77,33 @@ public class Object  {
         group.getChildren().addAll(sprite, box);
     }
 
+    //shows or hide object on the screen
+    public void setVisible (boolean visible) {
+        sprite.setVisible (visible);
+        box.setVisible (visible);
+    }
+
     //the only objects you'd want to update are animated objects, e.g. anything that can fall, move around
     //this would include the player, enemies, cubes falling from the sky etc.
     void update(Map map){
         //update Sprite position and animation
-        sprite.update(movingRight, isMoving, box.getTranslateX(), box.getTranslateY());
-        //for Clouds
-        if(type == Type.LAYER3){ circumnavigate(0.05, map); }
-        if(type == Type.LAYER1){ circumnavigate(0.2, map); }
-        if(!type.hasGravity()) return;
-        //for Everything else that has gravity
-        applyGravity();
-        updateY(map);
-        isMoving = false;
+        if (! this.alive) {
+            setVisible (false);
+        }
+        else {
+            setVisible (true);
+            sprite.update(movingRight, isMoving, box.getTranslateX(), box.getTranslateY());
+            //for Clouds
+            if(type == Type.LAYER3){ circumnavigate(0.05, map); }
+            if(type == Type.LAYER1){ circumnavigate(0.2, map); }
+            if(!type.hasGravity()) return;
+            //for Everything else that has gravity
+            applyGravity();
+            updateY(map);
+            updateX (map);
+            isMoving = false;
+        }
+
     }
     void applyGravity() {
         if (this.Velocity.getY () < 10) {
@@ -98,6 +114,11 @@ public class Object  {
     void updateY (Map map) {
         move_Y((int)this.Velocity.getY(), map);
     }
+
+    void updateX (Map map) {
+        move_X((int)this.Velocity.getX(), map);
+    }
+
 
     //returns true if the move is not blocked
     public boolean move_X(int value, Map map) {
@@ -124,7 +145,7 @@ public class Object  {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
-                            if(isLanded==false && this.type == Type.PLAYER) landSound.play();
+                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY1)) landSound.play();
                             CanJump = true;
                             isLanded = true;
                             return;
@@ -162,4 +183,11 @@ public class Object  {
 
     public void setY(double y){ box.setTranslateY(y);}
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
 }

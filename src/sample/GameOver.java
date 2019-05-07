@@ -70,19 +70,18 @@ public class GameOver {
         return root;
     }
 
-    public void  tryAgainPress(ActionEvent e) {
-        System.out.println("click");
+    public void tryAgainPress(ActionEvent e) {
         startAgain = true;
     }
 
     private void initialiseFonts(){
-            try {
-                smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);
-                mediumFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 54);
-            } catch (FileNotFoundException e) {
-                smallFont = Font.font("Verdana", 28);
-                mediumFont = Font.font("Verdana", 54);
-            }
+        try {
+            smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);
+            mediumFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 54);
+        } catch (FileNotFoundException e) {
+            smallFont = Font.font("Verdana", 28);
+            mediumFont = Font.font("Verdana", 54);
         }
     }
+}
 
