@@ -112,46 +112,45 @@ public class Main extends Application {
         boolean keypressed = false;
 
         if (mode == Mode.MINIGAME) {
-            if (isPressed(KeyCode.ESCAPE)) {
+            if (isPressed (KeyCode.ESCAPE)) {
                 mode = Mode.PLATFORMGAME;
-                mainScene.setRoot(appRoot);
+                mainScene.setRoot (appRoot);
             }
         }
 
-        if(mode == Mode.PLATFORMGAME) {
+        if (mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
-            if (isPressed(KeyCode.LEFT)) {
+            if (isPressed (KeyCode.LEFT)) {
                 keypressed = true;
-                if (player.move_X(-5, map)) moveScreenX(-5);
+                if (player.move_X (-5, map)) moveScreenX (-5);
             }
-            if (isPressed(KeyCode.RIGHT) && keypressed == false) {
-                if (player.move_X(5, map)) moveScreenX(5);
+            if (isPressed (KeyCode.RIGHT) && keypressed == false) {
+                if (player.move_X (5, map)) moveScreenX (5);
             }
-            if (isPressed(KeyCode.SPACE)) {
-                player.jump();
+            if (isPressed (KeyCode.SPACE)) {
+                player.jump ();
             }
 
-            moveScreenY();
+            moveScreenY ();
             ListenerEnemies ();
-            ListenerItemsEvent();
+            ListenerItemsEvent ();
             ListenerPlayerLives ();
 
             for (Object object : animatedObjects) {
-                object.update(map);
+                object.update (map);
             }
 
-            if (isPlayerOutOfBounds()) { handleGameOver(); }
-
-            if (gameMenu.isStartGame()) {
-                handleMenu();
+            if (gameMenu.isStartGame ()) {
+                handleMenu ();
             }
-            if (gameMenu.isInstructionsPressed()) {
-                handleInstructions();
-                System.out.println("TEST");
+            if (gameMenu.isInstructionsPressed ()) {
+                handleInstructions ();
+                System.out.println ("TEST");
 
-            if (player.getLives () == 0 || isObjectOutOfBounds(player) ) {
-                handleGameOver();
+                if (player.getLives () == 0 || isObjectOutOfBounds (player)) {
+                    handleGameOver ();
+                }
             }
         }
     }
@@ -183,9 +182,6 @@ public class Main extends Application {
 
     /* ---------- PLAYER ----------- */
 
-    private Boolean isPressed(KeyCode key) {
-        return keys.getOrDefault(key, false);
-    }
 
     private void ListenerItemsEvent () {
         for (Item block : map.blocks()) {
@@ -330,8 +326,8 @@ public class Main extends Application {
     }
 
     private Boolean isPressed(KeyCode key) {
-        return keys.getOrDefault(key, false);
-
+        return keys.getOrDefault (key, false);
+    }
     /* ----------------- MINI GAME ------------------- */
 
     private void miniGameKey() {
