@@ -3,7 +3,6 @@ package sample;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.nio.file.Paths;
@@ -15,22 +14,24 @@ public class Player extends Object {
 
     //variables
     private int WIDTH = 30, HEIGHT = 60;
+    private int lives;
+    private boolean canDie;
     private String name;
-    private Luggage luggage = new Luggage();
+    private Luggage luggage;
     private Stage stage;
 
-    public Player(String name, int STARTX, int STARTY, Stage stage) {
+    public Player(String name, int STARTX, int STARTY, Stage stage, int START_LIVES) {
         super(Type.PLAYER);
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
-        this.stage = stage;
+        this.canDie = true;
+        this.lives = START_LIVES;
         this.name = name;
+        this.luggage = new Luggage();
+        this.stage = stage;
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
         sprite().offset(-(64-WIDTH)/2, -(64- HEIGHT));
     }
 
-    Luggage getLuggage () {
-        return this.luggage;
-    }
 
     void jump() {
         if (CanJump) {
@@ -67,4 +68,34 @@ public class Player extends Object {
                 new Frame("/graphics/motionLeft4.png"));
     }
 
+    /* ------------ GETTERS & SETTERS -------------- */
+
+
+    Luggage getLuggage () {
+        return this.luggage;
+    }
+
+    public int getLives () {
+        return this.lives;
+    }
+
+    public void setLives (int lives) {
+        this.lives = lives;
+    }
+
+    public void winOneLive () {
+        this.lives++;
+    }
+
+    public void LooseOneLive () {
+        this.lives--;
+    }
+
+    public boolean isCanDie() {
+        return canDie;
+    }
+
+    public void setCanDie(boolean canDie) {
+        this.canDie = canDie;
+    }
 }

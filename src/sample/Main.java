@@ -28,9 +28,9 @@ public class Main extends Application {
     AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
 
     //global variables
-    private int WIDTH = 960 , HEIGHT = 640;
-    private int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
-    private double playerY = PLAYERSTARTY;
+    private final int WIDTH = 960 , HEIGHT = 640;
+    private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
+    private final int PLAYER_START_LIVES = 2;
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
     private boolean gameisOver;
@@ -52,10 +52,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mediaPlayer.play();
-        mediaPlayer.setVolume(20);
+        mediaPlayer.setVolume(0);
 
         //initialise player, the 'player' is the collision box of the playerInstance
-        player = new Player("Come", PLAYERSTARTX, PLAYERSTARTY, primaryStage);
+        player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, primaryStage, PLAYER_START_LIVES);
         player.initialise();
 
         //initialise Scene/game
@@ -100,7 +100,16 @@ public class Main extends Application {
     //boolean keypressed stops people holding both left and right down at same time
     private void update(Stage stage) {
         boolean keypressed = false;
+
+        if (mode == Mode.MINIGAME) {
+            if (isPressed(KeyCode.ESCAPE)) {
+                mode = Mode.PLATFORMGAME;
+                mainScene.setRoot(appRoot);
+            }
+        }
+
         if(mode == Mode.PLATFORMGAME) {
+
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed(KeyCode.LEFT)) {
                 keypressed = true;
@@ -112,15 +121,18 @@ public class Main extends Application {
             if (isPressed(KeyCode.SPACE)) {
                 player.jump();
             }
-            if (isPressed(KeyCode.ESCAPE)) {
-                mainScene.setRoot(appRoot);
-            }
+
             moveScreenY();
+            ListenerEnemies ();
+            ListenerItemsEvent();
+            ListenerPlayerLives ();
+
             for (Object object : animatedObjects) {
                 object.update(map);
             }
-            handleItems();
-            if (isPlayerOutOfBounds()) { handleGameOver(); }
+            if (player.getLives () == 0 || isObjectOutOfBounds(player) ) {
+                handleGameOver();
+            }
         }
     }
 
@@ -149,15 +161,19 @@ public class Main extends Application {
 
     }
 
-    /* ---------- Sub methods ----------- */
+    /* ---------- PLAYER ----------- */
 
-    private void handleItems () {
+    private Boolean isPressed(KeyCode key) {
+        return keys.getOrDefault(key, false);
+    }
+
+    private void ListenerItemsEvent () {
         for (Item block : map.blocks()) {
             if ((this.player.box.getBoundsInParent()).intersects(block.box.getBoundsInParent())) {
                 /* pickup item */
                 if (block.isAlive() && isPressed (KeyCode.A)) {
                     player.getLuggage ().take (block);
-                    map.removeItem (block);
+                    map.hideEntity (block);
                     miniGameKey();
                 }
             }
@@ -176,16 +192,54 @@ public class Main extends Application {
         }
     }
 
-    private void miniGameKey() {
-        /* Mini games activated once player collects a block on the map */
-        KeyGame mini = new KeyGame();
-        Group game = mini.returnRoot();
-        mainScene.setRoot(game);
-       // mainScene.setRoot(appRoot);
+    private void ListenerPlayerLives () {
+        int collision=0;
+        for (EnemyType1 enemy: map.getEnemies ()) {
+            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+                collision++;
+                // Waits that player moves out from the enemy to loose another life
+                if (player.isCanDie ()) {
+                    System.out.println ("PLAYER LOST A LIFE");
+                    player.LooseOneLive ();
+                    player.setCanDie (false);
+                }
+            }
+        }
+        // if player not on any enemy
+        if (collision == 0) {
+            player.setCanDie (true);
+        }
+    }
+    private boolean PlayerKillEnemy (EnemyType1 enemy) {
+        /*
+        if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+            return true;
+        }*/
+        return false;
     }
 
-    private boolean isPlayerOutOfBounds() {
-        if (player.getY() > map.level().height()){
+    /* ----------- ENEMIES ------------ */
+
+
+    private void ListenerEnemies () {
+        for (EnemyType1 enemy : map.getEnemies ()) {
+
+            // check if enemy died
+            if (PlayerKillEnemy (enemy) || isObjectOutOfBounds (enemy) ) {
+                enemy.setAlive (false);
+                map.hideEntity (enemy);
+            }
+            // if enemy alive - give motion
+            if (enemy.isAlive () && enemy.getCanMove ()) {
+                enemy.giveMotion (map);
+            }
+        }
+    }
+
+    /* ----------------- GAME OVER ------------------- */
+
+    private boolean isObjectOutOfBounds(Object object) {
+        if (object.getY() > map.level().height()){
             return true;
         }
         return false;
@@ -197,6 +251,7 @@ public class Main extends Application {
             mainScene.setFill(Color.BLACK);
             defeatSound.play();
             mediaPlayer.stop();
+            map.setEnemiesAlive (false);
             gameisOver = true;
         }
         if (gameOver.isStartAgain()) {
@@ -204,6 +259,8 @@ public class Main extends Application {
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
+            player.setLives (PLAYER_START_LIVES);
+            map.setEnemiesAlive (true);
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
             moveScreenY();
@@ -212,8 +269,15 @@ public class Main extends Application {
         }
     }
 
-    private Boolean isPressed(KeyCode key) {
-        return keys.getOrDefault(key, false);
+    /* ----------------- MINI GAME ------------------- */
+
+    private void miniGameKey() {
+        /* Mini games activated once player collects a block on the map */
+        KeyGame mini = new KeyGame();
+        Group game = mini.returnRoot();
+        mainScene.setRoot(game);
+        mode = Mode.MINIGAME;
+        // mainScene.setRoot(appRoot);
     }
 
 
