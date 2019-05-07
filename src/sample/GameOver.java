@@ -2,23 +2,16 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 
 
 public class GameOver {
@@ -73,25 +66,22 @@ public class GameOver {
     }
 
 
-
-
     public Group returnRoot() {
         return root;
     }
 
-    public void  tryAgainPress(ActionEvent e) {
-        System.out.println("click");
+    public void tryAgainPress(ActionEvent e) {
         startAgain = true;
     }
 
     private void initialiseFonts(){
-            try {
-                smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);
-                mediumFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 54);
-            } catch (FileNotFoundException e) {
-                smallFont = Font.font("Verdana", 28);
-                mediumFont = Font.font("Verdana", 54);
-            }
+        try {
+            smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);
+            mediumFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 54);
+        } catch (FileNotFoundException e) {
+            smallFont = Font.font("Verdana", 28);
+            mediumFont = Font.font("Verdana", 54);
         }
     }
+}
 

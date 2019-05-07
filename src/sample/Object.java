@@ -2,14 +2,11 @@ package sample;
 
 import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 
-import java.io.File;
 import java.nio.file.Paths;
 
 
@@ -33,6 +30,7 @@ public class Object  {
     public Sprite sprite;
 
     //Object variables
+    public boolean alive;
     public Type type;
     public int width;
     public int height;
@@ -47,10 +45,12 @@ public class Object  {
     AudioClip landSound = new AudioClip(Paths.get("src/sound/land.wav").toUri().toString());
 
     //choose where the object starts, if its animated, its type, and its initial image.
-    public Object(Type type, Image defaultImage){
-        sprite = new Sprite(defaultImage);
+    public Object(Type type, Frame... defaultFrame){
+        sprite = new Sprite(type, defaultFrame);
         this.type = type;
+        this.alive = true;
     }
+
 
     //creates a collision box, this is initially a rectangle, but in the future it could be other shapes.
     public void setCollisionBox(double x, double y, int width, int height, Color colour){
@@ -77,20 +77,33 @@ public class Object  {
         group.getChildren().addAll(sprite, box);
     }
 
+    //shows or hide object on the screen
+    public void setVisible (boolean visible) {
+        sprite.setVisible (visible);
+        box.setVisible (visible);
+    }
+
     //the only objects you'd want to update are animated objects, e.g. anything that can fall, move around
     //this would include the player, enemies, cubes falling from the sky etc.
     void update(Map map){
-        sprite.moveTo(box.getTranslateX(), box.getTranslateY());
-        //for background
-        if(type == Type.LAYER3){ circumnavigate(0.05, map); }
-        if(type == Type.LAYER2){ circumnavigate(0.2, map); }
-        if(type == Type.LAYER1 || type == Type.LAYER2 || type == Type.LAYER3 || type == Type.LAYER4){ return; }
+        //update Sprite position and animation
+        if (! this.alive) {
+            setVisible (false);
+        }
+        else {
+            setVisible (true);
+            sprite.update(movingRight, isMoving, box.getTranslateX(), box.getTranslateY());
+            //for Clouds
+            if(type == Type.LAYER3){ circumnavigate(0.05, map); }
+            if(type == Type.LAYER1){ circumnavigate(0.2, map); }
+            if(!type.hasGravity()) return;
+            //for Everything else that has gravity
+            applyGravity();
+            updateY(map);
+            updateX (map);
+            isMoving = false;
+        }
 
-        applyGravity();
-        updateY(map);
-        if(type == Type.PLAYER) sprite.update(movingRight, isMoving);
-        if(type == Type.ITEM) sprite.update();
-        isMoving = false;
     }
     void applyGravity() {
         if (this.Velocity.getY () < 10) {
@@ -101,6 +114,11 @@ public class Object  {
     void updateY (Map map) {
         move_Y((int)this.Velocity.getY(), map);
     }
+
+    void updateX (Map map) {
+        move_X((int)this.Velocity.getX(), map);
+    }
+
 
     //returns true if the move is not blocked
     public boolean move_X(int value, Map map) {
@@ -127,7 +145,7 @@ public class Object  {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
-                            if(isLanded==false && this.type == Type.PLAYER) landSound.play();
+                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY1)) landSound.play();
                             CanJump = true;
                             isLanded = true;
                             return;
@@ -165,4 +183,11 @@ public class Object  {
 
     public void setY(double y){ box.setTranslateY(y);}
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
 }

@@ -12,17 +12,17 @@ public class Grid {
 
       # Elements #
       0 -> nothing
-      1 -> platform
+      1,2,3,4 -> platform
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
 
   */
 
-  private Image platformleft = new Image("/graphics/platformleft.png");
-  private Image platformright = new Image("/graphics/platformright.png");
-  private Image platformmiddle = new Image("/graphics/platformmiddle.png");
-  private Image block = new Image("/graphics/block.png");
+  private Frame platformleft = new Frame("/graphics/platformleft.png");
+  private Frame platformright = new Frame("/graphics/platformright.png");
+  private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
+  private Frame block = new Frame("/graphics/block.png");
 
   private ArrayList<Object> platforms = new ArrayList<> ();
   int width;
@@ -32,16 +32,16 @@ public class Grid {
           "4000000000000000000004",
           "4000000000000000000004",
           "4000000000000001223004",
-          "4000000001230000000004",
-          "4230000000000440000004",
-          "4000013000000000000004",
-          "4000000001300000000004",
-          "4000000000000122230004",
-          "4000040001300000000004",
-          "4000444000000000000004",
-          "4004444400000000004444",
-          "4444444444444000000004",
-          "4444444444444440004444"
+          "4000000012300000000004",
+          "4222300000000001300004",
+          "4000013000001300000004",
+          "4000000001300000123004",
+          "4000000000001300000004",
+          "4444000000400000004004",
+          "4000000044400000000004",
+          "4000044000000400004444",
+          "4000444400040044000004",
+          "4444444444400000444000"
   };
 
   /* Constructor */
