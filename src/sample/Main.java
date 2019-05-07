@@ -211,16 +211,18 @@ public class Main extends Application {
     private void miniGameKey() {
         /* Mini games activated once player collects a block on the map */
         try {
-            KeyGame mini = new KeyGame();
+            KeyGame mini = new KeyGame ();
 
-            AnchorPane game = mini.returnRoot();
-            mainScene.setRoot(game);
-            mainScene.getRoot().requestFocus();
+            AnchorPane game = mini.returnRoot ();
+            mainScene.setRoot (game);
+            mainScene.getRoot ().requestFocus ();
+            mode = Mode.MINIGAME;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace ();
 
         }
+    }
 
        // mainScene.setRoot(appRoot);
 

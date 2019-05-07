@@ -1,13 +1,11 @@
 package sample;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -17,10 +15,8 @@ import javafx.scene.text.Text;
 
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import static java.lang.Math.PI;
 
 public class KeyGameController implements Initializable {
 
