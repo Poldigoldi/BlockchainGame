@@ -26,6 +26,8 @@ public class Main extends Application {
     MediaPlayer mediaPlayer = new MediaPlayer(musicMedia);
     //sounds
     AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
+    AudioClip menuSound = new AudioClip(Paths.get("src/sound/menuSong.mp3").toUri().toString());
+    AudioClip instructionSound = new AudioClip(Paths.get("src/sound/instructionSong.mp3").toUri().toString());
 
     //global variables
     private final int WIDTH = 960 , HEIGHT = 640;
@@ -34,12 +36,17 @@ public class Main extends Application {
     private Mode mode = Mode.PLATFORMGAME;
     private int counter;
     private boolean gameisOver;
+    private boolean gameisMenu;
+    private boolean gameisInstructions;
+    private static boolean firstCall = true;
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
     private Player player;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
+    private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
+    private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -65,6 +72,9 @@ public class Main extends Application {
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         primaryStage.setScene(mainScene);
+        mainScene.setRoot(gameMenu.returnRoot());
+        gameisMenu = true;
+        handleMenu();
         primaryStage.show();
         runGame(primaryStage);
     }
@@ -130,6 +140,16 @@ public class Main extends Application {
             for (Object object : animatedObjects) {
                 object.update(map);
             }
+
+            if (isPlayerOutOfBounds()) { handleGameOver(); }
+
+            if (gameMenu.isStartGame()) {
+                handleMenu();
+            }
+            if (gameMenu.isInstructionsPressed()) {
+                handleInstructions();
+                System.out.println("TEST");
+
             if (player.getLives () == 0 || isObjectOutOfBounds(player) ) {
                 handleGameOver();
             }
@@ -269,6 +289,49 @@ public class Main extends Application {
         }
     }
 
+    private void handleMenu() {
+        if(!gameisMenu) {
+            mainScene.setRoot(gameMenu.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            menuSound.play();
+            mediaPlayer.stop();
+            gameisMenu = true;
+        }
+        if (gameMenu.isStartGame()) {
+            gameisMenu=false;
+            menuSound.stop();
+            mediaPlayer.play();
+            player.setX(PLAYERSTARTX);
+            player.setY(PLAYERSTARTY);
+            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
+            moveScreenY();
+            gameMenu.setStartAgain();
+            mainScene.setRoot(appRoot);
+        }
+    }
+
+    private void handleInstructions() {
+        if(!gameisInstructions) {
+            mainScene.setRoot(instructionScreen.returnRoot());
+            mainScene.setFill(Color.BLACK);
+            instructionSound.play();
+            mediaPlayer.stop();
+            gameisInstructions = true;
+        }
+        if (instructionScreen.isReturn_to_menu()) {
+            gameMenu.resetInstructionPress();
+            instructionSound.stop();
+            gameisInstructions=false;
+            mediaPlayer.play();
+            instructionScreen.setReturn_to_menu();
+            mainScene.setRoot(gameMenu.returnRoot());
+        }
+    }
+
+    private Boolean isPressed(KeyCode key) {
+        return keys.getOrDefault(key, false);
+
     /* ----------------- MINI GAME ------------------- */
 
     private void miniGameKey() {
@@ -279,7 +342,5 @@ public class Main extends Application {
         mode = Mode.MINIGAME;
         // mainScene.setRoot(appRoot);
     }
-
-
 }
 
