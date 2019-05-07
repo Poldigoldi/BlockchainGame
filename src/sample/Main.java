@@ -33,7 +33,7 @@ public class Main extends Application {
     private final int WIDTH = 960 , HEIGHT = 640;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
     private final int PLAYER_START_LIVES = 2;
-    private Mode mode = Mode.PLATFORMGAME;
+    private Mode mode = Mode.STARTMENU;
     private int counter;
     private boolean gameisOver;
     private boolean gameisMenu;
@@ -118,6 +118,15 @@ public class Main extends Application {
             }
         }
 
+        if (mode == Mode.STARTMENU) {
+            if (gameMenu.isStartGame ()) {
+                handleMenu ();
+            }
+            if (gameMenu.isInstructionsPressed ()) {
+                handleInstructions ();
+            }
+        }
+
         if (mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
@@ -143,12 +152,6 @@ public class Main extends Application {
 
             if (player.getLives () == 0 || isObjectOutOfBounds (player)) {
                 handleGameOver ();
-            }
-            if (gameMenu.isStartGame ()) {
-                handleMenu ();
-            }
-            if (gameMenu.isInstructionsPressed ()) {
-                handleInstructions ();
             }
         }
     }
@@ -293,6 +296,7 @@ public class Main extends Application {
         }
         if (gameMenu.isStartGame()) {
             gameisMenu=false;
+            mode = Mode.PLATFORMGAME;
             menuSound.stop();
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
@@ -336,5 +340,14 @@ public class Main extends Application {
         mode = Mode.MINIGAME;
         // mainScene.setRoot(appRoot);
     }
+
+
+
+    /* --------------- GETTERS AND SETTERS --------------------- */
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
 }
 

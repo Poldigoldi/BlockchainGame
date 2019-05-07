@@ -102,8 +102,8 @@ public class GameMenu {
     }
 
     public void startPress(ActionEvent e) {
-        System.out.println("click");
         startGame = true;
+
     }
 
     public void instructionPress(ActionEvent e) {
