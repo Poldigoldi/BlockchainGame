@@ -36,7 +36,7 @@ public class Object  {
     public int height;
     public boolean CanJump = true;
     public Point2D Velocity = new Point2D(0,0);
-    public boolean movingRight;
+    public boolean facingRight;
     public boolean movingDown;
     public boolean isMoving;
     public boolean isLanded;
@@ -89,19 +89,19 @@ public class Object  {
         //update Sprite position and animation
         if (! this.alive) {
             setVisible (false);
-        }
-        else {
+        } else {
             setVisible (true);
-            sprite.update(movingRight, isMoving, box.getTranslateX(), box.getTranslateY());
+            sprite.update(facingRight, isMoving, isLanded, movingDown, box.getTranslateX(), box.getTranslateY());
             //for Clouds
             if(type == Type.LAYER3){ circumnavigate(0.05, map); }
             if(type == Type.LAYER1){ circumnavigate(0.2, map); }
-            if(!type.hasGravity()) return;
-            //for Everything else that has gravity
-            applyGravity();
-            updateY(map);
-            updateX (map);
-            isMoving = false;
+            if(type.hasGravity()) {
+                //for Everything else that has gravity
+                applyGravity();
+                updateY(map);
+                updateX(map);
+                isMoving = false;
+            }
         }
 
     }
@@ -116,23 +116,23 @@ public class Object  {
     }
 
     void updateX (Map map) {
-        move_X((int)this.Velocity.getX(), map);
+        if(this.type!=Type.PLAYER) move_X((int)this.Velocity.getX(), map);
     }
 
 
     //returns true if the move is not blocked
     public boolean move_X(int value, Map map) {
         isMoving = true;
-        movingRight = value > 0;
+        facingRight = value > 0;
         for (Object object : map.level().platforms()) {
             //checks if player at same height as object and its solid first, then block left/right movements
             if(object.type == Type.SOLID && this.getY()>object.getY()-this.height && this.getY()<object.getY()+this.height){
-                if(movingRight && Math.abs(object.getX() - this.getX() - this.width) <= 5) return false;
-                if(!movingRight && Math.abs(object.getX()+object.width()- this.getX()) <= 5) return false;
+                if(facingRight && Math.abs(object.getX() - this.getX() - this.width) <= 5) return false;
+                if(!facingRight && Math.abs(object.getX()+object.width()- this.getX()) <= 5) return false;
             }
         }
         for (int i=0; i<Math.abs(value); i++) {
-            this.setX(this.getX() + (movingRight ? 1 : -1));
+            this.setX(this.getX() + (facingRight ? 1 : -1));
         }
         return true;
     }
@@ -190,4 +190,6 @@ public class Object  {
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
+
+    public void setXDirection(boolean facingRight){ this.facingRight = facingRight;}
 }
