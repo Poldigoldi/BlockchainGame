@@ -1,7 +1,7 @@
 package sample;
 
 public enum Type {
-    SOLID, PLAYER, PLATFORM, DEFAULT, ITEM, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY1;
+    SOLID, PLAYER, PLATFORM, DEFAULT, ITEM, WEAPON, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY1;
 
     //used in update to see whether to apply falling
     public boolean hasGravity(){
@@ -22,7 +22,7 @@ public enum Type {
 
 //Platform means you can jump up through it, but its still solid when you land on it
 //Solid means it is completely solid and nothing can pass through it
-//Item will eventually mean can be walked through i guess, may be redundant if we do a 'NON-SOLID' type.
+//Block will eventually mean can be walked through i guess, may be redundant if we do a 'NON-SOLID' type.
 //This could be useful later on for doing other things with objects if we've given them types.
 
 /*

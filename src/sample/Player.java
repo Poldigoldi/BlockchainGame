@@ -41,7 +41,7 @@ public class Player extends Object {
         }
     }
 
-    void useItem(Item item) {
+    void useItem(Block item) {
         /* Do Something with item .... */
     }
 

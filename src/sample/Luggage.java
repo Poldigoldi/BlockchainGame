@@ -4,27 +4,45 @@ package sample;
 import java.util.ArrayList;
 
 public class Luggage {
-    private Item block;
-    ArrayList<Item> weapons = new ArrayList<> ();
+    private Block block;
+    ArrayList<Collectable> items = new ArrayList<> ();
 
     void show() {
-        /*Shows items*/
+        /* Shows items */
     }
 
-    void take(Item item) {
-        /*Picks up item and add it to luggage*/
-        item.setAlive (false);
-        this.block = item;
+    void take(Collectable item) {
+        // check if its a block
+        System.out.println ("taking item: " + item.getItemType ());
+        if (item.getItemType () == Type.BLOCK && this.block == null) {
+            item.setAlive (false);
+            this.block = (Block) item;
+            System.out.println ("Picked up: block");
+        }
+        // check if its a weapon
+        if (item.getItemType () == Type.WEAPON) {
+            item.setAlive (false);
+            this.items.add (item);
+            System.out.println ("Picked up: weapon");
+        }
     }
 
-    void drop(Item item, double x, double y) {
-        /*Drops item*/
+    void drop(Collectable item, double x, double y) {
+        /* TODO: SEE HOW DO WE DROP DIFFERENT ITEMS */
         item.setAlive (true);
         item.drop (x, y - 20);
-        this.block = null;
+        if (item.getItemType () == Type.BLOCK) {
+            this.block = null;
+        }
+        System.out.println ("Dropped: " + item.getItemType ());
     }
 
-    Item getblock () {
+
+    Block getblock () {
         return this.block;
+    }
+
+    ArrayList<Collectable> getItems () {
+        return this.items;
     }
 }

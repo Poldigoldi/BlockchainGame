@@ -103,7 +103,6 @@ public class Object  {
             updateX (map);
             isMoving = false;
         }
-
     }
     void applyGravity() {
         if (this.Velocity.getY () < 10) {

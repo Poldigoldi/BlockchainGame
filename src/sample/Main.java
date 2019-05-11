@@ -2,7 +2,6 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
@@ -93,7 +92,7 @@ public class Main extends Application {
 
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         animatedObjects.add(player);
-        for(Object block: map.blocks()) animatedObjects.add(block);
+        for(Object block: map.getItems ()) animatedObjects.add(block);
         for(Object object: map.objects()) animatedObjects.add(object);
     }
 
@@ -184,18 +183,20 @@ public class Main extends Application {
 
 
     private void ListenerItemsEvent () {
-        for (Item block : map.blocks()) {
-            if ((this.player.box.getBoundsInParent()).intersects(block.box.getBoundsInParent())) {
+        for (Collectable item : map.getItems ()) {
+            if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
-                if (block.isAlive() && isPressed (KeyCode.A)) {
-                    player.getLuggage ().take (block);
-                    map.hideEntity (block);
-                    miniGameKey();
+                if (item.isAlive() && isPressed (KeyCode.A)) {
+                    player.getLuggage ().take (item);
+                    if (item.getItemType () == Type.BLOCK) {
+                        map.hideEntity (item);
+                        miniGameKey();
+                    }
                 }
             }
         }
-        /* drop item */
-        Item myBlock = player.getLuggage ().getblock ();
+        /* drop item  TODO: see how to drop WEAPONS  */
+        Block myBlock = player.getLuggage ().getblock ();
         if (myBlock != null) {
             if (! myBlock.isAlive ()) {
                 if (isPressed (KeyCode.Z)) {

@@ -3,11 +3,10 @@ package sample;
 import javafx.scene.Group;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 
 public class Map {
 
-    private ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
     private Group mapRoot = new Group();
@@ -25,25 +24,12 @@ public class Map {
         for (Object platform : level.platforms()) {
             showEntity(platform);
         }
-        // Add block to pick-up
-        Item block = new Item("block");
-        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
-        addItem(block);
+        createCollectableObjects ();
     }
 
-    public Group mapRoot() {
-        return mapRoot;
-    }
-
-    ArrayList<Item> blocks() { return this.items; }
-
-    ArrayList<Object> objects() { return this.animatedObjects; }
-
-    public Grid level() { return level; }
-
-    public void addItem (Item item) {
-        /* add Item to Map */
-        if (!items.contains (item)) { items.add (item); }
+    public void addItem (Collectable item) {
+        /* add Block to Map */
+        items.add (item);
         showEntity(item);
     }
 
@@ -73,6 +59,17 @@ public class Map {
         enemiestype1.add (enemy3);
     }
 
+    // Weapons & blocks to collect
+    private void createCollectableObjects () {
+        // Add block to pick-up
+        Block block = new Block ("block");
+        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
+        addItem(block);
+
+        // Add weapons to pick-up
+        Weapon weapon1 = new Weapon ("weapon 1");
+        addItem (weapon1);
+    }
 
     //Nick's functions for making the background graphics
 
@@ -127,12 +124,25 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
+    public Group mapRoot() {
+        return mapRoot;
+    }
+
+
+    ArrayList<Object> objects() { return this.animatedObjects; }
+
+    public Grid level() { return level; }
+
+
     public ArrayList<Object> getAnimatedObjects() {
         return animatedObjects;
     }
 
     public ArrayList<EnemyType1> getEnemies () {
         return enemiestype1;
+    }
+    public ArrayList<Collectable> getItems() {
+        return items;
     }
 
     public Grid getLevel () {

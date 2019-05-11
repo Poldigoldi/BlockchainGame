@@ -21,8 +21,8 @@ public class EnemyType1 extends Object {
     // Global variables
     private final int OFFSET = 5;
     private final int MOVE_SPEED = 1;
-    private final double JUMP_SPEED_Y = 28;
-    private final double JUMP_SPEED_X = 2.6;
+    private final double JUMP_SPEED_Y = 29;
+    private final double JUMP_SPEED_X = 2.8;
     private final int JUMP_PROBA_RANGE;
     private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
@@ -117,7 +117,7 @@ public class EnemyType1 extends Object {
                 return false;
             }
         }
-        System.out.println ("GAP RIGHT TOO BIG");
+      //  System.out.println ("GAP RIGHT TOO BIG");
         return true;
     }
     private boolean isGapLeftTooBig (Map map) {
@@ -131,7 +131,7 @@ public class EnemyType1 extends Object {
                 return false;
             }
         }
-        System.out.println ("GAP LEFT TOO BIG");
+      //  System.out.println ("GAP LEFT TOO BIG");
         return true;
     }
 
@@ -157,7 +157,7 @@ public class EnemyType1 extends Object {
                     && platform.getX () < map.getLevel ().width() - platform.width - OFFSET
                     && getX () < platform.getX() - platform.width
                     && getX () > platform.getX () - 2 * platform.width) {
-                System.out.println ("CAN JUMP GAP RIGHT");
+          //      System.out.println ("CAN JUMP GAP RIGHT");
                 return true;
             }
         }
@@ -186,7 +186,7 @@ public class EnemyType1 extends Object {
                     && platform.getX () > platform.width + OFFSET
                     && getX () < platform.getX () + platform.width * 3
                     && getX () > platform.getX () + platform.width * 2) {
-                System.out.println ("CAN JUMP GAP LEFT");
+         //       System.out.println ("CAN JUMP GAP LEFT");
                 return true;
             }
         }
@@ -206,7 +206,7 @@ public class EnemyType1 extends Object {
                     && (platform.getX () > getX() + width)
                     && (platform.getX () <= getX() + width + OFFSET)
                     && (platform.getY() + platform.height == getY() + height) ){
-                System.out.println ("CAN JUMP RIGHT");
+                //System.out.println ("CAN JUMP RIGHT");
                 return true;
             }
         }
@@ -228,7 +228,7 @@ public class EnemyType1 extends Object {
                     && (getX () >= platform.getX())
                     && (getX () <= platform.getX() + platform.width + OFFSET)
                     && (platform.getY() + platform.height == getY() + height) ){
-                System.out.println ("CAN JUMP LEFT");
+        //        System.out.println ("CAN JUMP LEFT");
                 return true;
             }
         }
@@ -248,12 +248,12 @@ public class EnemyType1 extends Object {
                 if (p.getY () > getY () + height) {
                     if (   (side == "RIGHT" && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
                         || (side == "LEFT" && getX () > p.getX () + p.width - width && (getX () < p.getX () + p.width + width))   ){
-                        System.out.println ("SAFE TO ABORT JUMP " + side);
+                //        System.out.println ("SAFE TO ABORT JUMP " + side);
                         return false;
                     }
                 }
             }
-            System.out.println ("WASN'T SAFE TO NOT JUMP " + side);
+      //      System.out.println ("WASN'T SAFE TO NOT JUMP " + side);
         }
         return true;
     }
