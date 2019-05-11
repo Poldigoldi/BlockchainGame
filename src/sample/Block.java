@@ -15,7 +15,6 @@ public class Block extends Collectable {
                                     new Frame("/graphics/item4.png"),
                                     new Frame("/graphics/item5.png"),
                                     new Frame("/graphics/item6.png"));
-        setUnique (true);
         setItemType (Type.BLOCK);
     }
 

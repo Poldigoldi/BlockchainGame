@@ -41,6 +41,15 @@ public class Player extends Object {
         }
     }
 
+    public boolean hasWeapon () {
+        for (Collectable item: luggage.getItems ()) {
+            if (item.getItemType () == Type.WEAPON) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void useItem(Block item) {
         /* Do Something with item .... */
     }

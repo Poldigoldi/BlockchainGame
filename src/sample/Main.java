@@ -127,7 +127,6 @@ public class Main extends Application {
         }
 
         if (mode == Mode.PLATFORMGAME) {
-
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.LEFT)) {
                 keypressed = true;
@@ -144,6 +143,7 @@ public class Main extends Application {
             ListenerEnemies ();
             ListenerItemsEvent ();
             ListenerPlayerLives ();
+            ListenerPlayerUseWeapon ();
 
             for (Object object : animatedObjects) {
                 object.update (map);
@@ -225,8 +225,6 @@ public class Main extends Application {
         }
     }
 
-       // mainScene.setRoot(appRoot);
-
     private void ListenerPlayerLives () {
         int collision=0;
         for (EnemyType1 enemy: map.getEnemies ()) {
@@ -253,8 +251,22 @@ public class Main extends Application {
         return false;
     }
 
-    /* ----------- ENEMIES ------------ */
+    private void ListenerPlayerUseWeapon () {
+        if (isPressed (KeyCode.W) && player.hasWeapon ()) {
+            // create new bullet
+            Bullet bullet = new Bullet (player.getX () + 5, player.getY ());
+            map.addAnimatedObjects (bullet);
+            animatedObjects.add (bullet);
+        }
+        // moves existing bullets
+        for (Object obj : animatedObjects) {
+            if (obj.type == Type.BULLET) {
+               obj.move_X (3, map);
+            }
+        }
+    }
 
+    /* ----------- ENEMIES ------------ */
 
     private void ListenerEnemies () {
         for (EnemyType1 enemy : map.getEnemies ()) {

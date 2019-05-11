@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Luggage {
     private Block block;
-    ArrayList<Collectable> items = new ArrayList<> ();
+    private ArrayList<Collectable> items = new ArrayList<> ();
 
     void show() {
         /* Shows items */
@@ -17,13 +17,11 @@ public class Luggage {
         if (item.getItemType () == Type.BLOCK && this.block == null) {
             item.setAlive (false);
             this.block = (Block) item;
-            System.out.println ("Picked up: block");
         }
         // check if its a weapon
         if (item.getItemType () == Type.WEAPON) {
             item.setAlive (false);
             this.items.add (item);
-            System.out.println ("Picked up: weapon");
         }
     }
 
@@ -34,9 +32,7 @@ public class Luggage {
         if (item.getItemType () == Type.BLOCK) {
             this.block = null;
         }
-        System.out.println ("Dropped: " + item.getItemType ());
     }
-
 
     Block getblock () {
         return this.block;

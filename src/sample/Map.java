@@ -154,4 +154,8 @@ public class Map {
             enemy.setAlive (state);
         }
     }
+
+    public void createOneBullet () {
+
+    }
 }
