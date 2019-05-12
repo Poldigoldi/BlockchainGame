@@ -1,7 +1,6 @@
 package sample;
 
 
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
 public class Bullet extends Object {
@@ -17,7 +16,4 @@ public class Bullet extends Object {
         move_X (SPEED, map);
     }
 
-    public void stop () {
-        Velocity = new Point2D (0, 0);
-    }
 }

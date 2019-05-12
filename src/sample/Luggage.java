@@ -1,14 +1,14 @@
 package sample;
 
 
-import java.util.ArrayList;
-
 public class Luggage {
     private Block block;
-    private ArrayList<Collectable> items = new ArrayList<> ();
+    private Weapon weapon;
 
-    void show() {
-        /* Shows items */
+
+    Luggage () {
+        this.block = null;
+        this.weapon = null;
     }
 
     void take(Collectable item) {
@@ -19,9 +19,9 @@ public class Luggage {
             this.block = (Block) item;
         }
         // check if its a weapon
-        if (item.getItemType () == Type.WEAPON) {
+        if (item.getItemType () == Type.WEAPON && this.weapon == null) {
             item.setAlive (false);
-            this.items.add (item);
+            this.weapon = (Weapon) item;
         }
     }
 
@@ -38,7 +38,7 @@ public class Luggage {
         return this.block;
     }
 
-    ArrayList<Collectable> getItems () {
-        return this.items;
+    Weapon getWeapon () {
+        return this.weapon;
     }
 }

@@ -67,7 +67,7 @@ public class Map {
         addItem(block);
 
         // Add weapons to pick-up
-        Weapon weapon1 = new Weapon ("weapon 1");
+        Weapon weapon1 = new Weapon ("weapon 1", 10);
         addItem (weapon1);
     }
 

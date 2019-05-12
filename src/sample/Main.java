@@ -252,16 +252,26 @@ public class Main extends Application {
     }
 
     private void ListenerPlayerUseWeapon () {
-        if (isPressed (KeyCode.W) && player.hasWeapon ()) {
-            // create new bullet
-            Bullet bullet = new Bullet (player.getX () + 5, player.getY ());
-            map.addAnimatedObjects (bullet);
-            animatedObjects.add (bullet);
-        }
-        // moves existing bullets
-        for (Object obj : animatedObjects) {
-            if (obj.type == Type.BULLET) {
-               obj.move_X (3, map);
+        if (player.hasWeapon ()) {
+
+            // If player allowed to use weapon and has bullets left
+            if (isPressed (KeyCode.W) && player.canUseWeapon ()) {
+                Bullet bullet = new Bullet (player.getX () + 5, player.getY ());
+                map.addAnimatedObjects (bullet);
+                animatedObjects.add (bullet);
+                player.getLuggage ().getWeapon ().looseOneBullet ();
+                player.getLuggage ().getWeapon ().setCanShoot (false);
+            }
+            // User can only shoot 1 bullet when press key (un-press & press again to shoot)
+            if (!isPressed (KeyCode.W)) {
+                player.getLuggage ().getWeapon ().setCanShoot (true);
+            }
+
+            // moves existing bullets
+            for (Object obj : animatedObjects) {
+                if (obj instanceof Bullet) {
+                    ((Bullet) obj).shoot (map);
+                }
             }
         }
     }
