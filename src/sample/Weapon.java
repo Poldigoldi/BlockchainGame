@@ -31,15 +31,16 @@ public class Weapon extends Collectable {
         this.canShoot = canShoot;
     }
 
-    public void looseOneBullet () {
-        bullets--;
+    public void winOneBullet () {
+        bullets++;
     }
 
-    public void getOneBullet () {
-        bullets++;
+    public void looseOneBullet () {
+        bullets--;
     }
 
     public int getBullets() {
         return bullets;
     }
+
 }

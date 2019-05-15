@@ -1,7 +1,6 @@
 package sample;
 import java.util.*;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 
 
 public class Grid {
@@ -25,6 +24,7 @@ public class Grid {
   private Frame block = new Frame("/graphics/block.png");
 
   private ArrayList<Object> platforms = new ArrayList<> ();
+  private final int OBJ_WIDTH = 64;
   int width;
   int height;
   private String[] map = new String[]{
@@ -37,7 +37,7 @@ public class Grid {
           "4000013000001300000004",
           "4000000001300001223004",
           "4000000000001300000004",
-          "4444000000400000004004",
+          "4444444400400000004004",
           "4000000044400000000004",
           "4000044000000400004444",
           "4000444400040044000004",
@@ -53,14 +53,14 @@ public class Grid {
       for (char value : map[y].toCharArray()) {
           if(value == '4') {
             Object platform = new Object(  Type.SOLID, block);
-            platform.setCollisionBox(x*64, y*64,64, 64, Color.TRANSPARENT);
+            platform.setCollisionBox(x*OBJ_WIDTH, y*64,OBJ_WIDTH, 64, Color.TRANSPARENT);
             platforms.add(platform);
           }
           if(value == '1' || value == '2' || value == '3'){
             Object platform = new Object(  Type.PLATFORM, platformleft);
             if (value == '2') platform = new Object(  Type.PLATFORM, platformmiddle);
             if (value == '3') platform = new Object(  Type.PLATFORM, platformright);
-            platform.setCollisionBox(x*64, y*64,64, 10, Color.GREEN);
+            platform.setCollisionBox(x*OBJ_WIDTH, y*64,OBJ_WIDTH, 10, Color.GREEN);
             platforms.add(platform);
         }
         x++;
@@ -75,7 +75,11 @@ public class Grid {
   }
 
   int width(){
-    return width*64;
+    return width*OBJ_WIDTH;
+  }
+
+  public int getOBJ_WIDTH() {
+    return OBJ_WIDTH;
   }
 
   ArrayList<Object> platforms() {

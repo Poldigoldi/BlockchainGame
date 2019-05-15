@@ -19,6 +19,8 @@ public class Player extends Object {
     private String name;
     private Luggage luggage;
     private Stage stage;
+    private String facing;
+
 
     public Player(String name, int STARTX, int STARTY, Stage stage, int START_LIVES) {
         super(Type.PLAYER);
@@ -28,6 +30,7 @@ public class Player extends Object {
         this.name = name;
         this.luggage = new Luggage();
         this.stage = stage;
+        this.facing = "RIGHT";
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
         sprite().offset(-(64-WIDTH)/2, -(64- HEIGHT));
     }
@@ -51,11 +54,6 @@ public class Player extends Object {
         }
         return false;
     }
-
-    void useItem(Block item) {
-        /* Do Something with item .... */
-    }
-
 
     //set up the images for walking etc.
     public void initialise() {
@@ -108,5 +106,12 @@ public class Player extends Object {
 
     public void setCanDie(boolean canDie) {
         this.canDie = canDie;
+    }
+    public String getFacing() {
+        return facing;
+    }
+
+    public void setFacing(String facing) {
+        this.facing = facing;
     }
 }

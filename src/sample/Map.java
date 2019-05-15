@@ -45,18 +45,27 @@ public class Map {
     }
 
     //Enemies
-    private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(200, 100, true, 800, 100);
-        addAnimatedObjects(enemy1);
-        enemiestype1.add (enemy1);
 
-        EnemyType1 enemy2 = new EnemyType1(600, 500, true, 800, 10);
-        addAnimatedObjects(enemy2);
-        enemiestype1.add (enemy2);
-
-        EnemyType1 enemy3 = new EnemyType1(1300, 500, true, 800, 50);
-        addAnimatedObjects(enemy3);
-        enemiestype1.add (enemy3);
+    private void createEnemies () {
+        addEnemy (1);
+        addEnemy (2);
+        addEnemy (3);
+    }
+    public void addEnemy (int type){
+        EnemyType1 enemy;
+        switch (type){
+            case 1:  // Enemy stay more at bottom of map - on left side
+                enemy = new EnemyType1(200, 100, true, 800, 100);
+                break;
+            case 2: // Enemy stay more at top of map - anywhere
+                enemy = new EnemyType1(600, 500, true, 800, 10);
+                break;
+            default: // Enemy will be between bottom and middle - anywhere
+                enemy = new EnemyType1(1300, 500, true, 800, 50);
+                break;
+        }
+        addAnimatedObjects(enemy);
+        enemiestype1.add (enemy);
     }
 
     // Weapons & blocks to collect
@@ -67,7 +76,7 @@ public class Map {
         addItem(block);
 
         // Add weapons to pick-up
-        Weapon weapon1 = new Weapon ("weapon 1", 10);
+        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
         addItem (weapon1);
     }
 
@@ -129,8 +138,6 @@ public class Map {
     }
 
 
-    ArrayList<Object> objects() { return this.animatedObjects; }
-
     public Grid level() { return level; }
 
 
@@ -155,7 +162,4 @@ public class Map {
         }
     }
 
-    public void createOneBullet () {
-
-    }
 }

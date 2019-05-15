@@ -31,7 +31,7 @@ public class Main extends Application {
     //global variables
     private final int WIDTH = 960 , HEIGHT = 640;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
-    private final int PLAYER_START_LIVES = 2;
+    private final int PLAYER_START_LIVES = 4;
     private Mode mode = Mode.STARTMENU;
     private int counter;
     private boolean gameisOver;
@@ -92,8 +92,8 @@ public class Main extends Application {
 
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         animatedObjects.add(player);
-        for(Object block: map.getItems ()) animatedObjects.add(block);
-        for(Object object: map.objects()) animatedObjects.add(object);
+        animatedObjects.addAll(map.getItems ());
+        animatedObjects.addAll(map.getAnimatedObjects ());
     }
 
     private void runGame(Stage stage) {
@@ -130,9 +130,11 @@ public class Main extends Application {
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.LEFT)) {
                 keypressed = true;
+                player.setFacing ("LEFT");
                 if (player.move_X (-5, map)) moveScreenX (-5);
             }
-            if (isPressed (KeyCode.RIGHT) && keypressed == false) {
+            if (isPressed (KeyCode.RIGHT) && !keypressed) {
+                player.setFacing ("RIGHT");
                 if (player.move_X (5, map)) moveScreenX (5);
             }
             if (isPressed (KeyCode.SPACE)) {
@@ -144,16 +146,16 @@ public class Main extends Application {
             ListenerItemsEvent ();
             ListenerPlayerLives ();
             ListenerPlayerUseWeapon ();
+            UpdateAnimatedObjects ();
+            ListenerGameOver ();
 
-            for (Object object : animatedObjects) {
-                object.update (map);
-            }
-
-            if (player.getLives () == 0 || isObjectOutOfBounds (player)) {
-                handleGameOver ();
+            if (isPressed (KeyCode.UP)) {
+                map.addEnemy (1);
             }
         }
     }
+
+
 
     //updates the screen X based on player position
     private void moveScreenX(int movement){
@@ -179,8 +181,13 @@ public class Main extends Application {
         }
     }
 
-    /* ---------- PLAYER ----------- */
+    private void UpdateAnimatedObjects () {
+        for (Object object : animatedObjects) {
+            object.update (map);
+        }
+    }
 
+    /* ---------- PLAYER ----------- */
 
     private void ListenerItemsEvent () {
         for (Collectable item : map.getItems ()) {
@@ -188,8 +195,8 @@ public class Main extends Application {
                 /* pickup item */
                 if (item.isAlive() && isPressed (KeyCode.A)) {
                     player.getLuggage ().take (item);
+                    map.hideEntity (item);
                     if (item.getItemType () == Type.BLOCK) {
-                        map.hideEntity (item);
                         miniGameKey();
                     }
                 }
@@ -209,32 +216,18 @@ public class Main extends Application {
         }
     }
 
-    private void miniGameKey() {
-        /* Mini games activated once player collects a block on the map */
-        try {
-            KeyGame mini = new KeyGame ();
-
-            AnchorPane game = mini.returnRoot ();
-            mainScene.setRoot (game);
-            mainScene.getRoot ().requestFocus ();
-            mode = Mode.MINIGAME;
-
-        } catch (Exception e) {
-            e.printStackTrace ();
-
-        }
-    }
-
     private void ListenerPlayerLives () {
         int collision=0;
         for (EnemyType1 enemy: map.getEnemies ()) {
-            if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
-                collision++;
-                // Waits that player moves out from the enemy to loose another life
-                if (player.isCanDie ()) {
-                    System.out.println ("PLAYER LOST A LIFE");
-                    player.LooseOneLive ();
-                    player.setCanDie (false);
+            if (enemy.isAlive ()) {
+                if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
+                    collision++;
+                    // Waits that player moves out from the enemy to loose another life
+                    if (player.isCanDie ()) {
+                        System.out.println ("PLAYER LOST A LIFE");
+                        player.LooseOneLive ();
+                        player.setCanDie (false);
+                    }
                 }
             }
         }
@@ -242,13 +235,7 @@ public class Main extends Application {
         if (collision == 0) {
             player.setCanDie (true);
         }
-    }
-    private boolean PlayerKillEnemy (EnemyType1 enemy) {
-        /*
-        if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
-            return true;
-        }*/
-        return false;
+
     }
 
     private void ListenerPlayerUseWeapon () {
@@ -256,9 +243,9 @@ public class Main extends Application {
 
             // If player allowed to use weapon and has bullets left
             if (isPressed (KeyCode.W) && player.canUseWeapon ()) {
-                Bullet bullet = new Bullet (player.getX () + 5, player.getY ());
+                Bullet bullet = new Bullet (player.getX () + 5, player.getY () + player.height/4, player.getFacing ());
+                animatedObjects.add(bullet);
                 map.addAnimatedObjects (bullet);
-                animatedObjects.add (bullet);
                 player.getLuggage ().getWeapon ().looseOneBullet ();
                 player.getLuggage ().getWeapon ().setCanShoot (false);
             }
@@ -269,8 +256,19 @@ public class Main extends Application {
 
             // moves existing bullets
             for (Object obj : animatedObjects) {
-                if (obj instanceof Bullet) {
-                    ((Bullet) obj).shoot (map);
+                if (obj instanceof Bullet && obj.isAlive ()) {
+                    ((Bullet) obj).move (map);
+
+                    // check if bullet collide with any enemy
+                    for (EnemyType1 enemyType1 : map.getEnemies ()) {
+                        if (enemyType1.isAlive ()
+                            && enemyType1.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
+                            enemyType1.setAlive (false);
+                            obj.setAlive (false);
+                            map.hideEntity (enemyType1);
+                            map.hideEntity (obj);
+                        }
+                    }
                 }
             }
         }
@@ -282,9 +280,8 @@ public class Main extends Application {
         for (EnemyType1 enemy : map.getEnemies ()) {
 
             // check if enemy died
-            if (PlayerKillEnemy (enemy) || isObjectOutOfBounds (enemy) ) {
+            if (isObjectOutOfBounds (enemy) ) {
                 enemy.setAlive (false);
-                map.hideEntity (enemy);
             }
             // if enemy alive - give motion
             if (enemy.isAlive () && enemy.getCanMove ()) {
@@ -295,14 +292,21 @@ public class Main extends Application {
 
     /* ----------------- GAME OVER ------------------- */
 
+
+
     private boolean isObjectOutOfBounds(Object object) {
-        if (object.getY() > map.level().height()){
+        if (object.getY() > map.level().height()
+            || object.getX () >= map.level ().width() - map.level ().getOBJ_WIDTH ()
+            || object.getX () < map.level ().getOBJ_WIDTH ()){
             return true;
         }
         return false;
     }
 
-    private void handleGameOver() {
+    private void ListenerGameOver() {
+        if (player.getLives () > 0 && !isObjectOutOfBounds (player)) {
+            return;
+        }
         if(!gameisOver) {
             mainScene.setRoot(gameOver.returnRoot());
             mainScene.setFill(Color.BLACK);
@@ -372,13 +376,20 @@ public class Main extends Application {
     }
     /* ----------------- MINI GAME ------------------- */
 
+    private void miniGameKey() {
+        /* Mini games activated once player collects a block on the map */
+        try {
+            KeyGame mini = new KeyGame ();
 
+            AnchorPane game = mini.returnRoot ();
+            mainScene.setRoot (game);
+            mainScene.getRoot ().requestFocus ();
+            mode = Mode.MINIGAME;
 
+        } catch (Exception e) {
+            e.printStackTrace ();
 
-    /* --------------- GETTERS AND SETTERS --------------------- */
-
-    public void setMode(Mode mode) {
-        this.mode = mode;
+        }
     }
 
 }
