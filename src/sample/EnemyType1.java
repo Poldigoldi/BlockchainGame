@@ -22,8 +22,8 @@ public class EnemyType1 extends Object {
     // Global variables
     private final int OFFSET = 5;
     private final int MOVE_SPEED = 1;
-    private final double JUMP_SPEED_Y = 28;
-    private final double JUMP_SPEED_X = 2.6;
+    private final double JUMP_SPEED_Y = 29;
+    private final double JUMP_SPEED_X = 2.8;
     private final int JUMP_PROBA_RANGE;
     private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
@@ -283,7 +283,7 @@ public class EnemyType1 extends Object {
 
 
     /* PRINTING */
-    
+
     private void print(String string){
         if(print) System.out.println(string);
     }

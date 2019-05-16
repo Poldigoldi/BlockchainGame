@@ -3,11 +3,10 @@ package sample;
 import javafx.scene.Group;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
 
 public class Map {
 
-    private ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
     private Group mapRoot = new Group();
@@ -25,25 +24,12 @@ public class Map {
         for (Object platform : level.platforms()) {
             showEntity(platform);
         }
-        // Add block to pick-up
-        Item block = new Item("block");
-        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
-        addItem(block);
+        createCollectableObjects ();
     }
 
-    public Group mapRoot() {
-        return mapRoot;
-    }
-
-    ArrayList<Item> blocks() { return this.items; }
-
-    ArrayList<Object> objects() { return this.animatedObjects; }
-
-    public Grid level() { return level; }
-
-    public void addItem (Item item) {
-        /* add Item to Map */
-        if (!items.contains (item)) { items.add (item); }
+    public void addItem (Collectable item) {
+        /* add Block to Map */
+        items.add (item);
         showEntity(item);
     }
 
@@ -59,20 +45,40 @@ public class Map {
     }
 
     //Enemies
-    private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(200, 100, true, 800, 100);
-        addAnimatedObjects(enemy1);
-        enemiestype1.add (enemy1);
 
-        EnemyType1 enemy2 = new EnemyType1(600, 500, true, 800, 10);
-        addAnimatedObjects(enemy2);
-        enemiestype1.add (enemy2);
-
-        EnemyType1 enemy3 = new EnemyType1(1300, 500, true, 800, 50);
-        addAnimatedObjects(enemy3);
-        enemiestype1.add (enemy3);
+    private void createEnemies () {
+        addEnemy (1);
+        addEnemy (2);
+        addEnemy (3);
+    }
+    public void addEnemy (int type){
+        EnemyType1 enemy;
+        switch (type){
+            case 1:  // Enemy stay more at bottom of map - on left side
+                enemy = new EnemyType1(200, 100, true, 800, 100);
+                break;
+            case 2: // Enemy stay more at top of map - anywhere
+                enemy = new EnemyType1(600, 500, true, 800, 10);
+                break;
+            default: // Enemy will be between bottom and middle - anywhere
+                enemy = new EnemyType1(1300, 500, true, 800, 50);
+                break;
+        }
+        addAnimatedObjects(enemy);
+        enemiestype1.add (enemy);
     }
 
+    // Weapons & blocks to collect
+    private void createCollectableObjects () {
+        // Add block to pick-up
+        Block block = new Block ("block");
+        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
+        addItem(block);
+
+        // Add weapons to pick-up
+        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
+        addItem (weapon1);
+    }
 
     //Nick's functions for making the background graphics
 
@@ -127,12 +133,23 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
+    public Group mapRoot() {
+        return mapRoot;
+    }
+
+
+    public Grid level() { return level; }
+
+
     public ArrayList<Object> getAnimatedObjects() {
         return animatedObjects;
     }
 
     public ArrayList<EnemyType1> getEnemies () {
         return enemiestype1;
+    }
+    public ArrayList<Collectable> getItems() {
+        return items;
     }
 
     public Grid getLevel () {
@@ -144,4 +161,5 @@ public class Map {
             enemy.setAlive (state);
         }
     }
+
 }
