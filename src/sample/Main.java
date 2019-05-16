@@ -42,6 +42,7 @@ public class Main extends Application {
     private boolean gameisOver;
     private boolean gameisMenu;
     private boolean gameisInstructions;
+    private KeyPad keyPad = new KeyPad();
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
@@ -49,7 +50,6 @@ public class Main extends Application {
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
     private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
     private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
-    private KeyPad keyPad = new KeyPad();
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -143,14 +143,17 @@ public class Main extends Application {
             handleKeyPad();
         }
 
-        /*Change levels when player walks to right wall*/
-        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644) {
+        if (keyPad.isCodeCorrect()) {
+            changeLevel(2);
+            keyPad.setCodeCorrect(false);
+        }
+
+        /*Opens keyPad if in the right position and action button is pressed "e"*/
+        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644 && isPressed(KeyCode.E)) {
             openKeyPad();
-            changeLevel(2);//change to level 2
         }
 
         if (mode == Mode.PLATFORMGAME) {
-
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.LEFT)) {
                 player.setFacingRight (false);
@@ -176,7 +179,9 @@ public class Main extends Application {
         }
     }
 
+    /*Creates the keyPad and changes game mode*/
     private void openKeyPad() {
+        keyPad = new KeyPad();
         Group keyPadRoot = new Group();
         keyPad.initialise();
         keyPadRoot.getChildren().add(keyPad.getRoot());
@@ -184,6 +189,7 @@ public class Main extends Application {
         mode = Mode.KEYPAD;
     }
 
+    /*Handles all button clicks on the keyPad*/
     private void handleKeyPad() {
         keyPad.getOne().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getOne().getValue()))));
         keyPad.getTwo().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getTwo().getValue()))));
@@ -196,9 +202,14 @@ public class Main extends Application {
         keyPad.getNine().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getNine().getValue()))));
         keyPad.getZero().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getZero().getValue()))));
         keyPad.getClear().setOnAction(event -> keyPad.setDisplayText(""));
+        keyPad.getExit().setOnAction(event -> {
+            mainScene.setRoot(appRoot);
+            mode = Mode.PLATFORMGAME;
+        });
         keyPad.getEnter().setOnAction(event -> {
             if (keyPad.getDisplayText().equals("1234")) {
                 mainScene.setRoot(appRoot);
+                keyPad.setCodeCorrect(true);
                 mode = Mode.PLATFORMGAME;
             } else {
                 keyPad.setDisplayText("WRONG CODE!");
