@@ -129,7 +129,6 @@ public class Object  {
             if (type == Type.BULLET && box.getBoundsInParent ().intersects (object.box.getBoundsInParent ())) {
                 return false;
             }
-
             if (object.type == Type.SOLID
                     && this.getY()>object.getY()-this.height
                     && this.getY()<object.getY()+this.height) {
@@ -154,7 +153,7 @@ public class Object  {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
-                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY1)) landSound.play();
+                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY)) landSound.play();
                             CanJump = true;
                             isLanded = true;
                             return;

@@ -1,13 +1,11 @@
 package sample;
 
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-public class EnemyType1 extends Object {
+public class Enemy extends Object {
 
     /*
     TODO: 1) allow enemy to attack (either rockets/contact)
@@ -27,8 +25,8 @@ public class EnemyType1 extends Object {
     private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
 
-    public EnemyType1(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
-        super(Type.ENEMY1);
+    public Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
+        super(Type.ENEMY);
         this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
         this.canMove = canMove;
         this.alive = true;
