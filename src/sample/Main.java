@@ -2,6 +2,7 @@ package sample;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ public class Main extends Application {
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
     private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
     private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
+    private KeyPad keyPad = new KeyPad();
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
@@ -133,8 +136,13 @@ public class Main extends Application {
             }
         }
 
+        if (mode == Mode.KEYPAD) {
+            handleKeyPad();
+        }
+
         /*Change levels when player walks to right wall*/
         if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644) {
+            openKeyPad();
             changeLevel(2);//change to level 2
         }
 
@@ -168,6 +176,36 @@ public class Main extends Application {
         }
     }
 
+    private void openKeyPad() {
+        Group keyPadRoot = new Group();
+        keyPad.initialise();
+        keyPadRoot.getChildren().add(keyPad.getRoot());
+        mainScene.setRoot(keyPadRoot);
+        mode = Mode.KEYPAD;
+    }
+
+    private void handleKeyPad() {
+        keyPad.getOne().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getOne().getValue()))));
+        keyPad.getTwo().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getTwo().getValue()))));
+        keyPad.getThree().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getThree().getValue()))));
+        keyPad.getFour().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getFour().getValue()))));
+        keyPad.getFive().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getFive().getValue()))));
+        keyPad.getSix().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getSix().getValue()))));
+        keyPad.getSeven().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getSeven().getValue()))));
+        keyPad.getEight().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getEight().getValue()))));
+        keyPad.getNine().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getNine().getValue()))));
+        keyPad.getZero().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getZero().getValue()))));
+        keyPad.getClear().setOnAction(event -> keyPad.setDisplayText(""));
+        keyPad.getEnter().setOnAction(event -> {
+            if (keyPad.getDisplayText().equals("1234")) {
+                mainScene.setRoot(appRoot);
+                mode = Mode.PLATFORMGAME;
+            } else {
+                keyPad.setDisplayText("WRONG CODE!");
+            }
+        });
+
+    }
 
 
     //updates the screen X based on player position
