@@ -33,7 +33,7 @@ public class Main extends Application {
     private final int WIDTH = 960 , HEIGHT = 640;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
     private final int PLAYER_START_LIVES = 4;
-    private final int TIME_LIMIT = 60 * 30 * 1; // 30 seconds
+    private final int TIME_LIMIT = 60 * 10 * 1; // 30 seconds
     private Mode mode = Mode.STARTMENU;
     private int counter;
     private int timeCounter = 0;
