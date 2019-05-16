@@ -3,7 +3,6 @@ package sample;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 import java.nio.file.Paths;
 
@@ -34,10 +33,10 @@ public class Player extends Object {
 
 
     void jump() {
-        if (CanJump) {
+        if (canJump) {
             jumpSound.play();
             this.Velocity = this.Velocity.add (0, -30);
-            CanJump=false;
+            canJump =false;
         }
     }
 

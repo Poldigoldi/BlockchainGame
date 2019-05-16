@@ -115,9 +115,9 @@ public class Enemy extends Object {
     /* -------------------- PRIVATE METHODS ------------------------- */
 
     private void jump (double value) {
-        if (CanJump) {
+        if (canJump) {
             this.Velocity = this.Velocity.add (value, -JUMP_SPEED_Y);
-            CanJump=false;
+            canJump =false;
         }
     }
 
