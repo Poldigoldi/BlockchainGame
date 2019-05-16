@@ -37,11 +37,9 @@ public class Main extends Application {
     private boolean gameisOver;
     private boolean gameisMenu;
     private boolean gameisInstructions;
-    private static boolean firstCall = true;
 
     private Pane appRoot = new Pane();
     private Map map = new Map();
-    private Player player;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
     private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
@@ -49,36 +47,33 @@ public class Main extends Application {
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private List<Object> animatedObjects = new ArrayList<>();
-
+    private Player player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, PLAYER_START_LIVES);
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         mediaPlayer.play();
         mediaPlayer.setVolume(0);
 
-        //initialise player, the 'player' is the collision box of the playerInstance
-        player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, primaryStage, PLAYER_START_LIVES);
         player.initialise();
-
         //initialise Scene/game
-        initContent();
+        initContent(1);
         mainScene = new Scene(appRoot, WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         primaryStage.setScene(mainScene);
-        mainScene.setRoot(gameMenu.returnRoot());
+        mainScene.setRoot(gameMenu.returnRoot());;
         gameisMenu = true;
         handleMenu();
         primaryStage.show();
         runGame(primaryStage);
     }
 
-    private void initContent() {
+    private void initContent(int level) {
         //initialise background
         Image back1 = new Image("/graphics/background1.png", true);
         BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
@@ -86,7 +81,7 @@ public class Main extends Application {
         appRoot.setBackground(new Background(background));
 
         //initialise map / contents of the appRoot (i.e. the player, platforms, blocks, etc.)
-        map.initialize ();
+        map.initialize (level); //initialises level based on level number input
         map.showEntity(player);
         appRoot.getChildren().addAll(map.mapRoot());
 
@@ -94,6 +89,19 @@ public class Main extends Application {
         animatedObjects.add(player);
         animatedObjects.addAll(map.getItems ());
         animatedObjects.addAll(map.getAnimatedObjects ());
+    }
+
+    private void changeLevel(int level) {
+        appRoot.getChildren().clear();
+        map.mapRoot().getChildren().clear();
+        map.getEnemies().clear();
+        map.getItems().clear();
+        map.getAnimatedObjects().clear();
+        initContent(level);
+        player.setX(PLAYERSTARTX);
+        player.setY(PLAYERSTARTY);
+        map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+        map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
     }
 
     private void runGame(Stage stage) {
@@ -116,7 +124,6 @@ public class Main extends Application {
                 mainScene.setRoot (appRoot);
             }
         }
-
         if (mode == Mode.STARTMENU) {
             if (gameMenu.isStartGame ()) {
                 handleMenu ();
@@ -124,6 +131,11 @@ public class Main extends Application {
             if (gameMenu.isInstructionsPressed ()) {
                 handleInstructions ();
             }
+        }
+
+        /*Change levels when player walks to right wall*/
+        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644) {
+            changeLevel(2);//change to level 2
         }
 
         if (mode == Mode.PLATFORMGAME) {
@@ -391,6 +403,5 @@ public class Main extends Application {
 
         }
     }
-
 }
 

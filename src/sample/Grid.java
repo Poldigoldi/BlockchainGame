@@ -27,7 +27,7 @@ public class Grid {
   private final int OBJ_WIDTH = 64;
   int width;
   int height;
-  private String[] map = new String[]{
+  private String[] map1 = new String[]{
           "4000000000000000000004",
           "4000000000000000000004",
           "4000000000000000000004",
@@ -44,8 +44,30 @@ public class Grid {
           "4444444444400000444000"
   };
 
+  private String[] map2 = new String[]{
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4000000000000000000004",
+          "4444444444444444444444"
+  };
+
+
   /* Constructor */
-  Grid() {
+  Grid(int leveNumber) {
+    String[] map = map1;
+    if (leveNumber == 2) {
+      map = map2;
+    }
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {

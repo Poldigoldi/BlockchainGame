@@ -18,18 +18,15 @@ public class Player extends Object {
     private boolean canDie;
     private String name;
     private Luggage luggage;
-    private Stage stage;
     private String facing;
 
-
-    public Player(String name, int STARTX, int STARTY, Stage stage, int START_LIVES) {
+    public Player(String name, int STARTX, int STARTY, int START_LIVES) {
         super(Type.PLAYER);
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
         this.canDie = true;
         this.lives = START_LIVES;
         this.name = name;
         this.luggage = new Luggage();
-        this.stage = stage;
         this.facing = "RIGHT";
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
         sprite().offset(-(64-WIDTH)/2, -(64- HEIGHT));
