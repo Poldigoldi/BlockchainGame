@@ -69,11 +69,10 @@ public class Grid {
 
 
   /* Constructor */
-  Grid(int leveNumber) {
-    String[] map = map1;
-    if (leveNumber == 2) {
-      map = map2;
-    }
+  Grid(int level) {
+    String [] map;
+    map = map1;
+    if(level == 2) map = map2;
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {
