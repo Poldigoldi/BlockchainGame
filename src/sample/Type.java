@@ -1,20 +1,20 @@
 package sample;
 
 public enum Type {
-    SOLID, PLAYER, PLATFORM, PLATFORMBUTTON, DEFAULT, ITEM, WEAPON, BULLET, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY1;
+    SOLID, PLAYER, PLATFORM, PLATFORMBUTTON, DEFAULT, ITEM, WEAPON, BULLET, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY;
 
     //used in update to see whether to apply falling
     public boolean hasGravity(){
         if(this==PLAYER) return true;
         if(this==ITEM) return true;
-        if(this== ENEMY1) return true;
+        if(this== ENEMY) return true;
         return false;
     }
 
     //used in update to see whether to look for the last movement for animations (e.g. left or right?)
     public boolean hasMovementAnimation(){
         if(this==PLAYER) return true;
-        if(this== ENEMY1) return true;
+        if(this== ENEMY) return true;
         return false;
     }
 
@@ -27,7 +27,7 @@ public enum Type {
 
 /*
 PLAYER: Nothing unique so far.
-ENEMY1: will add stuff.
+ENEMY: will add stuff.
 PLATFORM: Other objects can move up through platforms, but not down.
 ITEM: Has no collision but still has gravity.
 SOLID: Objects are unable to X or Y collide with these type of objects.

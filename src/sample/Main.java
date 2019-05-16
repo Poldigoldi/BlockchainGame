@@ -33,7 +33,7 @@ public class Main extends Application {
     private final int WIDTH = 960 , HEIGHT = 640;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
     private final int PLAYER_START_LIVES = 4;
-    private final int TIME_LIMIT = 60 * 10 * 1; // 30 seconds
+    private final int TIME_LIMIT = 60 * 20 * 1; // 20 seconds
     private Mode mode = Mode.STARTMENU;
     private int counter;
     private int timeCounter = 0;
@@ -145,11 +145,11 @@ public class Main extends Application {
 
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.LEFT)) {
-                player.setXDirection(false);
+                player.setFacingRight (false);
                 if (player.move_X (-5, map))moveScreenX (-5);
             }
             else if (isPressed (KeyCode.RIGHT)){
-                player.setXDirection(true);
+                player.setFacingRight (true);
                 if (player.move_X (5, map)) moveScreenX (5);
             }
             if (isPressed (KeyCode.SPACE)) {
@@ -253,7 +253,7 @@ public class Main extends Application {
 
             // If player allowed to use weapon and has bullets left
             if (isPressed (KeyCode.W) && player.canUseWeapon ()) {
-                Bullet bullet = new Bullet (player.getX () + 5, player.getY () + player.height/4, player.getFacing ());
+                Bullet bullet = new Bullet (player.getX () + 5, player.getY () + player.height/4, player.isFacingRight ());
                 animatedObjects.add(bullet);
                 map.addAnimatedObjects (bullet);
                 player.getLuggage ().getWeapon ().looseOneBullet ();
