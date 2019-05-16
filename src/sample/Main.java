@@ -310,7 +310,7 @@ public class Main extends Application {
                     // TODO: remove bullets & enemy who are dead from animatedObjects array
                     for (Enemy enemy : map.getEnemies ()) {
                         if (enemy.isAlive ()
-                            && enemy.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
+                            && enemy.box.getBoundsInParent ().intersects (object.box.getBoundsInParent ()) ) {
                             enemy.setAlive (false);
                             object.setAlive (false);
                             map.hideEntity (enemy);
