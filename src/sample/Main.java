@@ -143,8 +143,8 @@ public class Main extends Application {
             handleKeyPad();
         }
 
-        /*Change levels when player walks to right wall*/
-        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644) {
+        /*Opens keyPad if in the right position and action button is pressed "e"*/
+        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644 && isPressed(KeyCode.E)) {
             openKeyPad();
             changeLevel(2);//change to level 2
         }
@@ -176,6 +176,7 @@ public class Main extends Application {
         }
     }
 
+    /*Creates the keyPad and changes game mode*/
     private void openKeyPad() {
         Group keyPadRoot = new Group();
         keyPad.initialise();
@@ -184,6 +185,7 @@ public class Main extends Application {
         mode = Mode.KEYPAD;
     }
 
+    /*Handles all button clicks on the keyPad*/
     private void handleKeyPad() {
         keyPad.getOne().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getOne().getValue()))));
         keyPad.getTwo().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getTwo().getValue()))));
