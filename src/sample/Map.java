@@ -3,6 +3,7 @@ package sample;
 import javafx.scene.Group;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 public class Map {
 
