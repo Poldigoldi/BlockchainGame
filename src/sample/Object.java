@@ -149,7 +149,7 @@ public class Object  {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
-                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY1)) landSound.play();
+                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY)) landSound.play();
                             canJump = true;
                             isLanded = true;
                             return;
