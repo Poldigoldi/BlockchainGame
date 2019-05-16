@@ -27,7 +27,7 @@ public class Platform extends Object{
 
 
   public void restoreCollisionBox() {
-    setCollisionBox(collisionValues.get(0), collisionValues.get(1), collisionValues.get(2), collisionValues.get(3), Color.GREEN);
+    setCollisionBox(collisionValues.get(0), collisionValues.get(1), collisionValues.get(2), collisionValues.get(3), Color.DARKORANGE);
   }
 
 

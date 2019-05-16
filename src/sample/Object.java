@@ -35,7 +35,7 @@ public class Object  {
     public Type type;
     public int width;
     public int height;
-    public boolean CanJump = true;
+    public boolean canJump = true;
     public Point2D Velocity = new Point2D(0,0);
     public boolean facingRight;
     public boolean movingDown;
@@ -145,12 +145,12 @@ public class Object  {
         movingDown = value > 0; // (Y=0) at the top of the frame
         for (int i=0; i<Math.abs(value); i++) {
             /* Check for collisions between player and platforms */
-            for (Object object : map.level().platforms()) {
+            for (Platform object : map.level().platforms()) {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
                             if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY1)) landSound.play();
-                            CanJump = true;
+                            canJump = true;
                             isLanded = true;
                             return;
                         }

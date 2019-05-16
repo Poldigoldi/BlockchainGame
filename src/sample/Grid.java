@@ -25,7 +25,6 @@ public class Grid {
   private Frame platformleft = new Frame("/graphics/platformleft.png");
   private Frame platformright = new Frame("/graphics/platformright.png");
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
-  private Frame platformbutton = new Frame("/graphics/defaultright2.png");
   private Frame block = new Frame("/graphics/block.png");
 
   private ArrayList<Platform> platforms = new ArrayList<> ();
@@ -94,10 +93,10 @@ public class Grid {
         }
         if (value == '5'){
          Platform platform = new Platform(Type.PLATFORM, platformright);
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GRAY);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
           platform.setDisappear(true);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.GRAY);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.DARKORANGE);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
           outline.setY(y * 64);
@@ -105,8 +104,8 @@ public class Grid {
           platforms.add(platform);
         }
         if (value == '6'){
-          PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, platformbutton);
-          button.setCollisionBox(x*64, y*64,20, 30, Color.RED);
+          PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON);
+          button.setCollisionBox(x * 64 + 11, y * 64 + 40,40, 5, Color.RED);
           buttons.add(button);
         }
         x++;

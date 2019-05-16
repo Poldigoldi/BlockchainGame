@@ -1,11 +1,9 @@
 package sample;
 
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class EnemyType1 extends Object {
 
@@ -117,9 +115,9 @@ public class EnemyType1 extends Object {
     /* -------------------- PRIVATE METHODS ------------------------- */
 
     private void jump (double value) {
-        if (CanJump) {
+        if (canJump) {
             this.Velocity = this.Velocity.add (value, -JUMP_SPEED_Y);
-            CanJump=false;
+            canJump =false;
         }
     }
 

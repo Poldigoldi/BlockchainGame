@@ -183,6 +183,12 @@ public class Map {
         }
     }
 
+    public void resetButtons() {
+      for (PlatformButton button : level.buttons()) {
+        button.buttonUp();
+      }
+    }
+
     public int getCurrentLevel() {
         return currentLevel;
     }

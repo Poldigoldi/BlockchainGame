@@ -13,15 +13,26 @@ import javafx.scene.paint.Color;
 
 public class PlatformButton extends Object{
   private boolean pressed = false;
+  private Frame buttonUp = new Frame("/graphics/buttonUp.png");
+  private Frame buttonDown = new Frame("/graphics/buttonDown.png");
 
 
-  PlatformButton(Type type, Frame ... frame) {
+  PlatformButton(Type type) {
     super(type);
-    sprite = new Sprite(type, frame);
+    sprite = new Sprite(type, buttonUp);
+    sprite().offset(-11, -40);
   }
 
   void setPressed(boolean pressed) {
     this.pressed = pressed;
+  }
+
+  void buttonDown() {
+    sprite.setImage(buttonDown);
+  }
+
+  void buttonUp() {
+    sprite.setImage(buttonUp);
   }
 
   boolean isPressed(){
