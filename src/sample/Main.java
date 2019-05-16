@@ -131,23 +131,10 @@ public class Main extends Application {
             }
         }
         if (mode == Mode.STARTMENU) {
-            if (gameMenu.isStartGame ()) {
-                handleMenu ();
-            }
-            if (gameMenu.isInstructionsPressed ()) {
-                handleInstructions ();
-            }
+            if (gameMenu.isStartGame ()) handleMenu ();
+            if (gameMenu.isInstructionsPressed ()) handleInstructions ();
         }
-
-        if (mode == Mode.KEYPAD) {
-            handleKeyPad();
-        }
-
-        /*Change levels when player walks to right wall*/
-        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644) {
-            openKeyPad();
-            changeLevel(2);//change to level 2
-        }
+        if (mode == Mode.KEYPAD) handleKeyPad();
 
         if (mode == Mode.PLATFORMGAME) {
 
@@ -163,7 +150,11 @@ public class Main extends Application {
             if (isPressed (KeyCode.SPACE)) {
                 player.jump ();
             }
-
+            /*Change levels when player walks to right wall*/
+            if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644) {
+                openKeyPad();
+                changeLevel(2);//change to level 2
+            }
             moveScreenY ();
             ListenerEnemies ();
             ListenerItemsEvent ();
@@ -308,6 +299,7 @@ public class Main extends Application {
 
                     // check if bullet collide with any enemy
                     // TODO: remove bullets & enemy who are dead from animatedObjects array
+                    ArrayList<Enemy> deads = new ArrayList<> ();
                     for (Enemy enemy : map.getEnemies ()) {
                         if (enemy.isAlive ()
                             && enemy.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
@@ -315,8 +307,10 @@ public class Main extends Application {
                             obj.setAlive (false);
                             map.hideEntity (enemy);
                             map.hideEntity (obj);
+                            deads.add(enemy);
                         }
                     }
+                    map.getEnemies ().removeIf (e -> !e.isAlive ());
                 }
             }
         }
