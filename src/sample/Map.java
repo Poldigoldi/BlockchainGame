@@ -7,23 +7,44 @@ import javafx.scene.shape.Shape;
 
 public class Map {
 
-    private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<Object> animatedObjects = new ArrayList<>();
+    private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
     private Group mapRoot = new Group();
     private Grid level;
     private int currentLevel;
 
 
-    public void initialize(int levelNumber) {
-        level = new Grid(levelNumber);
-        currentLevel = levelNumber;
+    public Map(int level){
+        if(level==1){
+            initialiseLevel1();
+        }
+        if(level==2){
+            initialiseLevel2();
+        }
+    }
+
+    public void initialiseLevel1() {
+        level = new Grid(1);
+        currentLevel = 1;
         createLayer4Mountains();
         createLayer3Clouds();
         createLayer2Mountains();
         createLayer1Clouds();
         createEnemies();
+        createCollectableObjects ();
+        generalInitialiser();
+    }
 
+    public void initialiseLevel2(){
+        level = new Grid(2);
+        currentLevel = 2;
+        createLayer3Clouds();
+        generalInitialiser();
+    }
+
+
+    public void generalInitialiser(){
         for(Shape outline : level.outlines()) {
             mapRoot.getChildren().add(outline);
         }
@@ -34,14 +55,23 @@ public class Map {
         for (PlatformButton button : level.buttons()) {
             showEntity(button);
         }
-
-        createCollectableObjects ();
     }
 
     public void addItem (Collectable item) {
         /* add Block to Map */
         items.add (item);
+        animatedObjects.add(item);
         showEntity(item);
+    }
+
+    public void addPlayer(Object player){
+        showEntity(player);
+        animatedObjects.add(player);
+    }
+
+    public void removePlayer(Object player){
+        hideEntity(player);
+        animatedObjects.remove(player);
     }
 
     public void showEntity(Object object) { object.add(mapRoot); }
@@ -152,7 +182,7 @@ public class Map {
     public Grid level() { return level; }
 
 
-    public ArrayList<Object> getAnimatedObjects() {
+    public ArrayList<Object> animatedObjects() {
         return animatedObjects;
     }
 

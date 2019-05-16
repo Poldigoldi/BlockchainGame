@@ -28,6 +28,7 @@ public class Player extends Object {
         this.name = name;
         this.luggage = new Luggage();
         this.facing = "RIGHT";
+        initialise();
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
         sprite().offset(-(64-WIDTH)/2, -(64- HEIGHT));
     }

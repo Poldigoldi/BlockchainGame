@@ -39,14 +39,13 @@ public class Main extends Application {
     private boolean gameisInstructions;
 
     private Pane appRoot = new Pane();
-    private Map map = new Map();
+    private Map map;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
     private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
     private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
-    private List<Object> animatedObjects = new ArrayList<>();
     private Player player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, PLAYER_START_LIVES);
 
     public static void main(String[] args) {
@@ -57,8 +56,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         mediaPlayer.play();
         mediaPlayer.setVolume(0);
-
-        player.initialise();
         //initialise Scene/game
         initContent(1);
         mainScene = new Scene(appRoot, WIDTH, HEIGHT);
@@ -81,22 +78,15 @@ public class Main extends Application {
         appRoot.setBackground(new Background(background));
 
         //initialise map / contents of the appRoot (i.e. the player, platforms, blocks, etc.)
-        map.initialize (level); //initialises level based on level number input
-        map.showEntity(player);
+        map = new Map(level); //initialises level based on level number input
         appRoot.getChildren().addAll(map.mapRoot());
-
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
-        animatedObjects.add(player);
-        animatedObjects.addAll(map.getItems ());
-        animatedObjects.addAll(map.getAnimatedObjects ());
+        map.addPlayer(player);
     }
 
     private void changeLevel(int level) {
+        map.removePlayer(player);
         appRoot.getChildren().clear();
-        map.mapRoot().getChildren().clear();
-        map.getEnemies().clear();
-        map.getItems().clear();
-        map.getAnimatedObjects().clear();
         initContent(level);
         player.setX(PLAYERSTARTX);
         player.setY(PLAYERSTARTY);
@@ -178,10 +168,10 @@ public class Main extends Application {
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             //this is for parallax scrolling of background elements
             if(counter == 5|| counter == 10){
-                for(Object object: animatedObjects) if(object.type==Type.LAYER2) object.setX(object.getX()-movement/5);
+                for(Object object: map.animatedObjects()) if(object.type==Type.LAYER2) object.setX(object.getX()-movement/5);
             }
             if(counter == 10){
-                for(Object object: animatedObjects) if(object.type==Type.LAYER4) object.setX(object.getX()-movement/5);
+                for(Object object: map.animatedObjects()) if(object.type==Type.LAYER4) object.setX(object.getX()-movement/5);
                 counter = 0;
             }
         }
@@ -195,7 +185,7 @@ public class Main extends Application {
     }
 
     private void UpdateAnimatedObjects () {
-        for (Object object : animatedObjects) {
+        for (Object object : map.animatedObjects()) {
             object.update (map);
         }
     }
@@ -257,7 +247,6 @@ public class Main extends Application {
             // If player allowed to use weapon and has bullets left
             if (isPressed (KeyCode.W) && player.canUseWeapon ()) {
                 Bullet bullet = new Bullet (player.getX () + 5, player.getY () + player.height/4, player.getFacing ());
-                animatedObjects.add(bullet);
                 map.addAnimatedObjects (bullet);
                 player.getLuggage ().getWeapon ().looseOneBullet ();
                 player.getLuggage ().getWeapon ().setCanShoot (false);
@@ -268,18 +257,18 @@ public class Main extends Application {
             }
 
             // moves existing bullets
-            for (Object obj : animatedObjects) {
-                if (obj instanceof Bullet && obj.isAlive ()) {
-                    ((Bullet) obj).move (map);
+            for (Object object : map.animatedObjects()) {
+                if (object instanceof Bullet && object.isAlive ()) {
+                    ((Bullet) object).move (map);
 
                     // check if bullet collide with any enemy
                     for (EnemyType1 enemyType1 : map.getEnemies ()) {
                         if (enemyType1.isAlive ()
-                            && enemyType1.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
+                            && enemyType1.box.getBoundsInParent ().intersects (object.box.getBoundsInParent ()) ) {
                             enemyType1.setAlive (false);
-                            obj.setAlive (false);
+                            object.setAlive (false);
                             map.hideEntity (enemyType1);
-                            map.hideEntity (obj);
+                            map.hideEntity (object);
                         }
                     }
                 }
