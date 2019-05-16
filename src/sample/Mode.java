@@ -1,5 +1,5 @@
 package sample;
 
 public enum Mode {
-    PLATFORMGAME, MINIGAME, STARTMENU
+    PLATFORMGAME, MINIGAME, STARTMENU, KEYPAD
 }
