@@ -155,15 +155,15 @@ public class Main extends Application {
 
         if (mode == Mode.PLATFORMGAME) {
             /*  Handles all the game events, including player motion and interaction with items  */
-            if (isPressed (KeyCode.LEFT)) {
+            if (isPressed (KeyCode.A)) {
                 player.setFacingRight (false);
                 if (player.move_X (-5, map))moveScreenX (-5);
             }
-            else if (isPressed (KeyCode.RIGHT)){
+            else if (isPressed (KeyCode.D)){
                 player.setFacingRight (true);
                 if (player.move_X (5, map)) moveScreenX (5);
             }
-            if (isPressed (KeyCode.SPACE)) {
+            if (isPressed (KeyCode.W)) {
                 player.jump ();
             }
 
@@ -253,7 +253,7 @@ public class Main extends Application {
         for (Collectable item : map.getItems ()) {
             if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
-                if (item.isAlive() && isPressed (KeyCode.A)) {
+                if (item.isAlive() && isPressed (KeyCode.E)) {
                     player.getLuggage ().take (item);
                     map.hideEntity (item);
                     if (item.getItemType () == Type.BLOCK) {
@@ -300,7 +300,7 @@ public class Main extends Application {
         if (player.hasWeapon ()) {
 
             // If player allowed to use weapon and has bullets left
-            if (isPressed (KeyCode.W) && player.canUseWeapon ()) {
+            if (isPressed (KeyCode.SPACE) && player.canUseWeapon ()) {
                 Bullet bullet = new Bullet (player.getX () + 5, player.getY () + player.height/4, player.isFacingRight ());
                 animatedObjects.add(bullet);
                 map.addAnimatedObjects (bullet);
@@ -308,7 +308,7 @@ public class Main extends Application {
                 player.getLuggage ().getWeapon ().setCanShoot (false);
             }
             // User can only shoot 1 bullet when press key (un-press & press again to shoot)
-            if (!isPressed (KeyCode.W)) {
+            if (!isPressed (KeyCode.SPACE)) {
                 player.getLuggage ().getWeapon ().setCanShoot (true);
             }
 
