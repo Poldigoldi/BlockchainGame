@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 public class KeyPad {
     private GridPane keyPad = new GridPane();
     private Key one, two, three, four, five, six, seven, eight, nine, zero;
-    private Button enter, clear;
+    private Button enter, clear, exit;
     private TextField display;
     private Group root = new Group();
     private boolean isCodeCorrect = false;
@@ -36,6 +36,8 @@ public class KeyPad {
         enter.setMinSize(50,50);
         clear = new Button("C");
         clear.setMinSize(50,50);
+        exit = new Button("EXIT");
+        exit.setMinSize(50,50);
 
 
         /*Add buttons to keyPad*/
@@ -52,6 +54,7 @@ public class KeyPad {
         keyPad.add(zero.getButton(),1,3);
         keyPad.add(enter, 2,3);
         keyPad.add(clear, 0,3);
+        keyPad.add(exit,3,3);
 
         keyPad.setPadding(new Insets(10));
         keyPad.setHgap(10);
@@ -108,6 +111,10 @@ public class KeyPad {
     }
     Button getClear() {
         return clear;
+    }
+
+    public Button getExit() {
+        return exit;
     }
 
     public boolean isCodeCorrect() {
