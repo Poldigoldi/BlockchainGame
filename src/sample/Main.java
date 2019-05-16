@@ -204,7 +204,6 @@ public class Main extends Application {
                 keyPad.setDisplayText("WRONG CODE!");
             }
         });
-
     }
 
 
