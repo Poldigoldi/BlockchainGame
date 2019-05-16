@@ -3,6 +3,7 @@ package sample;
 import javafx.scene.Group;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 public class Map {
 
@@ -20,10 +21,18 @@ public class Map {
         createLayer2Mountains();
         createLayer1Clouds();
         createEnemies();
+
+        for(Shape outline : level.outlines()) {
+            mapRoot.getChildren().add(outline);
+        }
         //Adds every platform object within the level
-        for (Object platform : level.platforms()) {
+        for (Platform platform : level.platforms()) {
             showEntity(platform);
         }
+        for (PlatformButton button : level.buttons()) {
+            showEntity(button);
+        }
+
         createCollectableObjects ();
     }
 
@@ -159,6 +168,16 @@ public class Map {
     public void setEnemiesAlive (boolean state) {
         for (EnemyType1 enemy : this.enemiestype1) {
             enemy.setAlive (state);
+        }
+    }
+
+    public void resetPlatforms(){
+        for (Platform platform : level.platforms()) {
+            if (platform.canDisappear() && !platform.isAlive()){
+                platform.restoreCollisionBox();
+                platform.isAlive();
+                platform.setVisible(true);
+            }
         }
     }
 
