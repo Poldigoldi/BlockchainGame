@@ -1,6 +1,8 @@
 package sample;
 import java.util.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 
 public class Grid {
@@ -12,6 +14,8 @@ public class Grid {
       # Elements #
       0 -> nothing
       1,2,3,4 -> platform
+      5 -> dynamic platform
+      6 -> interactive button
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
@@ -21,9 +25,12 @@ public class Grid {
   private Frame platformleft = new Frame("/graphics/platformleft.png");
   private Frame platformright = new Frame("/graphics/platformright.png");
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
+  private Frame platformbutton = new Frame("/graphics/defaultright2.png");
   private Frame block = new Frame("/graphics/block.png");
 
-  private ArrayList<Object> platforms = new ArrayList<> ();
+  private ArrayList<Platform> platforms = new ArrayList<> ();
+  private ArrayList<PlatformButton> buttons = new ArrayList<>();
+  private ArrayList<Shape> outlines = new ArrayList<>();
   private final int OBJ_WIDTH = 64;
   int width;
   int height;
@@ -32,8 +39,8 @@ public class Grid {
           "4000000000000000000004",
           "4000000000000000000004",
           "4000000000000001223004",
-          "4000000012300000000004",
-          "4222300000000001300004",
+          "4060000012300000000004",
+          "4222300000000005550004",
           "4000013000001300000004",
           "4000000001300001223004",
           "4000000000001300000004",
@@ -51,17 +58,34 @@ public class Grid {
     for (int y = 0; y < height; y++) {
       int x = 0;
       for (char value : map[y].toCharArray()) {
-          if(value == '4') {
-            Object platform = new Object(  Type.SOLID, block);
-            platform.setCollisionBox(x*OBJ_WIDTH, y*64,OBJ_WIDTH, 64, Color.TRANSPARENT);
-            platforms.add(platform);
-          }
-          if(value == '1' || value == '2' || value == '3'){
-            Object platform = new Object(  Type.PLATFORM, platformleft);
-            if (value == '2') platform = new Object(  Type.PLATFORM, platformmiddle);
-            if (value == '3') platform = new Object(  Type.PLATFORM, platformright);
-            platform.setCollisionBox(x*OBJ_WIDTH, y*64,OBJ_WIDTH, 10, Color.GREEN);
-            platforms.add(platform);
+        if (value == '4') {
+          Platform platform = new Platform(Type.SOLID, block);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platforms.add(platform);
+        }
+        if (value == '1' || value == '2' || value == '3') {
+          Platform platform = new Platform(Type.PLATFORM, platformleft);
+          if (value == '2') platform = new Platform(Type.PLATFORM, platformmiddle);
+          if (value == '3') platform = new Platform(Type.PLATFORM, platformright);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+          platforms.add(platform);
+        }
+        if (value == '5'){
+         Platform platform = new Platform(Type.PLATFORM, platformright);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GRAY);
+          platform.setDisappear(true);
+          platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.GRAY);
+          outline.opacityProperty().setValue(0.25);
+          outline.setX(x * OBJ_WIDTH);
+          outline.setY(y * 64);
+          outlines.add(outline);
+          platforms.add(platform);
+        }
+        if (value == '6'){
+          PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, platformbutton);
+          button.setCollisionBox(x*64, y*64,20, 30, Color.RED);
+          buttons.add(button);
         }
         x++;
       }
@@ -82,8 +106,16 @@ public class Grid {
     return OBJ_WIDTH;
   }
 
-  ArrayList<Object> platforms() {
+  ArrayList<Platform> platforms() {
     return this.platforms;
+  }
+
+  ArrayList<Shape> outlines() {
+    return this.outlines;
+  }
+
+  ArrayList<PlatformButton> buttons() {
+    return this.buttons;
   }
 
 }

@@ -124,7 +124,7 @@ public class Object  {
     public boolean move_X(int value, Map map) {
         isMoving = true;
         movingRight = value > 0;
-        for (Object object : map.level().platforms()) {
+        for (Platform object : map.level().platforms()) {
             //checks if player at same height as object and its solid first, then block left/right movements
             if (type == Type.BULLET && box.getBoundsInParent ().intersects (object.box.getBoundsInParent ())) {
                 return false;

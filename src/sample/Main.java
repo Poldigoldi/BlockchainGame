@@ -146,6 +146,7 @@ public class Main extends Application {
             ListenerItemsEvent ();
             ListenerPlayerLives ();
             ListenerPlayerUseWeapon ();
+            ListenerButtons();
             UpdateAnimatedObjects ();
             ListenerGameOver ();
 
@@ -290,6 +291,31 @@ public class Main extends Application {
         }
     }
 
+    /* ----------- BUTTONS ------------ */
+    private void ListenerButtons () {
+        for (PlatformButton button : map.getLevel().buttons()) {
+            if (!(this.player.box.getBoundsInParent()).intersects(button.box.getBoundsInParent())) {
+                button.setPressed(false);
+            }
+            if (!button.isPressed() && (this.player.box.getBoundsInParent()).intersects(button.box.getBoundsInParent()) && isPressed (KeyCode.ENTER)) {
+                    for(Platform platform : map.getLevel().platforms()) {
+                        if(platform.canDisappear() && platform.isAlive()) {
+                            System.out.println("here");
+                            platform.setVisible(false);
+                            platform.setAlive(false);
+                            platform.setCollisionBox(0, 0, 0, 0, Color.GRAY);
+                    }
+                        else if(platform.canDisappear() && !platform.isAlive()) {
+                            platform.restoreCollisionBox();
+                            platform.setVisible(true);
+                            platform.setAlive(true);
+                        }
+                    }
+                    button.setPressed(true);
+            }
+        }
+    }
+
     /* ----------------- GAME OVER ------------------- */
 
 
@@ -322,6 +348,10 @@ public class Main extends Application {
             player.setY(PLAYERSTARTY);
             player.setLives (PLAYER_START_LIVES);
             map.setEnemiesAlive (true);
+            map.resetPlatforms();
+            keys.clear(); /**added to prevent input from previous game being called on reset**/
+            mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
+            mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
             moveScreenY();
