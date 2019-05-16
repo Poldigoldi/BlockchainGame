@@ -9,10 +9,17 @@ import java.util.ArrayList;
 
 public class Platform extends Object{
   private boolean canDisappear = false;
+  private String colour;
   private ArrayList<Integer> collisionValues = new ArrayList<>();
 
   Platform(Type type, Frame ... frame) {
     super(type);
+    sprite = new Sprite(type, frame);
+  }
+
+  Platform(Type type,String colour, Frame ... frame) {
+    super(type);
+    this.colour = colour;
     sprite = new Sprite(type, frame);
   }
 
@@ -38,6 +45,11 @@ public class Platform extends Object{
   public boolean canDisappear() {
     return this.canDisappear;
   }
+
+  public String getColour() {
+    return this.colour;
+  }
+
 
 
 }
