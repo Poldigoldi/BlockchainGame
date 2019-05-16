@@ -3,7 +3,6 @@ package sample;
 import javafx.scene.Group;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 
 public class Map {
 
@@ -11,11 +10,13 @@ public class Map {
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
     private Group mapRoot = new Group();
-    private Grid level = new Grid();
+    private Grid level;
+    private int currentLevel;
 
 
-
-    public void initialize() {
+    public void initialize(int levelNumber) {
+        level = new Grid(levelNumber);
+        currentLevel = levelNumber;
         createLayer4Mountains();
         createLayer3Clouds();
         createLayer2Mountains();
@@ -179,6 +180,10 @@ public class Map {
                 platform.setVisible(true);
             }
         }
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
 }
