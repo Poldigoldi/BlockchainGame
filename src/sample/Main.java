@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Main extends Application {
@@ -32,8 +33,10 @@ public class Main extends Application {
     private final int WIDTH = 960 , HEIGHT = 640;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
     private final int PLAYER_START_LIVES = 4;
+    private final int TIME_LIMIT = 60 * 10 * 1; // 30 seconds
     private Mode mode = Mode.STARTMENU;
     private int counter;
+    private int timeCounter = 0;
     private boolean gameisOver;
     private boolean gameisMenu;
     private boolean gameisInstructions;
@@ -161,13 +164,9 @@ public class Main extends Application {
             ListenerButtons();
             UpdateAnimatedObjects ();
             ListenerGameOver ();
-
-            if (isPressed (KeyCode.UP)) {
-                map.addEnemy (1);
-            }
+            ListenerTimeBeforeNewEnemyWave ();
         }
     }
-
 
 
     //updates the screen X based on player position
@@ -215,7 +214,7 @@ public class Main extends Application {
                 }
             }
         }
-        /* drop item  TODO: see how to drop WEAPONS  */
+        /* drop item  TODO: see how to drop WEAPONS - do we still want to drop blocks ? */
         Block myBlock = player.getLuggage ().getblock ();
         if (myBlock != null) {
             if (! myBlock.isAlive ()) {
@@ -231,13 +230,12 @@ public class Main extends Application {
 
     private void ListenerPlayerLives () {
         int collision=0;
-        for (EnemyType1 enemy: map.getEnemies ()) {
+        for (Enemy enemy: map.getEnemies ()) {
             if (enemy.isAlive ()) {
                 if ( player.box.getBoundsInParent ().intersects (enemy.box.getBoundsInParent ()) ) {
                     collision++;
                     // Waits that player moves out from the enemy to loose another life
                     if (player.isCanDie ()) {
-                        System.out.println ("PLAYER LOST A LIFE");
                         player.LooseOneLive ();
                         player.setCanDie (false);
                     }
@@ -248,7 +246,6 @@ public class Main extends Application {
         if (collision == 0) {
             player.setCanDie (true);
         }
-
     }
 
     private void ListenerPlayerUseWeapon () {
@@ -273,12 +270,13 @@ public class Main extends Application {
                     ((Bullet) obj).move (map);
 
                     // check if bullet collide with any enemy
-                    for (EnemyType1 enemyType1 : map.getEnemies ()) {
-                        if (enemyType1.isAlive ()
-                            && enemyType1.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
-                            enemyType1.setAlive (false);
+                    // TODO: remove bullets & enemy who are dead from animatedObjects array
+                    for (Enemy enemy : map.getEnemies ()) {
+                        if (enemy.isAlive ()
+                            && enemy.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
+                            enemy.setAlive (false);
                             obj.setAlive (false);
-                            map.hideEntity (enemyType1);
+                            map.hideEntity (enemy);
                             map.hideEntity (obj);
                         }
                     }
@@ -290,7 +288,7 @@ public class Main extends Application {
     /* ----------- ENEMIES ------------ */
 
     private void ListenerEnemies () {
-        for (EnemyType1 enemy : map.getEnemies ()) {
+        for (Enemy enemy : map.getEnemies ()) {
 
             // check if enemy died
             if (isObjectOutOfBounds (enemy) ) {
@@ -301,6 +299,25 @@ public class Main extends Application {
                 enemy.giveMotion (map);
             }
         }
+    }
+    // Sends a new wave of enemy to the game every so often
+    // New enemies are sent 1 by 1 (every second)
+    // will keep going until there is more 10 enemies on the map
+    private void ListenerTimeBeforeNewEnemyWave () {
+        timeCounter++;
+        int WAVE_SIZE = 3;
+        if (map.getEnemies ().size () < 10) {
+            if (timeCounter >= TIME_LIMIT && timeCounter % 60 == 0) addRandomEnemy ();
+            if (timeCounter > TIME_LIMIT + WAVE_SIZE * 60) timeCounter = 0;
+        }
+    }
+
+    private void addRandomEnemy () {
+        // randomise position and behaviour of enemy created
+        int rand = new Random ().nextInt(3);
+        map.addEnemy (rand);
+        Enemy newEnemy = map.getEnemies ().get (map.getEnemies ().size () - 1); //retrieve last enemy added
+        animatedObjects.add (newEnemy);
     }
 
     /* ----------- BUTTONS ------------ */
@@ -387,6 +404,7 @@ public class Main extends Application {
             mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
+            timeCounter = 0;
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
             moveScreenY();

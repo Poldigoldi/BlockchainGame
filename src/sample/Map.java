@@ -9,7 +9,7 @@ public class Map {
 
     private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<Object> animatedObjects = new ArrayList<>();
-    private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
+    private ArrayList<Enemy> enemiestype1 = new ArrayList<> ();
     private Group mapRoot = new Group();
     private Grid level;
     private int currentLevel;
@@ -62,17 +62,17 @@ public class Map {
         addEnemy (2);
         addEnemy (3);
     }
-    public void addEnemy (int type){
-        EnemyType1 enemy;
-        switch (type){
+    public void addEnemy (int typeId){
+        Enemy enemy;
+        switch (typeId){
             case 1:  // Enemy stay more at bottom of map - on left side
-                enemy = new EnemyType1(200, 100, true, 800, 100);
+                enemy = new Enemy (200, 100, true, 800, 100);
                 break;
             case 2: // Enemy stay more at top of map - anywhere
-                enemy = new EnemyType1(600, 500, true, 800, 10);
+                enemy = new Enemy (600, 500, true, 800, 10);
                 break;
             default: // Enemy will be between bottom and middle - anywhere
-                enemy = new EnemyType1(1300, 500, true, 800, 50);
+                enemy = new Enemy (1300, 500, true, 800, 50);
                 break;
         }
         addAnimatedObjects(enemy);
@@ -156,7 +156,7 @@ public class Map {
         return animatedObjects;
     }
 
-    public ArrayList<EnemyType1> getEnemies () {
+    public ArrayList<Enemy> getEnemies () {
         return enemiestype1;
     }
     public ArrayList<Collectable> getItems() {
@@ -168,7 +168,7 @@ public class Map {
     }
 
     public void setEnemiesAlive (boolean state) {
-        for (EnemyType1 enemy : this.enemiestype1) {
+        for (Enemy enemy : this.enemiestype1) {
             enemy.setAlive (state);
         }
     }
