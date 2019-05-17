@@ -4,7 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.image.Image;
@@ -16,20 +15,21 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 
 public class Main extends Application {
     //music
-    String musicFile = "src/sound/song1.mp3";
-    javafx.scene.media.Media musicMedia = new javafx.scene.media.Media(new File(musicFile).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(musicMedia);
+    private String gameSong = "src/sound/song1.mp3";
+    private javafx.scene.media.Media gameMedia = new javafx.scene.media.Media(new File(gameSong).toURI().toString());
+    private MediaPlayer gameMediaPlayer = new MediaPlayer(gameMedia);
+
+    private String menuSong = "src/sound/menuSong.mp3";
+    private javafx.scene.media.Media menuMedia = new javafx.scene.media.Media(new File(menuSong).toURI().toString());
+    private MediaPlayer menuMediaPlayer = new MediaPlayer(menuMedia);
+
     //sounds
-    AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
-    AudioClip menuSound = new AudioClip(Paths.get("src/sound/menuSong.mp3").toUri().toString());
-    AudioClip instructionSound = new AudioClip(Paths.get("src/sound/instructionSong.mp3").toUri().toString());
+    private AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
 
     //global variables
     private final int WIDTH = 960 , HEIGHT = 640;
@@ -60,8 +60,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        mediaPlayer.play();
-        mediaPlayer.setVolume(20);
+        menuMediaPlayer.play();
+        menuMediaPlayer.setVolume(20);
         //initialise Scene/game
         initContent(1);
         mainScene = new Scene(appRoot, WIDTH, HEIGHT);
@@ -102,7 +102,9 @@ public class Main extends Application {
 
     //boolean keypressed stops people holding both left and right down at same time
     private void update(Stage stage) {
-        boolean keypressed = false;
+        if (gameMediaPlayer.getStatus() != MediaPlayer.Status.PLAYING && mode == Mode.PLATFORMGAME) {
+            gameMediaPlayer.play();
+        }
 
         if (mode == Mode.MINIGAME) {
             if (isPressed (KeyCode.ESCAPE)) {
@@ -401,17 +403,15 @@ public class Main extends Application {
         if (player.getLives () > 0 && !isObjectOutOfBounds (player)) {
             return;
         }
-        if(!gameisOver) {
+        if(!gameisOver) { //This get called when you're playing and then you DIE!
             mainScene.setRoot(gameOver.returnRoot());
             mainScene.setFill(Color.BLACK);
             defeatSound.play();
-            mediaPlayer.stop();
             map.setEnemiesAlive (false);
             gameisOver = true;
         }
         if (gameOver.isStartAgain()) {
             gameisOver=false;
-            mediaPlayer.play();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
             player.setLives (PLAYER_START_LIVES);
@@ -433,15 +433,12 @@ public class Main extends Application {
         if(!gameisMenu) {
             mainScene.setRoot(gameMenu.returnRoot());
             mainScene.setFill(Color.BLACK);
-            menuSound.play();
-            mediaPlayer.stop();
             gameisMenu = true;
         }
         if (gameMenu.isStartGame()) {
             gameisMenu=false;
             mode = Mode.PLATFORMGAME;
-            menuSound.stop();
-            mediaPlayer.play();
+            menuMediaPlayer.stop();
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
             timeCounter = 0;
@@ -457,15 +454,11 @@ public class Main extends Application {
         if(!gameisInstructions) {
             mainScene.setRoot(instructionScreen.returnRoot());
             mainScene.setFill(Color.BLACK);
-            instructionSound.play();
-            mediaPlayer.stop();
             gameisInstructions = true;
         }
         if (instructionScreen.isReturn_to_menu()) {
             gameMenu.resetInstructionPress();
-            instructionSound.stop();
             gameisInstructions=false;
-            mediaPlayer.play();
             instructionScreen.setReturn_to_menu();
             mainScene.setRoot(gameMenu.returnRoot());
         }
