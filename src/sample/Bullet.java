@@ -20,30 +20,24 @@ public class Bullet extends Object {
         label.setStyle(style);
         label.setFont(font);
         sprite.setVisible(false);
+        label.setText(randomText());
     }
 
     public Label label(){ return label; }
 
     public void move (Map map) {
-        frame++;
         label.setTranslateX(box.getTranslateX());
         label.setTranslateY(box.getTranslateY()-5);
         int speed = (playerFacingRight ? 1 : -1) * SPEED_MAGNITUDE;
-        if(frame == 5){
-            frame = 0;
-            if(speed > 0) label.setText(randomText(true));
-            else label.setText(randomText(false));
-        }
         if (! move_X (speed, map)) {
            map.removeBullet(this);
         }
     }
 
-    private String randomText(boolean goingRight){
+    private String randomText(){
         String string =
                     rc() + rc() + rc() +rc() + rc() + rc() + rc() + rc() + "\n" +
-                    rc() + rc() + rc() +rc() + rc() + rc() + rc() + rc() + "\n" +
-                    rc() + rc() + rc() +rc() + rc() + rc() + rc() + rc() + "\n";
+                    rc() + rc() + rc() +rc() + rc() + rc() + rc() + rc() + "\n" ;
 
         return string;
     }
@@ -51,7 +45,7 @@ public class Bullet extends Object {
 
     public static String rc(){
         double x = (int)(Math.random()*((5-0)+1))+0;
-        if(x==0 || x==1 || x ==2) return "0";
+        if(x==0 || x==1) return "0";
         if(x==3 || x==4) return "1";
         return " ";
     }

@@ -349,12 +349,12 @@ public class Main extends Application {
         }
     }
 
-    private void addRandomEnemy() {
+    private void addRandomEnemy() {/*
         // randomise position and behaviour of enemy created
         int rand = new Random().nextInt(3);
         map.addEnemy(rand);
         Enemy newEnemy = map.getEnemies().get(map.getEnemies().size() - 1); //retrieve last enemy added
-        map.animatedObjects().add(newEnemy);
+        map.animatedObjects().add(newEnemy);*/
     }
 
     /* ----------- BUTTONS ------------ */
