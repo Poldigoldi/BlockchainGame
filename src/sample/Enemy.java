@@ -16,7 +16,7 @@ public class Enemy extends Object {
     private int countMoveLeft;
     private int countMoveRight;
     private int limitMoves = 400;
-    private int lives = 1;
+    private int lives = 2;
     private boolean print = false;
 
     // Global variables

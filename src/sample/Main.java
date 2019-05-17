@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 
@@ -55,6 +56,7 @@ public class Main extends Application {
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private Player player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, PLAYER_START_LIVES);
+    private ArrayList<Bullet> bulletsFired = new ArrayList<Bullet>();
 
     public static void main(String[] args) {
         launch(args);
@@ -282,9 +284,8 @@ public class Main extends Application {
             // If player allowed to use weapon and has bullets left
             if (isPressed(KeyCode.SPACE) && player.canUseWeapon()) {
                 Bullet bullet = new Bullet(player.getX() + 5, player.getY() + player.height / 4, player.isFacingRight());
-                appRoot.getChildren().add(bullet.label());
-                map.animatedObjects().add(bullet);
-                map.addAnimatedObjects(bullet);
+                map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
+                bulletsFired.add(bullet);
                 player.getLuggage().getWeapon().looseOneBullet();
                 player.getLuggage().getWeapon().setCanShoot(false);
             }
@@ -296,40 +297,30 @@ public class Main extends Application {
     }
 
     private void ListenerPlayerKillEnemy() {
-        ArrayList<Object> deads = new ArrayList<>();
         // moves existing bullets
-        for (Object obj : map.animatedObjects()) {
-            if (obj instanceof Bullet && obj.isAlive()) {
-                ((Bullet) obj).move(map);
-
-                // check if bullet collide with any enemy
-                // TODO: remove bullets & enemy who are dead from animatedObjects array
-                for (Enemy enemy : map.getEnemies()) {
-                    if (enemy.isCanDie() && enemy.box.getBoundsInParent().intersects(obj.box.getBoundsInParent())) {
-                        deads.add(obj);
-                        enemy.looseOneLife();
-                        enemy.setCanDie(false);
-                    } else {
-                        enemy.setCanDie(true);
-                    }
-                    if (enemy.getLives() == 0) {
-                        deads.add(enemy);
-                    }
+        for (Bullet bullet: bulletsFired) {
+            bullet.move(map);
+            for (Enemy enemy : map.getEnemies()) {
+                if (bullet.isAlive() && enemy.isCanDie() && enemy.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
+                    map.removeBullet(bullet);
+                    bulletsFired.remove(bullet);
+                    enemy.looseOneLife();
+                    enemy.setCanDie(false);
+                } else {
+                    enemy.setCanDie(true);
+                }
+                if (enemy.getLives() == 0) {
+                    enemy.setAlive(false);
                 }
             }
         }
-        for (Object dead : deads) {
-            map.hideEntity(dead);
-            map.animatedObjects().remove(dead);
-        }
-        map.getEnemies().removeIf(e -> !e.isAlive());
     }
+
 
     /* ----------- ENEMIES ------------ */
 
     private void ListenerEnemies() {
         for (Enemy enemy : map.getEnemies()) {
-
             // check if enemy died
             if (isObjectOutOfBounds(enemy)) {
                 enemy.setAlive(false);
@@ -337,6 +328,11 @@ public class Main extends Application {
             // if enemy alive - give motion
             if (enemy.isAlive() && enemy.getCanMove()) {
                 enemy.giveMotion(map);
+            }
+            // if enemy is dead
+            if (enemy.isAlive() == false){
+                map.getEnemies().remove(enemy);
+                map.hideEntity(enemy);
             }
         }
     }

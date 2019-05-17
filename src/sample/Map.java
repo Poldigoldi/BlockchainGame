@@ -72,6 +72,12 @@ public class Map {
         animatedObjects.add(player);
     }
 
+    public void removeBullet(Bullet bullet){
+        bullet.setAlive(false);
+        mapRoot.getChildren ().remove (bullet.label());
+        hideEntity(bullet);
+    }
+
     public void removePlayer(Object player){
         hideEntity(player);
     }
