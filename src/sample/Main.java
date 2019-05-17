@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.image.Image;
@@ -68,7 +69,7 @@ public class Main extends Application {
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         primaryStage.setScene(mainScene);
-        mainScene.setRoot(gameMenu.returnRoot());;
+        mainScene.setRoot(gameMenu.returnRoot());
         gameisMenu = true;
         handleMenu();
         primaryStage.show();
@@ -87,16 +88,6 @@ public class Main extends Application {
         appRoot.getChildren().addAll(map.mapRoot());
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         map.addPlayer(player);
-    }
-
-    private void changeLevel(int level) {
-        map.removePlayer(player);
-        appRoot.getChildren().clear();
-        initContent(level);
-        player.setX(PLAYERSTARTX);
-        player.setY(PLAYERSTARTY);
-        map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
-        map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
     }
 
     private void runGame(Stage stage) {
@@ -166,6 +157,17 @@ public class Main extends Application {
             ListenerGameOver ();
             ListenerTimeBeforeNewEnemyWave ();
         }
+    }
+
+    /*Changes the level based on level number. New levels can be created in Grid class*/
+    private void changeLevel(int level) {
+        map.removePlayer(player);
+        appRoot.getChildren().clear();
+        initContent(level);
+        player.setX(PLAYERSTARTX);
+        player.setY(PLAYERSTARTY);
+        map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
+        map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
     }
 
     /*Creates the keyPad and changes game mode*/
