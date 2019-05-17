@@ -78,7 +78,11 @@ public class Map {
     public void showEntity(Object object) { object.add(mapRoot); }
 
     public void hideEntity(Object object) {
+        mapRoot.getChildren ().remove (object.sprite);
+        mapRoot.getChildren ().remove (object.box);
+        mapRoot.getChildren ().remove (object);
         mapRoot.getChildren().remove(object);
+        object.setAlive (false);
     }
 
 
