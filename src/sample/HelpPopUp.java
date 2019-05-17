@@ -42,24 +42,8 @@ class HelpPopUp {
         popUp.setTranslateY(posY);
     }
 
-    void setRadius(int radius) {
-        posX = posX + radius;
-        posY = posY - radius;
-        popUp.setTranslateX(posX);
-        popUp.setTranslateY(posY);
-    }
-
     void setPopUpText(String text) {
         this.popUp.setText(text);
-    }
-
-    /*Use this method if you want to change the content and position of the popup*/
-    public void handlePopUp(String content, double posX, double posY, int radius, boolean visible) {
-        this.setPopUpText(content);
-        this.setPosX(posX);
-        this.setPosY(posY);
-        this.setRadius(radius);
-        this.setVisible(visible);
     }
 
 }

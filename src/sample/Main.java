@@ -133,7 +133,6 @@ public class Main extends Application {
                 handleInstructions ();
             }
         }
-
         if (mode == Mode.KEYPAD) {
             handleKeyPad();
         }
@@ -176,6 +175,14 @@ public class Main extends Application {
         if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644 && isPressed(KeyCode.E)) {
             openKeyPad();
         }
+    }
+
+    /*Use this method if you want to change the content and position of the popup*/
+    private void handlePopUp(String content, double posX, double posY, int radius, boolean visible) {
+        helpPopUp.setPopUpText(content);
+        helpPopUp.setPosX(posX + radius);
+        helpPopUp.setPosY(posY - radius);
+        helpPopUp.setVisible(visible);
     }
 
     private void ListenerHelpPopUp() {

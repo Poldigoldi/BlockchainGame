@@ -9,6 +9,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class KeyPad {
     private GridPane keyPad = new GridPane();
@@ -18,6 +23,17 @@ public class KeyPad {
     private Group root = new Group();
     private boolean isCodeCorrect = false;
     private int WIDTH, HEIGHT;
+    private Font font;
+    private String style = "-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;";
+
+    {
+        try {
+            font = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     KeyPad(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
@@ -46,6 +62,8 @@ public class KeyPad {
 
         display = new TextField("");
         display.setMinSize(200,50);
+        display.setFont(font);
+        display.setStyle(style);
 
         /*Buttons*/
         enter = new Button("ENTER");
@@ -54,6 +72,12 @@ public class KeyPad {
         clear.setMinSize(50,50);
         exit = new Button("EXIT");
         exit.setMinSize(50,50);
+        enter.setFont(font);
+        enter.setStyle(style);
+        clear.setFont(font);
+        clear.setStyle(style);
+        exit.setFont(font);
+        exit.setStyle(style);
 
 
         /*Add buttons to keyPad*/
