@@ -12,9 +12,11 @@ public class Enemy extends Object {
           2) reduce collision box size
      */
     private boolean canMove;
+    private boolean canDie;
     private int countMoveLeft;
     private int countMoveRight;
     private int limitMoves = 400;
+    private int lives = 1;
     private boolean print = false;
 
     // Global variables
@@ -29,6 +31,7 @@ public class Enemy extends Object {
     public Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
         super(Type.ENEMY);
         this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
+        this.canDie = true;
         this.canMove = canMove;
         this.alive = true;
         this.countMoveLeft=0;
@@ -279,6 +282,29 @@ public class Enemy extends Object {
         return canMove;
     }
 
+    public int getLives (){
+        return this.lives;
+    }
+
+     public void looseOneLife () {
+        this.lives--;
+     }
+
+    public void gainOneLife () {
+        this.lives++;
+    }
+
+    public void setLives (int lives) {
+        this.lives = lives;
+    }
+
+    public boolean isCanDie() {
+        return canDie;
+    }
+
+    public void setCanDie(boolean canDie) {
+        this.canDie = canDie;
+    }
 
     /* PRINTING */
 

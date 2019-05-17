@@ -8,8 +8,8 @@ import javafx.scene.shape.Shape;
 public class Map {
 
     private ArrayList<Object> animatedObjects = new ArrayList<>();
-    private ArrayList<Enemy> enemiestype1 = new ArrayList<> ();
     private ArrayList<Collectable> items = new ArrayList<>();
+    private ArrayList<Enemy> enemies = new ArrayList<> ();
     private Group mapRoot = new Group();
     private Grid level;
     private int currentLevel;
@@ -76,7 +76,12 @@ public class Map {
 
     public void showEntity(Object object) { object.add(mapRoot); }
 
-    public void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
+    public void hideEntity (Object object) {
+        mapRoot.getChildren ().remove (object.sprite);
+        mapRoot.getChildren ().remove (object.box);
+        mapRoot.getChildren ().remove (object);
+        object.setAlive (false);
+    }
 
 
 
@@ -90,6 +95,7 @@ public class Map {
     //Enemies
 
     private void createEnemies () {
+        addEnemy (0);
         addEnemy (1);
         addEnemy (2);
         addEnemy (3);
@@ -103,12 +109,16 @@ public class Map {
             case 2: // Enemy stay more at top of map - anywhere
                 enemy = new Enemy (600, 500, true, 800, 10);
                 break;
+            case 3:
+                enemy = new HacKing (200, 500);
+                break;
+
             default: // Enemy will be between bottom and middle - anywhere
                 enemy = new Enemy (1300, 500, true, 800, 50);
                 break;
         }
         addAnimatedObjects(enemy);
-        enemiestype1.add (enemy);
+        enemies.add (enemy);
     }
 
     // Weapons & blocks to collect
@@ -189,7 +199,7 @@ public class Map {
     }
 
     public ArrayList<Enemy> getEnemies () {
-        return enemiestype1;
+        return enemies;
     }
     public ArrayList<Collectable> getItems() {
         return items;
@@ -200,7 +210,7 @@ public class Map {
     }
 
     public void setEnemiesAlive (boolean state) {
-        for (Enemy enemy : this.enemiestype1) {
+        for (Enemy enemy : this.enemies) {
             enemy.setAlive (state);
         }
     }

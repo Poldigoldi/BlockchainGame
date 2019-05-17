@@ -13,11 +13,16 @@ import javafx.scene.paint.Color;
 
 public class HacKing extends Enemy {
 
+    private final int MAX_LIVES = 2;
+
     // Constructor
     public HacKing (int startx, int starty) {
-        super (startx, starty, false,  500, 50);
+        super (startx, starty, true,  500, 50);
         this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
+        setLives (MAX_LIVES);
     }
 
-
+    public void print () {
+        System.out.println("lives: " + getLives ());
+    }
 }
