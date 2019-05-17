@@ -32,7 +32,7 @@ public class Map {
         createLayer2Mountains();
         createLayer1Clouds();
         createEnemies();
-      addAnimatedPlatforms();
+        addAnimatedPlatforms();
         createCollectableObjects ();
         generalInitialiser();
     }
@@ -65,24 +65,24 @@ public class Map {
         showEntity(item);
     }
 
-    public void addPlayer(Object player){
+    public void addPlayer(Object player, int startx, int starty){
         showEntity(player);
+        player.setX(startx);
+        player.setY(starty);
         animatedObjects.add(player);
     }
 
     public void removePlayer(Object player){
         hideEntity(player);
-        animatedObjects.remove(player);
     }
 
-    public void showEntity(Object object) { object.add(mapRoot); }
+    public void showEntity(Object object) {
+        object.add(mapRoot);
+    }
 
     public void hideEntity(Object object) {
         mapRoot.getChildren ().remove (object.sprite);
         mapRoot.getChildren ().remove (object.box);
-        mapRoot.getChildren ().remove (object);
-        mapRoot.getChildren().remove(object);
-        object.setAlive (false);
     }
 
 

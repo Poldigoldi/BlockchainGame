@@ -16,9 +16,10 @@ import java.io.FileNotFoundException;
 
 class InstructionScreen {
     private int WIDTH, HEIGHT;
-    private boolean return_to_menu = false;
+    private boolean returnPressed = false;
     private Font teenytinyFont, tinyFont, smallFont, mediumFont;
     Group root = new Group();
+    Button returnButton = new Button("Return to Menu");
 
     InstructionScreen(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
@@ -50,10 +51,9 @@ class InstructionScreen {
         instructionsText.setTranslateY(130);
 
         //Buttons
-        Button returnToMenu = new Button("Return to Menu");
-        returnToMenu.setFont(tinyFont);
-        returnToMenu.setTranslateX(WIDTH-200);
-        returnToMenu.setTranslateY(HEIGHT-80);
+        returnButton.setFont(tinyFont);
+        returnButton.setTranslateX(WIDTH-200);
+        returnButton.setTranslateY(HEIGHT-80);
 
         //Images
         Image instructionsBackground = new Image("/graphics/menuBackground.png");
@@ -73,25 +73,19 @@ class InstructionScreen {
                 if(i == 100) i = 0;
             }
         }.start();
-        root.getChildren().addAll(backgroundView, instructionsText, header, returnToMenu);
-        returnToMenu.setOnAction(this::returnPress);
+        root.getChildren().addAll(backgroundView, instructionsText, header,  returnButton);
+        returnButton.setOnAction(this::returnPress);
     }
 
     Group returnRoot() {
         return root;
     }
 
-    boolean isReturn_to_menu() {
-        return return_to_menu;
-    }
-
-    void setReturn_to_menu() {
-        this.return_to_menu = false;
-    }
+    public Button returnButton(){ return returnButton;}
 
     private void returnPress(ActionEvent e) {
         System.out.println("click");
-        return_to_menu = true;
+        returnPressed = true;
     }
 
     private void initialiseFonts(){

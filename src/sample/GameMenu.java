@@ -16,10 +16,11 @@ import java.io.FileNotFoundException;
 
 public class GameMenu {
     private int WIDTH, HEIGHT;
-    private boolean startGame = false;
-    private boolean instructions = false;
     private Font teenytinyFont, tinyFont, smallFont, mediumFont;
     Group root = new Group();
+    private Button startGame = new Button("START");
+    private Button instructions = new Button("INSTRUCTIONS");
+
 
     public GameMenu(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
@@ -44,12 +45,10 @@ public class GameMenu {
         creators.setTranslateY(5);
 
         //Buttons
-        Button startGame = new Button("START");
         startGame.setFont(tinyFont);
         startGame.setTranslateX(WIDTH/2-50);
         startGame.setTranslateY(HEIGHT/2+100);
 
-        Button instructions = new Button("INSTRUCTIONS");
         instructions.setFont(tinyFont);
         instructions.setTranslateX(WIDTH/2-80);
         instructions.setTranslateY(HEIGHT/2+150);
@@ -80,35 +79,14 @@ public class GameMenu {
             }
         }.start();
         root.getChildren().addAll(backgroundView, adventureView, creators, gameInfo, startGame, instructions);
-        startGame.setOnAction(this::startPress);
-        instructions.setOnAction(this::instructionPress);
-
     }
 
-    public boolean isStartGame() {
-        return startGame;
-    }
+    public Button startGame(){ return startGame; }
 
-    public void setStartAgain() {
-        this.startGame = false;
-    }
-
-    public boolean isInstructionsPressed() {return instructions;}
-
-    public void resetInstructionPress() {instructions = false;}
+    public Button instructions(){ return instructions; }
 
     public Group returnRoot() {
         return root;
-    }
-
-    public void startPress(ActionEvent e) {
-        startGame = true;
-
-    }
-
-    public void instructionPress(ActionEvent e) {
-        System.out.println("Instruction click");
-        instructions = true;
     }
 
     private void initialiseFonts(){
