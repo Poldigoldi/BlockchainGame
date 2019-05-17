@@ -122,7 +122,7 @@ public class Grid {
     return width*OBJ_WIDTH;
   }
 
-  public int getOBJ_WIDTH() {
+  int getOBJ_WIDTH() {
     return OBJ_WIDTH;
   }
 

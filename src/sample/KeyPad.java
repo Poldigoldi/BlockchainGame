@@ -42,27 +42,26 @@ public class KeyPad {
 
 
         /*Add buttons to keyPad*/
-        keyPad.add(display, 3,0);
-        keyPad.add(seven.getButton(),0,0);
-        keyPad.add(eight.getButton(),1,0);
-        keyPad.add(nine.getButton(),2,0);
-        keyPad.add(four.getButton(),0,1);
-        keyPad.add(five.getButton(),1,1);
-        keyPad.add(six.getButton(),2,1);
-        keyPad.add(one.getButton(),0,2);
-        keyPad.add(two.getButton(),1,2);
-        keyPad.add(three.getButton(), 2,2);
-        keyPad.add(zero.getButton(),1,3);
-        keyPad.add(enter, 2,3);
-        keyPad.add(clear, 0,3);
-        keyPad.add(exit,3,3);
+        keyPad.add(display, 0,0,3,1);
+        keyPad.add(seven.getButton(),0,1);
+        keyPad.add(eight.getButton(),1,1);
+        keyPad.add(nine.getButton(),2,1);
+        keyPad.add(four.getButton(),0,2);
+        keyPad.add(five.getButton(),1,2);
+        keyPad.add(six.getButton(),2,2);
+        keyPad.add(one.getButton(),0,3);
+        keyPad.add(two.getButton(),1,3);
+        keyPad.add(three.getButton(), 2,3);
+        keyPad.add(zero.getButton(),1,4);
+        keyPad.add(enter, 2,4);
+        keyPad.add(clear, 0,4);
+        keyPad.add(exit,3,4);
 
         keyPad.setPadding(new Insets(10));
         keyPad.setHgap(10);
         keyPad.setVgap(10);
 
         root.getChildren().add(keyPad);
-
     }
 
     public Group getRoot() {
