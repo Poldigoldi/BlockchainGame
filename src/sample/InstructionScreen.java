@@ -14,13 +14,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class InstructionScreen {
+class InstructionScreen {
     private int WIDTH, HEIGHT;
     private boolean return_to_menu = false;
     private Font teenytinyFont, tinyFont, smallFont, mediumFont;
     Group root = new Group();
 
-    public InstructionScreen(int WIDTH, int HEIGHT) {
+    InstructionScreen(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         initialiseFonts();
@@ -77,19 +77,19 @@ public class InstructionScreen {
         returnToMenu.setOnAction(this::returnPress);
     }
 
-    public Group returnRoot() {
+    Group returnRoot() {
         return root;
     }
 
-    public boolean isReturn_to_menu() {
+    boolean isReturn_to_menu() {
         return return_to_menu;
     }
 
-    public void setReturn_to_menu() {
+    void setReturn_to_menu() {
         this.return_to_menu = false;
     }
 
-    public void returnPress(ActionEvent e) {
+    private void returnPress(ActionEvent e) {
         System.out.println("click");
         return_to_menu = true;
     }

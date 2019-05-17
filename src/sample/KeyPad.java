@@ -5,7 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class KeyPad {
     private GridPane keyPad = new GridPane();
@@ -14,9 +17,21 @@ public class KeyPad {
     private TextField display;
     private Group root = new Group();
     private boolean isCodeCorrect = false;
+    private int WIDTH, HEIGHT;
 
+    KeyPad(int WIDTH, int HEIGHT) {
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
+    }
 
     void initialise() {
+        Image background = new Image("/graphics/neo.png");
+        ImageView backgroundView = new ImageView(background);
+        backgroundView.setFitWidth(WIDTH/4);
+        backgroundView.setFitHeight(HEIGHT/4);
+        backgroundView.setTranslateX(WIDTH/2);
+        backgroundView.setTranslateY(HEIGHT/2-100);
+
         /*Selection keys*/
         one = new Key(1);
         two = new Key(2);
@@ -61,18 +76,16 @@ public class KeyPad {
         keyPad.setHgap(10);
         keyPad.setVgap(10);
 
-        root.getChildren().add(keyPad);
+        root.getChildren().addAll(backgroundView, keyPad);
     }
 
-    public Group getRoot() {
+    Group getRoot() {
         return root;
     }
-
-    public String getDisplayText() {
+    String getDisplayText() {
         return display.getText();
     }
-
-    public void setDisplayText(String displayText) {
+    void setDisplayText(String displayText) {
         this.display.setText(displayText);
     }
 
@@ -113,15 +126,13 @@ public class KeyPad {
         return clear;
     }
 
-    public Button getExit() {
+    Button getExit() {
         return exit;
     }
-
-    public boolean isCodeCorrect() {
+    boolean isCodeCorrect() {
         return isCodeCorrect;
     }
-
-    public void setCodeCorrect(boolean codeCorrect) {
+    void setCodeCorrect(boolean codeCorrect) {
         isCodeCorrect = codeCorrect;
     }
 }

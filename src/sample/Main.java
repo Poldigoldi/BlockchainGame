@@ -42,7 +42,7 @@ public class Main extends Application {
     private boolean gameisOver;
     private boolean gameisMenu;
     private boolean gameisInstructions;
-    private KeyPad keyPad = new KeyPad();
+    private KeyPad keyPad = new KeyPad(WIDTH, HEIGHT);
 
     private Pane appRoot = new Pane();
     private Map map;
@@ -172,7 +172,7 @@ public class Main extends Application {
 
     /*Creates the keyPad and changes game mode*/
     private void openKeyPad() {
-        keyPad = new KeyPad();
+        keyPad = new KeyPad(WIDTH, HEIGHT);
         Group keyPadRoot = new Group();
         keyPad.initialise();
         keyPadRoot.getChildren().add(keyPad.getRoot());
