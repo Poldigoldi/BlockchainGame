@@ -61,7 +61,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         mediaPlayer.play();
-        mediaPlayer.setVolume(0);
+        mediaPlayer.setVolume(20);
         //initialise Scene/game
         initContent(1);
         mainScene = new Scene(appRoot, WIDTH, HEIGHT);
