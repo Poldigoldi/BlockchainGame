@@ -13,9 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -134,6 +132,11 @@ public class Main extends Application {
                 handleInstructions ();
             }
         }
+
+        if (mode == Mode.GAMEOVER) {
+            gameOver();
+        }
+
         if (mode == Mode.KEYPAD) {
             handleKeyPad();
         }
@@ -262,6 +265,7 @@ public class Main extends Application {
 
     //updates the screen Y based on player position
     private void moveScreenY(){
+
         if(player.getY()>HEIGHT/2+40 && player.getY()<map.level().height()-HEIGHT/2-64){
             map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
         }
@@ -442,33 +446,40 @@ public class Main extends Application {
     }
 
     private void ListenerGameOver() {
-        if (player.getLives () > 0 && !isObjectOutOfBounds (player)) {
+        if (player.getLives() > 0 && !isObjectOutOfBounds(player)) {
             return;
         }
-        if(!gameisOver) { //This get called when you're playing and then you DIE!
+        if (!gameisOver) { //This get called when you're playing and then you DIE!
             mainScene.setRoot(gameOver.returnRoot());
             mainScene.setFill(Color.BLACK);
             defeatSound.play();
-            map.setEnemiesAlive (false);
+            map.setEnemiesAlive(false);
             gameisOver = true;
             mode = Mode.GAMEOVER;
         }
+    }
+
+    private void gameOver() {
+        mainScene.setFill(Color.BLACK);
+        map.setEnemiesAlive(false);
+        gameisOver = true;
+
         if (gameOver.isStartAgain()) {
-            gameisOver=false;
+            mainScene.setRoot(appRoot);
+            gameisOver = false;
             player.setX(PLAYERSTARTX);
             player.setY(PLAYERSTARTY);
-            player.setLives (PLAYER_START_LIVES);
-            map.setEnemiesAlive (true);
+            player.setLives(PLAYER_START_LIVES);
+            map.setEnemiesAlive(true);
             map.resetPlatforms();
             map.resetButtons();
             keys.clear(); /**added to prevent input from previous game being called on reset**/
             mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
             mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
-            map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
-            map.mapRoot().setTranslateY(map.level().height()-player.getY() - HEIGHT);
+            map.mapRoot().setTranslateX(map.level().width() - player.getX() - WIDTH);
+            map.mapRoot().setTranslateY(map.level().height() - player.getY() - HEIGHT);
             moveScreenY();
             gameOver.setStartAgain();
-            mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
         }
     }

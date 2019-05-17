@@ -32,6 +32,7 @@ public class Map {
         createLayer2Mountains();
         createLayer1Clouds();
         createEnemies();
+      addAnimatedPlatforms();
         createCollectableObjects ();
         generalInitialiser();
     }
@@ -127,6 +128,14 @@ public class Map {
         // Add weapons to pick-up
         Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
         addItem (weapon1);
+    }
+
+    private void addAnimatedPlatforms(){
+      for(Platform platform : level.platforms()){
+        if (platform.getColour() != null){
+          animatedObjects.add(platform);
+        }
+      }
     }
 
     //Nick's functions for making the background graphics
