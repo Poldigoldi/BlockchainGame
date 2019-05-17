@@ -14,16 +14,17 @@ import javafx.scene.paint.Color;
 public class PlatformButton extends Object{
   private String colour;
   private boolean pressed = false;
-  private Frame buttonUp = new Frame("/graphics/buttonUp.png");
-  private Frame buttonUpRed = new Frame("/graphics/buttonUpRed.png");
-  private Frame buttonDown = new Frame("/graphics/buttonDown.png");
+  private Frame buttonUp;
+  private Frame buttonDown;
 
 
-  PlatformButton(Type type, String colour) {
+
+  PlatformButton(Type type, String colour, Frame up, Frame down) {
     super(type);
+    buttonUp = up;
+    buttonDown = down;
     this.colour = colour;
-    if (colour.equals("red")) {sprite.setImage(buttonUpRed);}
-    else { sprite.setImage(buttonUp);}
+    sprite.setImage(buttonUp);
     sprite().offset(-11, -40);
   }
 

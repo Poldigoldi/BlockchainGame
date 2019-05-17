@@ -27,6 +27,10 @@ public class Grid {
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
   private Frame block = new Frame("/graphics/block.png");
 
+  private Frame buttonUp = new Frame("/graphics/buttonUp.png");
+  private Frame buttonUpRed = new Frame("/graphics/buttonUpRed.png");
+  private Frame buttonDown = new Frame("/graphics/buttonDown.png");
+
   private ArrayList<Platform> platforms = new ArrayList<> ();
   private ArrayList<PlatformButton> buttons = new ArrayList<>();
   private ArrayList<Shape> outlines = new ArrayList<>();
@@ -36,10 +40,10 @@ public class Grid {
   private String[] map1 = new String[]{
           "4000000000000000000004",
           "4000000000000000000004",
-          "4000000000000000000004",
-          "4000000000000001223004",
-          "4070000012300000000004",
-          "4222300000000005550004",
+          "4005550006660000800004",
+          "4000050000000001223004",
+          "4070050012300000000004",
+          "444440000000005550004",
           "4000013000001300800004",
           "4000000001300001223004",
           "4000000000001300000004",
@@ -91,11 +95,11 @@ public class Grid {
           platforms.add(platform);
         }
         if (value == '5'){
-         Platform platform = new Platform(Type.PLATFORM,"orange", platformright);
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
+         Platform platform = new Platform(Type.SOLID,"orange", block);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.DARKORANGE);
           platform.setDisappear(true);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.DARKORANGE);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 64, Color.DARKORANGE);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
           outline.setY(y * 64);
@@ -115,13 +119,12 @@ public class Grid {
           platforms.add(platform);
         }
           if (value == '7') {
-            System.out.println("here");
-            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange");
+            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", buttonUp, buttonDown);
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
             buttons.add(button);
           }
           if (value == '8') {
-            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red");
+            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", buttonUpRed, buttonDown);
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
             buttons.add(button);
           }
