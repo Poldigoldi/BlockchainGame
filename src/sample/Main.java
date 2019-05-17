@@ -13,7 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -144,15 +146,15 @@ public class Main extends Application {
         if (mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
-            if (isPressed (KeyCode.LEFT)) {
+            if (isPressed (KeyCode.A)) {
                 player.setFacingRight (false);
                 if (player.move_X (-5, map))moveScreenX (-5);
             }
-            else if (isPressed (KeyCode.RIGHT)){
+            else if (isPressed (KeyCode.D)){
                 player.setFacingRight (true);
                 if (player.move_X (5, map)) moveScreenX (5);
             }
-            if (isPressed (KeyCode.SPACE)) {
+            if (isPressed (KeyCode.W)) {
                 player.jump ();
             }
 
@@ -340,7 +342,7 @@ public class Main extends Application {
     private void ListenerPlayerKillEnemy () {
         ArrayList<Object> deads = new ArrayList<> ();
         // moves existing bullets
-        for (Object obj : animatedObjects) {
+        for (Object obj : map.animatedObjects()) {
             if (obj instanceof Bullet && obj.isAlive ()) {
                 ((Bullet) obj).move (map);
 
@@ -363,7 +365,7 @@ public class Main extends Application {
         }
         for (Object dead : deads) {
             map.hideEntity (dead);
-            animatedObjects.remove (dead);
+            map.animatedObjects().remove (dead);
         }
         map.getEnemies ().removeIf (e -> !e.isAlive ());
     }
