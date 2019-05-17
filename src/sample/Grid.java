@@ -40,9 +40,9 @@ public class Grid {
   private String[] map1 = new String[]{
           "4000000000000000000004",
           "4000000000000000000004",
-          "4005550006660000800004",
-          "4000050000000001223004",
-          "4070050012300000000004",
+          "4000000006660000800004",
+          "4000000000000001223004",
+          "4070000012300000000004",
           "444440000000005550004",
           "4000013000001300800004",
           "4000000001300001223004",
@@ -95,11 +95,11 @@ public class Grid {
           platforms.add(platform);
         }
         if (value == '5'){
-         Platform platform = new Platform(Type.SOLID,"orange", block);
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.DARKORANGE);
+         Platform platform = new Platform(Type.PLATFORM,"orange");
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
           platform.setDisappear(true);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          Rectangle outline = new Rectangle(OBJ_WIDTH, 64, Color.DARKORANGE);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.DARKORANGE);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
           outline.setY(y * 64);

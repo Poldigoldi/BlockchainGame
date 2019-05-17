@@ -23,6 +23,18 @@ public class Platform extends Object{
     sprite = new Sprite(type, frame);
   }
 
+  Platform (Type type, String colour ) {
+    super(type);
+    this.colour = colour;
+    alive = true;
+    sprite.loadDefaultImages(new Frame("/graphics/orangePlatform1.png", 100),
+            new Frame("/graphics/orangePlatform2.png"),
+            new Frame("/graphics/orangePlatform3.png"),
+            new Frame("/graphics/orangePlatform4.png", 40),
+            new Frame("/graphics/orangePlatform3.png"),
+            new Frame("/graphics/orangePlatform2.png"));
+  }
+
   public void setCollisionValues(int x, int y, int width, int height) {
     if (canDisappear == true) {
       collisionValues.add(x);
