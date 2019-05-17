@@ -43,6 +43,7 @@ public class Main extends Application {
     private boolean gameisMenu;
     private boolean gameisInstructions;
     private KeyPad keyPad = new KeyPad(WIDTH, HEIGHT);
+    private HelpPopUp helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH-200, HEIGHT-50);
 
     private Pane appRoot = new Pane();
     private Map map;
@@ -88,6 +89,9 @@ public class Main extends Application {
         appRoot.getChildren().addAll(map.mapRoot());
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         map.addPlayer(player);
+
+        appRoot.getChildren().add(helpPopUp.getPopUp());
+        helpPopUp.setVisible(false);
     }
 
     private void runGame(Stage stage) {
@@ -131,10 +135,15 @@ public class Main extends Application {
         }
 
         /*Opens keyPad if in the right position and action button is pressed "e"*/
-        if (map.getCurrentLevel() == 1 && player.getX() == 1310 && player.getY() == 644 && isPressed(KeyCode.E)) {
-            openKeyPad();
+        if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644) {
+            helpPopUp.setVisible(true);
+            if (isPressed(KeyCode.E)) {
+                openKeyPad();
+            }
         }
-
+        else {
+            helpPopUp.setVisible(false);
+        }
         if (mode == Mode.PLATFORMGAME) {
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.A)) {
