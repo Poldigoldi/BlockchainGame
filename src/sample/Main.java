@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Random;
@@ -43,7 +44,7 @@ public class Main extends Application {
     private boolean gameisMenu;
     private boolean gameisInstructions;
     private KeyPad keyPad = new KeyPad(WIDTH, HEIGHT);
-    private HelpPopUp helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH-200, HEIGHT-50);
+    private HelpPopUp helpPopUp;
 
     private Pane appRoot = new Pane();
     private Map map;
@@ -90,6 +91,14 @@ public class Main extends Application {
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         map.addPlayer(player);
 
+        /*Initialise help pop up*/
+        {
+            try {
+                helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH-300, HEIGHT-50);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         appRoot.getChildren().add(helpPopUp.getPopUp());
         helpPopUp.setVisible(false);
     }
@@ -144,6 +153,7 @@ public class Main extends Application {
         else {
             helpPopUp.setVisible(false);
         }
+
         if (mode == Mode.PLATFORMGAME) {
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.A)) {
