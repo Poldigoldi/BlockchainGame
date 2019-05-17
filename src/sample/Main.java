@@ -143,17 +143,6 @@ public class Main extends Application {
             keyPad.setCodeCorrect(false);
         }
 
-        /*Opens keyPad if in the right position and action button is pressed "e"*/
-        if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644) {
-            helpPopUp.setVisible(true);
-            if (isPressed(KeyCode.E)) {
-                openKeyPad();
-            }
-        }
-        else {
-            helpPopUp.setVisible(false);
-        }
-
         if (mode == Mode.PLATFORMGAME) {
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed (KeyCode.A)) {
@@ -177,9 +166,24 @@ public class Main extends Application {
             UpdateAnimatedObjects ();
             ListenerGameOver ();
             ListenerTimeBeforeNewEnemyWave ();
+            ListenerKeyPad();
+            ListenerHelpPopUp();
         }
     }
 
+
+    private void ListenerKeyPad() {
+        if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644 && isPressed(KeyCode.E)) {
+            openKeyPad();
+        }
+    }
+
+    private void ListenerHelpPopUp() {
+        if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644) {
+            helpPopUp.setVisible(true);
+        }
+        else helpPopUp.setVisible(false);
+    }
     /*Changes the level based on level number. New levels can be created in Grid class*/
     private void changeLevel(int level) {
         map.removePlayer(player);
@@ -492,12 +496,10 @@ public class Main extends Application {
         /* Mini games activated once player collects a block on the map */
         try {
             KeyGame mini = new KeyGame ();
-
             AnchorPane game = mini.returnRoot ();
             mainScene.setRoot (game);
             mainScene.getRoot ().requestFocus ();
             mode = Mode.MINIGAME;
-
         } catch (Exception e) {
             e.printStackTrace ();
 
