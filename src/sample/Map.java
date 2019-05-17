@@ -44,9 +44,14 @@ public class Map {
         showEntity(item);
     }
 
-    public void showEntity(Object object) { object.add(mapRoot); }
+    public void showEntity(Object object) { object.add (mapRoot); }
 
-    public void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
+    public void hideEntity (Object object) {
+        mapRoot.getChildren ().remove (object.sprite);
+        mapRoot.getChildren ().remove (object.box);
+        mapRoot.getChildren ().remove (object);
+        object.setAlive (false);
+    }
 
     void addAnimatedObjects(Object... objects) {
         for(Object object: objects){
@@ -61,16 +66,21 @@ public class Map {
         addEnemy (0);
         addEnemy (1);
         addEnemy (2);
+        addEnemy (3);
     }
     public void addEnemy (int typeId){
         Enemy enemy;
         switch (typeId){
-            case 0:  // Enemy stay more at bottom of map - on left side
+            case 1:  // Enemy stay more at bottom of map - on left side
                 enemy = new Enemy (200, 100, true, 800, 100);
                 break;
-            case 1: // Enemy stay more at top of map - anywhere
+            case 2: // Enemy stay more at top of map - anywhere
                 enemy = new Enemy (600, 500, true, 800, 10);
                 break;
+            case 3:
+                enemy = new HacKing (200, 500);
+                break;
+
             default: // Enemy will be between bottom and middle - anywhere
                 enemy = new Enemy (1300, 500, true, 800, 50);
                 break;

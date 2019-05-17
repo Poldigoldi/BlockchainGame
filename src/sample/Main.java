@@ -98,11 +98,14 @@ public class Main extends Application {
     }
 
     private void changeLevel(int level) {
+        // clear old map elements
         appRoot.getChildren().clear();
         map.mapRoot().getChildren().clear();
         map.getEnemies().clear();
         map.getItems().clear();
         map.getAnimatedObjects().clear();
+
+        // initialize new map
         initContent(level);
         player.setX(PLAYERSTARTX);
         player.setY(PLAYERSTARTY);
@@ -122,7 +125,6 @@ public class Main extends Application {
 
     //boolean keypressed stops people holding both left and right down at same time
     private void update(Stage stage) {
-        boolean keypressed = false;
 
         if (mode == Mode.MINIGAME) {
             if (isPressed (KeyCode.ESCAPE)) {
@@ -160,10 +162,14 @@ public class Main extends Application {
             ListenerItemsEvent ();
             ListenerPlayerLives ();
             ListenerPlayerUseWeapon ();
+            ListenerPlayerKillEnemy ();
             ListenerButtons();
             UpdateAnimatedObjects ();
-            ListenerGameOver ();
             ListenerTimeBeforeNewEnemyWave ();
+        }
+        if (mode == Mode.PLATFORMGAME || mode == Mode.GAMEOVER) {
+            ListenerGameOver ();
+
         }
     }
 
@@ -278,7 +284,6 @@ public class Main extends Application {
 
     private void ListenerPlayerUseWeapon () {
         if (player.hasWeapon ()) {
-
             // If player allowed to use weapon and has bullets left
             if (isPressed (KeyCode.W) && player.canUseWeapon ()) {
                 Bullet bullet = new Bullet (player.getX () + 5, player.getY () + player.height/4, player.isFacingRight ());
@@ -291,29 +296,38 @@ public class Main extends Application {
             if (!isPressed (KeyCode.W)) {
                 player.getLuggage ().getWeapon ().setCanShoot (true);
             }
+        }
+    }
 
-            // moves existing bullets
-            for (Object obj : animatedObjects) {
-                if (obj instanceof Bullet && obj.isAlive ()) {
-                    ((Bullet) obj).move (map);
+    private void ListenerPlayerKillEnemy () {
+        ArrayList<Object> deads = new ArrayList<> ();
+        // moves existing bullets
+        for (Object obj : animatedObjects) {
+            if (obj instanceof Bullet && obj.isAlive ()) {
+                ((Bullet) obj).move (map);
 
-                    // check if bullet collide with any enemy
-                    // TODO: remove bullets & enemy who are dead from animatedObjects array
-                    ArrayList<Enemy> deads = new ArrayList<> ();
-                    for (Enemy enemy : map.getEnemies ()) {
-                        if (enemy.isAlive ()
-                            && enemy.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
-                            enemy.setAlive (false);
-                            obj.setAlive (false);
-                            map.hideEntity (enemy);
-                            map.hideEntity (obj);
-                            deads.add(enemy);
-                        }
+                // check if bullet collide with any enemy
+                // TODO: remove bullets & enemy who are dead from animatedObjects array
+                for (Enemy enemy : map.getEnemies ()) {
+                    if (enemy.isCanDie () && enemy.box.getBoundsInParent ().intersects (obj.box.getBoundsInParent ()) ) {
+                        deads.add (obj);
+                        enemy.looseOneLife ();
+                        enemy.setCanDie (false);
                     }
-                    map.getEnemies ().removeIf (e -> !e.isAlive ());
+                    else {
+                        enemy.setCanDie (true);
+                    }
+                    if (enemy.getLives () == 0) {
+                        deads.add (enemy);
+                    }
                 }
             }
         }
+        for (Object dead : deads) {
+            map.hideEntity (dead);
+            animatedObjects.remove (dead);
+        }
+        map.getEnemies ().removeIf (e -> !e.isAlive ());
     }
 
     /* ----------- ENEMIES ------------ */
@@ -331,6 +345,7 @@ public class Main extends Application {
             }
         }
     }
+
     // Sends a new wave of enemy to the game every so often
     // New enemies are sent 1 by 1 (every second)
     // will keep going until there is more 10 enemies on the map
@@ -378,8 +393,6 @@ public class Main extends Application {
 
     /* ----------------- GAME OVER ------------------- */
 
-
-
     private boolean isObjectOutOfBounds(Object object) {
         if (object.getY() > map.level().height()
             || object.getX () >= map.level ().width() - map.level ().getOBJ_WIDTH ()
@@ -400,6 +413,7 @@ public class Main extends Application {
             mediaPlayer.stop();
             map.setEnemiesAlive (false);
             gameisOver = true;
+            mode = Mode.GAMEOVER;
         }
         if (gameOver.isStartAgain()) {
             gameisOver=false;
@@ -409,7 +423,7 @@ public class Main extends Application {
             player.setLives (PLAYER_START_LIVES);
             map.setEnemiesAlive (true);
             map.resetPlatforms();
-            keys.clear(); /**added to prevent input from previous game being called on reset**/
+            keys.clear(); // added to prevent input from previous game being called on reset
             mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
             mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
             map.mapRoot().setTranslateX(map.level().width()-player.getX() - WIDTH);
@@ -417,6 +431,7 @@ public class Main extends Application {
             moveScreenY();
             gameOver.setStartAgain();
             mainScene.setRoot(appRoot);
+            mode = Mode.PLATFORMGAME;
         }
     }
 
