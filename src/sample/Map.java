@@ -78,6 +78,8 @@ public class Map {
 
     public void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
 
+
+
     void addAnimatedObjects(Object... objects) {
         for(Object object: objects){
             showEntity(object);
@@ -207,7 +209,7 @@ public class Map {
         for (Platform platform : level.platforms()) {
             if (platform.canDisappear() && !platform.isAlive()){
                 platform.restoreCollisionBox();
-                platform.isAlive();
+                platform.setAlive(true);
                 platform.setVisible(true);
             }
         }
@@ -221,6 +223,17 @@ public class Map {
 
     public int getCurrentLevel() {
         return currentLevel;
+    }
+
+    public void setButton(String colour) {
+        for(PlatformButton button : level.buttons()){
+            if(!button.getColour().equals(colour)){
+                button.buttonUp();
+            }
+            if(button.getColour().equals(colour)){
+                button.buttonDown();
+            }
+        }
     }
 
 }

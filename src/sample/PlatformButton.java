@@ -12,16 +12,25 @@ import javafx.scene.paint.Color;
   */
 
 public class PlatformButton extends Object{
+  private String colour;
   private boolean pressed = false;
-  private Frame buttonUp = new Frame("/graphics/buttonUp.png");
-  private Frame buttonDown = new Frame("/graphics/buttonDown.png");
+  private Frame buttonUp;
+  private Frame buttonDown;
 
 
-  PlatformButton(Type type) {
+
+  PlatformButton(Type type, String colour, Frame up, Frame down) {
     super(type);
-    sprite = new Sprite(type, buttonUp);
+    buttonUp = up;
+    buttonDown = down;
+    this.colour = colour;
+    sprite.setImage(buttonUp);
     sprite().offset(-11, -40);
   }
+
+
+
+
 
   void setPressed(boolean pressed) {
     this.pressed = pressed;
@@ -37,6 +46,10 @@ public class PlatformButton extends Object{
 
   boolean isPressed(){
     return this.pressed;
+  }
+
+  public String getColour() {
+    return this.colour;
   }
 
 }

@@ -27,6 +27,10 @@ public class Grid {
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
   private Frame block = new Frame("/graphics/block.png");
 
+  private Frame buttonUp = new Frame("/graphics/buttonUp.png");
+  private Frame buttonUpRed = new Frame("/graphics/buttonUpRed.png");
+  private Frame buttonDown = new Frame("/graphics/buttonDown.png");
+
   private ArrayList<Platform> platforms = new ArrayList<> ();
   private ArrayList<PlatformButton> buttons = new ArrayList<>();
   private ArrayList<Shape> outlines = new ArrayList<>();
@@ -36,15 +40,15 @@ public class Grid {
   private String[] map1 = new String[]{
           "4000000000000000000004",
           "4000000000000000000004",
-          "4000000000000000000004",
-          "4000000000000001223004",
-          "4060000012300000000004",
-          "4222300000000005550004",
-          "4000013000001300000004",
+          "4005550006660000800004",
+          "4000050000000001223004",
+          "4070050012300000000004",
+          "444440000000005550004",
+          "4000013000001300800004",
           "4000000001300001223004",
           "4000000000001300000004",
           "4444444400400000004004",
-          "4000000044400000000004",
+          "4000000066600000000004",
           "4000044000000400004444",
           "4000444400040044000004",
           "4444444444400000444000"
@@ -91,22 +95,39 @@ public class Grid {
           platforms.add(platform);
         }
         if (value == '5'){
-         Platform platform = new Platform(Type.PLATFORM, platformright);
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
+         Platform platform = new Platform(Type.SOLID,"orange", block);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.DARKORANGE);
           platform.setDisappear(true);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.DARKORANGE);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 64, Color.DARKORANGE);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
           outline.setY(y * 64);
           outlines.add(outline);
           platforms.add(platform);
         }
-        if (value == '6'){
-          PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON);
-          button.setCollisionBox(x * 64 + 11, y * 64 + 40,40, 5, Color.RED);
-          buttons.add(button);
+        if (value == '6') {
+          Platform platform = new Platform(Type.PLATFORM, "red", platformright);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.RED);
+          platform.setDisappear(true);
+          platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.RED);
+          outline.opacityProperty().setValue(0.25);
+          outline.setX(x * OBJ_WIDTH);
+          outline.setY(y * 64);
+          outlines.add(outline);
+          platforms.add(platform);
         }
+          if (value == '7') {
+            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", buttonUp, buttonDown);
+            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
+            buttons.add(button);
+          }
+          if (value == '8') {
+            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", buttonUpRed, buttonDown);
+            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
+            buttons.add(button);
+          }
         x++;
       }
     }
