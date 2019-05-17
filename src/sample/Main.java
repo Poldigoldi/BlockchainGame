@@ -94,7 +94,7 @@ public class Main extends Application {
         /*Initialise help pop up*/
         {
             try {
-                helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH-300, HEIGHT-50);
+                helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH-400, HEIGHT-70);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
