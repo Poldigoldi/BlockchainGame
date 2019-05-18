@@ -2,54 +2,101 @@ package sample;
 
 import javafx.scene.Group;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
+import javafx.scene.shape.Shape;
 
 public class Map {
 
-    private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Object> animatedObjects = new ArrayList<>();
-    private ArrayList<EnemyType1> enemiestype1 = new ArrayList<> ();
+    private ArrayList<Collectable> items = new ArrayList<>();
+    private ArrayList<Enemy> enemies = new ArrayList<> ();
+    private HacKing king;
     private Group mapRoot = new Group();
-    private Grid level = new Grid();
+    private Grid level;
+    private int currentLevel;
+    private Object terminal, bigdoor;
 
 
+    public Map(int level){
+        if(level==1){
+            initialiseLevel1();
+        }
+        if(level==2){
+            initialiseLevel2();
+        }
+    }
 
-    public void initialize() {
+    //ORDERING IS IMPORTANT!
+    public void initialiseLevel1() {
+        level = new Grid(1);
+        currentLevel = 1;
         createLayer4Mountains();
         createLayer3Clouds();
         createLayer2Mountains();
         createLayer1Clouds();
+        createDoodads();
         createEnemies();
+        addAnimatedPlatforms();
+        createCollectableObjects ();
+        generalInitialiser();
+    }
+
+    public void initialiseLevel2(){
+        level = new Grid(2);
+        currentLevel = 2;
+        createLayer3Clouds();
+        generalInitialiser();
+        addEnemy (3);
+    }
+
+    public void generalInitialiser(){
+        for(Shape outline : level.outlines()) {
+            mapRoot.getChildren().add(outline);
+        }
         //Adds every platform object within the level
-        for (Object platform : level.platforms()) {
+        for (Platform platform : level.platforms()) {
             showEntity(platform);
         }
-        // Add block to pick-up
-        Item block = new Item("block");
-        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
-        addItem(block);
+        for (PlatformButton button : level.buttons()) {
+            showEntity(button);
+        }
     }
 
-    public Group mapRoot() {
-        return mapRoot;
-    }
-
-    ArrayList<Item> blocks() { return this.items; }
-
-    ArrayList<Object> objects() { return this.animatedObjects; }
-
-    public Grid level() { return level; }
-
-    public void addItem (Item item) {
-        /* add Item to Map */
-        if (!items.contains (item)) { items.add (item); }
+    public void addItem (Collectable item) {
+        /* add Block to Map */
+        items.add (item);
+        animatedObjects.add(item);
         showEntity(item);
     }
 
-    public void showEntity(Object object) { object.add(mapRoot); }
+    public void addPlayer(Object player, int startx, int starty){
+        showEntity(player);
+        player.setX(startx);
+        player.setY(starty);
+        animatedObjects.add(player);
+    }
 
-    public void hideEntity (Object object) { mapRoot.getChildren().remove (object); }
+    public void removeBullet(Bullet bullet){
+        bullet.setAlive(false);
+        mapRoot.getChildren ().remove (bullet.label());
+        hideEntity(bullet);
+    }
+
+    public void removePlayer(Object player){
+        hideEntity(player);
+    }
+
+    public void showEntity(Object object) {
+        object.add(mapRoot);
+    }
+
+    public void hideEntity(Object object) {
+        mapRoot.getChildren ().remove (object.sprite);
+        mapRoot.getChildren ().remove (object.box);
+    }
+
 
     void addAnimatedObjects(Object... objects) {
         for(Object object: objects){
@@ -59,20 +106,100 @@ public class Map {
     }
 
     //Enemies
-    private void createEnemies(){
-        EnemyType1 enemy1 = new EnemyType1(200, 100, true, 800, 100);
-        addAnimatedObjects(enemy1);
-        enemiestype1.add (enemy1);
-
-        EnemyType1 enemy2 = new EnemyType1(600, 500, true, 800, 10);
-        addAnimatedObjects(enemy2);
-        enemiestype1.add (enemy2);
-
-        EnemyType1 enemy3 = new EnemyType1(1300, 500, true, 800, 50);
-        addAnimatedObjects(enemy3);
-        enemiestype1.add (enemy3);
+    private void createEnemies () {
+        addEnemy (0);
+        addEnemy (1);
+        addEnemy (2);
+    }
+    public void addEnemy (int typeId){
+        Enemy enemy;
+        switch (typeId){
+            case 1:  // Enemy stay more at bottom of map - on left side
+                enemy = new Enemy (200, 100, true, 800, 100);
+                break;
+            case 2: // Enemy stay more at top of map - anywhere
+                enemy = new Enemy (600, 500, true, 800, 10);
+                break;
+            case 3:
+                enemy = new HacKing (300, 500);
+                king = (HacKing)enemy;
+                break;
+            default: // Enemy will be between bottom and middle - anywhere
+                enemy = new Enemy (1300, 500, true, 800, 50);
+                break;
+        }
+        addAnimatedObjects(enemy);
+        enemies.add (enemy);
     }
 
+    public void addRandomEnemy() {
+        // randomise position and behaviour of enemy created
+        int rand = new Random ().nextInt(3);
+        addEnemy (rand);
+    }
+
+    private void createDoodads(){
+        Object terminal = new Object(Type.DOODAD);
+        terminal.setCollisionBox(15*64, 11*64, 50, 50, Color.YELLOW);
+        terminal.sprite.loadDefaultImages(new Frame("/graphics/terminal1.png"),
+                new Frame("/graphics/terminal2.png"),
+                new Frame("/graphics/terminal3.png"));
+        Object bigdoor = new Object(Type.DOODAD, new Frame("/graphics/bigdoor1.png"));
+        bigdoor.setCollisionBox(20*64-19, 9*64+61, 50, 50, Color.YELLOW);
+        bigdoor.sprite.offset(-40, -80);
+        bigdoor.sprite.loadDefaultImages(new Frame("/graphics/bigdoor1.png", 100),
+                new Frame("/graphics/bigdoor2.png"),
+                new Frame("/graphics/bigdoor3.png"),
+                new Frame("/graphics/bigdoor4.png"),
+                new Frame("/graphics/bigdoor5.png"),
+                new Frame("/graphics/bigdoor6.png"),
+                new Frame("/graphics/bigdoor7.png"),
+                new Frame("/graphics/bigdoor8.png"),
+                new Frame("/graphics/bigdoor9.png"),
+                new Frame("/graphics/bigdoor10.png"),
+                new Frame("/graphics/bigdoor11.png", 9999));
+        bigdoor.sprite.setanimation(false);
+        addAnimatedObjects(terminal, bigdoor);
+        this.terminal = terminal;
+        this.bigdoor = bigdoor;
+    }
+
+    public boolean inRangeOfTerminal(double playerx, double playery){
+        if(terminal == null) return false;
+        double distance = Math.sqrt(Math.pow((playerx - terminal.box.getTranslateX()), 2) + Math.pow((playery - terminal.box.getTranslateY()), 2));
+        if(distance < 60) return true;
+        return false;
+    }
+
+    public boolean inRangeOfBigDoor(double playerx, double playery){
+        if(bigdoor == null) return false;
+        double distance = Math.sqrt(Math.pow((playerx - bigdoor.box.getTranslateX()), 2) + Math.pow((playery - bigdoor.box.getTranslateY()), 2));
+        if(distance < 10) return true;
+        return false;
+    }
+
+    public Object bigdoor(){ return bigdoor;}
+
+
+    // Weapons & blocks to collect
+    private void createCollectableObjects () {
+        // Add block to pick-up
+        Block block = new Block ("block");
+        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
+        addItem(block);
+
+        // Add weapons to pick-up
+        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
+        addItem (weapon1);
+    }
+
+    private void addAnimatedPlatforms(){
+      for(Platform platform : level.platforms()){
+        if (platform.getColour() != null){
+          animatedObjects.add(platform);
+        }
+      }
+    }
 
     //Nick's functions for making the background graphics
 
@@ -127,12 +254,23 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
-    public ArrayList<Object> getAnimatedObjects() {
+    public Group mapRoot() {
+        return mapRoot;
+    }
+
+
+    public Grid level() { return level; }
+
+
+    public ArrayList<Object> animatedObjects() {
         return animatedObjects;
     }
 
-    public ArrayList<EnemyType1> getEnemies () {
-        return enemiestype1;
+    public ArrayList<Enemy> getEnemies () {
+        return enemies;
+    }
+    public ArrayList<Collectable> getItems() {
+        return items;
     }
 
     public Grid getLevel () {
@@ -140,8 +278,47 @@ public class Map {
     }
 
     public void setEnemiesAlive (boolean state) {
-        for (EnemyType1 enemy : this.enemiestype1) {
+        for (Enemy enemy : this.enemies) {
             enemy.setAlive (state);
         }
+    }
+
+    public void resetPlatforms(){
+        for (Platform platform : level.platforms()) {
+            if (platform.canDisappear() && !platform.isAlive()){
+                platform.restoreCollisionBox();
+                platform.setAlive(true);
+                platform.setVisible(true);
+            }
+        }
+    }
+
+    public void resetButtons() {
+      for (PlatformButton button : level.buttons()) {
+        button.buttonUp();
+      }
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setButton(String colour) {
+        for(PlatformButton button : level.buttons()){
+            if(!button.getColour().equals(colour)){
+                button.buttonUp();
+            }
+            if(button.getColour().equals(colour)){
+                button.buttonDown();
+            }
+        }
+    }
+
+    public HacKing getKing() {
+        return king;
+    }
+
+    public void setKing(HacKing king) {
+        this.king = king;
     }
 }

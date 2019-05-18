@@ -3,48 +3,52 @@ package sample;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 import java.nio.file.Paths;
 
 /*Nick made major changes to this class. A player is an Object that can JUMP and hold items */
-public class Player extends Object {
+public class Player extends Person {
     //sounds
     AudioClip jumpSound = new AudioClip(Paths.get("src/sound/jump.wav").toUri().toString());
 
     //variables
     private int WIDTH = 30, HEIGHT = 60;
-    private int lives;
     private boolean canDie;
     private String name;
     private Luggage luggage;
-    private Stage stage;
+    private String facing;
 
-    public Player(String name, int STARTX, int STARTY, Stage stage, int START_LIVES) {
-        super(Type.PLAYER);
+    public Player(String name, int STARTX, int STARTY, int START_LIVES) {
+        super(Type.PLAYER, START_LIVES);
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
         this.canDie = true;
-        this.lives = START_LIVES;
         this.name = name;
         this.luggage = new Luggage();
-        this.stage = stage;
+        this.facing = "RIGHT";
+        initialise();
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
         sprite().offset(-(64-WIDTH)/2, -(64- HEIGHT));
     }
 
 
     void jump() {
-        if (CanJump) {
+        if (canJump) {
             jumpSound.play();
             this.Velocity = this.Velocity.add (0, -30);
-            CanJump=false;
+            canJump =false;
         }
     }
 
-    void useItem(Item item) {
-        /* Do Something with item .... */
+    public boolean hasWeapon () {
+        return luggage.getWeapon () != null;
     }
 
+    public boolean canUseWeapon () {
+        if (luggage.getWeapon ().isCanShoot () && luggage.getWeapon ().getBullets () > 0) {
+            return true;
+        }
+        return false;
+    }
 
     //set up the images for walking etc.
     public void initialise() {
@@ -86,27 +90,11 @@ public class Player extends Object {
         return this.luggage;
     }
 
-    public int getLives () {
-        return this.lives;
+    public String getFacing() {
+        return facing;
     }
 
-    public void setLives (int lives) {
-        this.lives = lives;
-    }
-
-    public void winOneLive () {
-        this.lives++;
-    }
-
-    public void LooseOneLive () {
-        this.lives--;
-    }
-
-    public boolean isCanDie() {
-        return canDie;
-    }
-
-    public void setCanDie(boolean canDie) {
-        this.canDie = canDie;
+    public void setFacing(String facing) {
+        this.facing = facing;
     }
 }

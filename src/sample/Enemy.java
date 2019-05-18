@@ -1,35 +1,31 @@
 package sample;
 
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-public class EnemyType1 extends Object {
+public class Enemy extends Person {
 
-    /*
-    TODO: 1) allow enemy to attack (either rockets/contact)
-          2) reduce collision box size
-     */
+
     private boolean canMove;
     private int countMoveLeft;
     private int countMoveRight;
     private int limitMoves = 400;
-    private boolean print = false;
+    private boolean print = true;
 
     // Global variables
     private final int OFFSET = 5;
     private final int MOVE_SPEED = 1;
-    private final double JUMP_SPEED_Y = 28;
-    private final double JUMP_SPEED_X = 2.6;
+    private final double JUMP_SPEED_Y = 29;
+    private final double JUMP_SPEED_X = 2.8;
     private final int JUMP_PROBA_RANGE;
     private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
 
-    public EnemyType1(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
-        super(Type.ENEMY1);
+    public Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
+        super(Type.ENEMY, 2);
         this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
         this.canMove = canMove;
         this.alive = true;
@@ -117,9 +113,9 @@ public class EnemyType1 extends Object {
     /* -------------------- PRIVATE METHODS ------------------------- */
 
     private void jump (double value) {
-        if (CanJump) {
+        if (canJump) {
             this.Velocity = this.Velocity.add (value, -JUMP_SPEED_Y);
-            CanJump=false;
+            canJump =false;
         }
     }
 
@@ -127,7 +123,7 @@ public class EnemyType1 extends Object {
         /**
          @output: 'true' if there is a big gap that the enemy cannot jump without dying
          **/
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
             if ( (platform.getY () >= (getY () + height) )
                 && platform.getX () > getX ()
                 && platform.getX () < getX () + width + 2*platform.width) {
@@ -141,7 +137,7 @@ public class EnemyType1 extends Object {
         /**
          @output: 'true' if there is a big gap that the enemy cannot jump without dying
          **/
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
             if ( (platform.getY () >= (getY () + height) )
                     && platform.getX () < getX ()
                     && platform.getX () > getX () - width - 2*platform.width) {
@@ -191,11 +187,17 @@ public class EnemyType1 extends Object {
             and gap between is 1-2 platform length (condition 3, 4 and 5)
 
          **/
-        for (Object platform : map.getLevel ().platforms ()) {
+        // here we need to filter the array the other way
+        // in order to consider the platforms from right to left side of enemy
+        ArrayList<Platform> arr = map.getLevel ().platforms ();
+
+        for (int i=0; i<arr.size (); i++) {
+            Platform platform = arr.get (arr.size ()-1 - i);
             // case 1: enemy has no gap on his LEFT
-            if (platform.getX () <= getX ()
-                && platform.getX () >= getX () - 2 * platform.width
-                    && platform.getY () >= getY ()) {
+            if (platform.getX () < getX ()
+                && platform.getX () > platform.width + OFFSET
+                && platform.getX () > getX () - 2 * platform.width
+                && platform.getY () >= getY() + height) {
                 return false;
             }
             // case 2: enemy has a gap on his LEFT, small enough to jump
@@ -218,7 +220,7 @@ public class EnemyType1 extends Object {
           * if a block is on LEFT, next to him (condition 2 and 3)
           * if the block is just above him (condition 4 and 5)
          */
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
             if (    getX () + width < map.getLevel ().width() - platform.width - OFFSET
                     && (platform.getX () > getX() + width)
                     && (platform.getX () <= getX() + width + OFFSET)
@@ -238,7 +240,7 @@ public class EnemyType1 extends Object {
           * if a block is on LEFT, next to him (condition 2 and 3)
           * if the block is just above him (condition 4 and 5)
          */
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
 
 
             if (    getX () > platform.width + OFFSET
@@ -260,7 +262,7 @@ public class EnemyType1 extends Object {
          **/
         int rand = new Random ().nextInt(JUMP_PROBA_RANGE);
         if (rand != 1) {
-            for (Object p : map.getLevel ().platforms ()) {
+            for (Platform p : map.getLevel ().platforms ()) {
                 // only jump if there is a platform so he doesn't die
                 if (p.getY () > getY () + height) {
                     if (   (side == "RIGHT" && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
@@ -283,7 +285,7 @@ public class EnemyType1 extends Object {
 
 
     /* PRINTING */
-    
+
     private void print(String string){
         if(print) System.out.println(string);
     }

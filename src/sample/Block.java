@@ -2,11 +2,10 @@ package sample;
 
 
 /* An item is an object with extra methods*/
-public class Item extends Object {
+public class Block extends Collectable {
     private final String name;
 
-    Item(String name) {
-        super(Type.ITEM);
+    Block (String name) {
         this.name = name;
         alive = true;
         sprite.offset(-7, -7);
@@ -16,11 +15,7 @@ public class Item extends Object {
                                     new Frame("/graphics/item4.png"),
                                     new Frame("/graphics/item5.png"),
                                     new Frame("/graphics/item6.png"));
-    }
-
-    void drop (double x, double y) {
-        box.setTranslateX (x);
-        box.setTranslateY (y);
+        setItemType (Type.BLOCK);
     }
 
 }

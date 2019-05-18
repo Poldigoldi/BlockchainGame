@@ -8,6 +8,7 @@ import javafx.scene.shape.Shape;
 import javafx.geometry.Point2D;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 
 /*Objects hold two things, a collision box, and an image.
@@ -34,7 +35,7 @@ public class Object  {
     public Type type;
     public int width;
     public int height;
-    public boolean CanJump = true;
+    public boolean canJump = true;
     public Point2D Velocity = new Point2D(0,0);
     public boolean facingRight;
     public boolean movingDown;
@@ -50,7 +51,6 @@ public class Object  {
         this.type = type;
         this.alive = true;
     }
-
 
     //creates a collision box, this is initially a rectangle, but in the future it could be other shapes.
     public void setCollisionBox(double x, double y, int width, int height, Color colour){
@@ -103,8 +103,8 @@ public class Object  {
                 isMoving = false;
             }
         }
-
     }
+
     void applyGravity() {
         if (this.Velocity.getY () < 10) {
             this.Velocity = this.Velocity.add(0, 1);
@@ -126,6 +126,10 @@ public class Object  {
         facingRight = value > 0;
         for (Object object : map.level().platforms()) {
             //checks if player at same height as object and its solid first, then block left/right movements
+            if (type == Type.BULLET && box.getBoundsInParent ().intersects (object.box.getBoundsInParent ())) {
+                return false;
+            }
+
             if(object.type == Type.SOLID && this.getY()>object.getY()-this.height && this.getY()<object.getY()+this.height){
                 if(facingRight && Math.abs(object.getX() - this.getX() - this.width) <= 5) return false;
                 if(!facingRight && Math.abs(object.getX()+object.width()- this.getX()) <= 5) return false;
@@ -141,12 +145,12 @@ public class Object  {
         movingDown = value > 0; // (Y=0) at the top of the frame
         for (int i=0; i<Math.abs(value); i++) {
             /* Check for collisions between player and platforms */
-            for (Object object : map.level().platforms()) {
+            for (Platform object : map.level().platforms()) {
                 if (box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
                     if (movingDown) {
                         if (this.getY () + this.height == object.getY()) {
-                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY1)) landSound.play();
-                            CanJump = true;
+                            if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY)) landSound.play();
+                            canJump = true;
                             isLanded = true;
                             return;
                         }
@@ -161,6 +165,15 @@ public class Object  {
             this.setY(this.getY () + (movingDown ? 1 : -1));
             isLanded = false;
         }
+    }
+
+    public boolean isCollision (ArrayList<Object> constrains) {
+        for (Object constrain : constrains) {
+            if (box.getBoundsInParent ().intersects (constrain.box.getBoundsInParent ())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -191,5 +204,9 @@ public class Object  {
         this.alive = alive;
     }
 
-    public void setXDirection(boolean facingRight){ this.facingRight = facingRight;}
+    public void setFacingRight (boolean facingRight){ this.facingRight = facingRight;}
+
+    public boolean isFacingRight() {
+        return facingRight;
+    }
 }
