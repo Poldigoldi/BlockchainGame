@@ -28,6 +28,18 @@ public class Map {
         }
     }
 
+
+    private void addToGrid(){
+        for(int y = 0; y< level.height; y++){
+            for(int x = 0; x < level.width; x++){
+                if(level.map()[y].charAt(x) == 'T') addTerminal(x, y);
+                if(level.map()[y].charAt(x) == 'B') addBigDoor(x, y);
+                if(level.map()[y].charAt(x) == 'I') addBlock(x, y);
+                if(level.map()[y].charAt(x) == 'W') addWeapon(x, y);
+            }
+        }
+    }
+
     //ORDERING IS IMPORTANT!
     public void initialiseLevel1() {
         level = new Grid(1);
@@ -38,10 +50,9 @@ public class Map {
         createLayer2Mountains();
         createLayer1Clouds();
         */
-        createDoodads();
+        addToGrid();
         createEnemies();
         addAnimatedPlatforms();
-        createCollectableObjects ();
         generalInitialiser();
     }
 
@@ -140,14 +151,19 @@ public class Map {
         addEnemy (rand);
     }
 
-    private void createDoodads(){
+    private void addTerminal(int x, int y){
         Object terminal = new Object(Type.DOODAD);
-        terminal.setCollisionBox(15*64, 11*64, 50, 50, Color.YELLOW);
+        terminal.setCollisionBox(x*64, y*64, 50, 50, Color.YELLOW);
         terminal.sprite.loadDefaultImages(new Frame("/graphics/terminal1.png"),
                 new Frame("/graphics/terminal2.png"),
                 new Frame("/graphics/terminal3.png"));
+        addAnimatedObjects(terminal);
+        this.terminal = terminal;
+    }
+
+    private void addBigDoor(int x, int y){
         Object bigdoor = new Object(Type.DOODAD, new Frame("/graphics/bigdoor1.png"));
-        bigdoor.setCollisionBox(20*64-19, 9*64+61, 50, 50, Color.YELLOW);
+        bigdoor.setCollisionBox(x*64, y*64, 50, 50, Color.YELLOW);
         bigdoor.sprite.offset(-40, -80);
         bigdoor.sprite.loadDefaultImages(new Frame("/graphics/bigdoor1.png", 100),
                 new Frame("/graphics/bigdoor2.png"),
@@ -161,10 +177,23 @@ public class Map {
                 new Frame("/graphics/bigdoor10.png"),
                 new Frame("/graphics/bigdoor11.png", 9999));
         bigdoor.sprite.setanimation(false);
-        addAnimatedObjects(terminal, bigdoor);
-        this.terminal = terminal;
+        addAnimatedObjects(bigdoor);
         this.bigdoor = bigdoor;
     }
+
+    public void addBlock(int x, int y){
+        Block block = new Block ("block");
+        block.setCollisionBox(x*64, y*64 , 16, 16, Color.DARKRED);
+        addItem(block);
+    }
+
+    private void addWeapon (int x, int y) {
+        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
+        weapon1.setCollisionBox (x*64, y*64, 25, 25, Color.BLUEVIOLET);
+        addItem (weapon1);
+    }
+
+    //RANGE
 
     public boolean inRangeOfTerminal(double playerx, double playery){
         if(terminal == null) return false;
@@ -180,20 +209,6 @@ public class Map {
         return false;
     }
 
-    public Object bigdoor(){ return bigdoor;}
-
-
-    // Weapons & blocks to collect
-    private void createCollectableObjects () {
-        // Add block to pick-up
-        Block block = new Block ("block");
-        block.setCollisionBox(300, 300 , 16, 16, Color.DARKRED);
-        addItem(block);
-
-        // Add weapons to pick-up
-        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
-        addItem (weapon1);
-    }
 
     private void addAnimatedPlatforms(){
       for(Platform platform : level.platforms()){
@@ -260,9 +275,9 @@ public class Map {
         return mapRoot;
     }
 
-
     public Grid level() { return level; }
 
+    public Object bigdoor(){ return bigdoor;}
 
     public ArrayList<Object> animatedObjects() {
         return animatedObjects;
@@ -271,34 +286,13 @@ public class Map {
     public ArrayList<Enemy> getEnemies () {
         return enemies;
     }
+
     public ArrayList<Collectable> getItems() {
         return items;
     }
 
     public Grid getLevel () {
         return this.level;
-    }
-
-    public void setEnemiesAlive (boolean state) {
-        for (Enemy enemy : this.enemies) {
-            enemy.setAlive (state);
-        }
-    }
-
-    public void resetPlatforms(){
-        for (Platform platform : level.platforms()) {
-            if (platform.canDisappear() && !platform.isAlive()){
-                platform.restoreCollisionBox();
-                platform.setAlive(true);
-                platform.setVisible(true);
-            }
-        }
-    }
-
-    public void resetButtons() {
-      for (PlatformButton button : level.buttons()) {
-        button.buttonUp();
-      }
     }
 
     public int getCurrentLevel() {

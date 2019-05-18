@@ -38,6 +38,11 @@ public class Main extends Application {
 
     //sounds
     private AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
+    private AudioClip shootSound = new AudioClip(Paths.get("src/sound/shoot.wav").toUri().toString());
+    private AudioClip doorOpenSound = new AudioClip(Paths.get("src/sound/dooropen.wav").toUri().toString());
+    private AudioClip playerhurtSound = new AudioClip(Paths.get("src/sound/playerhurt.wav").toUri().toString());
+    private AudioClip enemy1hurtSound = new AudioClip(Paths.get("src/sound/enemy1hurt.wav").toUri().toString());
+    private AudioClip enemy1dieSound = new AudioClip(Paths.get("src/sound/enemy1die.wav").toUri().toString());
 
     //global variables
     private int WIDTH, HEIGHT;
@@ -162,6 +167,7 @@ public class Main extends Application {
             map.bigdoor().sprite.setanimation(true);
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
+            doorOpenSound.play();
             keyPad.setCodeCorrect(false);
         }
         if (mode == Mode.GAMEOVER) gameOver();
@@ -320,6 +326,7 @@ public class Main extends Application {
                     if (player.isCanDie()) {
                         player.looseOneLife();
                         player.setCanDie(false);
+                        playerhurtSound.play();
                     }
                     if(player.getLives()==3){
                         healthbar.sprite.loadDefaultImages(new Frame("/graphics/2lives1.png", 7),
@@ -347,6 +354,7 @@ public class Main extends Application {
             // If player allowed to use weapon and has bullets left
             if (isPressed(KeyCode.W) && player.canUseWeapon()) {
                 shootOneBullet (player, player.isFacingRight ());
+                shootSound.play();
                 player.getLuggage().getWeapon().looseOneBullet();
                 player.getLuggage().getWeapon().setCanShoot(false);
             }
@@ -362,6 +370,7 @@ public class Main extends Application {
         if ( person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
             map.removeBullet(bullet);
             person.looseOneLife();
+            enemy1hurtSound.play();
             person.setCanDie(false);
         } else {
             person.setCanDie(true);
@@ -436,6 +445,7 @@ public class Main extends Application {
             }
             // if enemy is dead
             if (enemy.isAlive() == false){
+                enemy1dieSound.play();
                 map.hideEntity(enemy);
             }
         }

@@ -12,7 +12,6 @@ public class Weapon extends Collectable {
 
     Weapon (String name, int bullets) {
         super(new Frame("/graphics/weapon.png"));
-        this.setCollisionBox (200, 500, 25, 25, Color.BLUEVIOLET);
         sprite.offset (-20, -35);
         this.alive = true;
         this.canShoot = true;
