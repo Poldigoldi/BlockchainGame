@@ -4,7 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
@@ -19,8 +21,6 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
 
 
 public class Main extends Application {
@@ -46,8 +46,10 @@ public class Main extends Application {
     private int timeCounter = 0;
     private KeyPad keyPad = new KeyPad(WIDTH, HEIGHT);
     private HelpPopUp helpPopUp;
+    private boolean doorunlocked = false;
+    private Object healthbar;
 
-    private Pane appRoot = new Pane();
+    private AnchorPane appRoot = new AnchorPane();
     private Map map;
     private Scene mainScene;
     private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
@@ -66,7 +68,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         menuMediaPlayer.play();
         menuMediaPlayer.setVolume(20);
-        initContent(1);
         //initialise Scene/game
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
@@ -78,6 +79,15 @@ public class Main extends Application {
         gameMenu.instructions().setOnAction(instructionButtonHandler);
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
+        //prepare game
+        initContent(1);
+        initialiseHealthbar();
+    }
+
+    private void initialiseHealthbar() {
+        healthbar = new Object(Type.ABSTRACT, new Frame( "/graphics/3lives1.png"));
+        healthbar.setCollisionBox(50,50,50,50, Color.WHITE);
+        map.addAnimatedObjects(healthbar);
     }
 
     private void initContent(int level) {
@@ -95,7 +105,6 @@ public class Main extends Application {
         appRoot.getChildren().addAll(map.mapRoot());
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         map.addPlayer(player, PLAYERSTARTX, PLAYERSTARTY);
-
         /*Initialise help pop up*/
         try {
             helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH - 400, HEIGHT - 70);
@@ -130,8 +139,11 @@ public class Main extends Application {
 
     private void update(Stage stage) {
 
+        stage.setTitle(player.getLives() + "");
         if (keyPad.isCodeCorrect()) {
-            changeLevel(2);
+            map.bigdoor().sprite.setanimation(true);
+            mainScene.setRoot(appRoot);
+            mode = Mode.PLATFORMGAME;
             keyPad.setCodeCorrect(false);
         }
         if (mode == Mode.GAMEOVER) gameOver();
@@ -152,12 +164,15 @@ public class Main extends Application {
             } else if (isPressed(KeyCode.D)) {
                 player.setFacingRight(true);
                 if (player.move_X(5, map)) moveScreenX(5);
+
             }
             if (isPressed(KeyCode.W)) {
                 player.jump();
             }
 
             moveScreenY();
+            healthbar.setX(-map.mapRoot().getTranslateX()+50);
+            healthbar.setY(-map.mapRoot().getTranslateY()+50);
             ListenerEnemies();
             ListenerItemsEvent();
             ListenerPlayerLives();
@@ -167,7 +182,7 @@ public class Main extends Application {
             UpdateAnimatedObjects();
             ListenerGameOver();
             ListenerTimeBeforeNewEnemyWave();
-            ListenerKeyPad();
+            ListenerDoodads();
             ListenerHelpPopUp();
         }
     }
@@ -217,9 +232,12 @@ public class Main extends Application {
      *                              LISTENERS FOR EVENTS
      * **********************************************************************/
 
-    private void ListenerKeyPad() {
-        if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644 && isPressed(KeyCode.E)) {
+    private void ListenerDoodads() {
+        if (map.getCurrentLevel() == 1 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
             openKeyPad();
+        }
+        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY())) {
+            changeLevel(2);
         }
     }
 
@@ -269,6 +287,18 @@ public class Main extends Application {
                     if (player.isCanDie()) {
                         player.LooseOneLive();
                         player.setCanDie(false);
+                    }
+                    if(player.getLives()==3){
+                        healthbar.sprite.loadDefaultImages(new Frame("/graphics/2lives1.png", 7),
+                                new Frame("/graphics/2lives2.png", 10),
+                                new Frame("/graphics/2lives3.png", 15),
+                                new Frame("/graphics/2lives4.png", 9999));
+                    }
+                    if(player.getLives()==2){
+                        healthbar.sprite.loadDefaultImages(new Frame("/graphics/1life1.png", 7),
+                                new Frame("/graphics/1life2.png", 10),
+                                new Frame("/graphics/1life3.png", 15),
+                                new Frame("/graphics/1life4.png", 9999));
                     }
                 }
             }
@@ -331,8 +361,8 @@ public class Main extends Application {
             }
             // if enemy is dead
             if (enemy.isAlive() == false){
-                map.getEnemies().remove(enemy);
                 map.hideEntity(enemy);
+                map.getEnemies().remove(enemy);
             }
         }
     }
@@ -403,6 +433,7 @@ public class Main extends Application {
             defeatSound.play();
             mode = Mode.GAMEOVER;
             changeLevel(1);
+            player.setLives(3);
         }
     }
 
@@ -410,6 +441,7 @@ public class Main extends Application {
         if (isPressed(KeyCode.SPACE)) {
             mainScene.setRoot(appRoot);
             player.setLives(PLAYER_START_LIVES);
+            initialiseHealthbar();
             keys.clear(); /**added to prevent input from previous game being called on reset**/
             mode = Mode.PLATFORMGAME;
         }
@@ -505,10 +537,15 @@ public class Main extends Application {
             if (keyPad.getDisplayText().equals("1234")) {
                 mainScene.setRoot(appRoot);
                 keyPad.setCodeCorrect(true);
+                doorunlocked = true;
                 mode = Mode.PLATFORMGAME;
             } else {
                 keyPad.setDisplayText("WRONG CODE!");
             }
         });
     }
+
+
 }
+
+

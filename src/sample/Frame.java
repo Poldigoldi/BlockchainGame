@@ -15,6 +15,5 @@ public class Frame extends Image {
         super(imageURL);
     }
 
-
     public int framerate(){return framerate;}
 }

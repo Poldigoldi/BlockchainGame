@@ -13,6 +13,7 @@ public class Map {
     private Group mapRoot = new Group();
     private Grid level;
     private int currentLevel;
+    private Object terminal, bigdoor;
 
 
     public Map(int level){
@@ -24,6 +25,7 @@ public class Map {
         }
     }
 
+    //ORDERING IS IMPORTANT!
     public void initialiseLevel1() {
         level = new Grid(1);
         currentLevel = 1;
@@ -31,6 +33,7 @@ public class Map {
         createLayer3Clouds();
         createLayer2Mountains();
         createLayer1Clouds();
+        createDoodads();
         createEnemies();
         addAnimatedPlatforms();
         createCollectableObjects ();
@@ -127,6 +130,49 @@ public class Map {
         addAnimatedObjects(enemy);
         enemies.add (enemy);
     }
+
+    private void createDoodads(){
+        Object terminal = new Object(Type.DOODAD);
+        terminal.setCollisionBox(15*64, 11*64, 50, 50, Color.YELLOW);
+        terminal.sprite.loadDefaultImages(new Frame("/graphics/terminal1.png"),
+                new Frame("/graphics/terminal2.png"),
+                new Frame("/graphics/terminal3.png"));
+        Object bigdoor = new Object(Type.DOODAD, new Frame("/graphics/bigdoor1.png"));
+        bigdoor.setCollisionBox(20*64-19, 9*64+61, 50, 50, Color.YELLOW);
+        bigdoor.sprite.offset(-40, -80);
+        bigdoor.sprite.loadDefaultImages(new Frame("/graphics/bigdoor1.png", 100),
+                new Frame("/graphics/bigdoor2.png"),
+                new Frame("/graphics/bigdoor3.png"),
+                new Frame("/graphics/bigdoor4.png"),
+                new Frame("/graphics/bigdoor5.png"),
+                new Frame("/graphics/bigdoor6.png"),
+                new Frame("/graphics/bigdoor7.png"),
+                new Frame("/graphics/bigdoor8.png"),
+                new Frame("/graphics/bigdoor9.png"),
+                new Frame("/graphics/bigdoor10.png"),
+                new Frame("/graphics/bigdoor11.png", 9999));
+        bigdoor.sprite.setanimation(false);
+        addAnimatedObjects(terminal, bigdoor);
+        this.terminal = terminal;
+        this.bigdoor = bigdoor;
+    }
+
+    public boolean inRangeOfTerminal(double playerx, double playery){
+        if(terminal == null) return false;
+        double distance = Math.sqrt(Math.pow((playerx - terminal.box.getTranslateX()), 2) + Math.pow((playery - terminal.box.getTranslateY()), 2));
+        if(distance < 60) return true;
+        return false;
+    }
+
+    public boolean inRangeOfBigDoor(double playerx, double playery){
+        if(bigdoor == null) return false;
+        double distance = Math.sqrt(Math.pow((playerx - bigdoor.box.getTranslateX()), 2) + Math.pow((playery - bigdoor.box.getTranslateY()), 2));
+        if(distance < 10) return true;
+        return false;
+    }
+
+    public Object bigdoor(){ return bigdoor;}
+
 
     // Weapons & blocks to collect
     private void createCollectableObjects () {

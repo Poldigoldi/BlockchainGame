@@ -4,7 +4,9 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+//set framerate to 9999 for no looping
 public class Sprite extends ImageView {
+    private boolean animationactive = true;
     private List<Frame> defaultAnimation = new ArrayList<>();
     private List<Frame> defaultLeftAnimation = new ArrayList<>();
     private List<Frame> defaultRightAnimation = new ArrayList<>();
@@ -44,11 +46,16 @@ public class Sprite extends ImageView {
         }
     }
 
-
+    public Frame currentFrame(){ return currentFrame;}
 
     //for an animated sprite
 
+    public void setanimation(boolean active){ animationactive = active;}
+
     public void loadDefaultImages(Frame... images){
+        animationCycle = 0;
+        frameDelay = 0;
+        if(defaultAnimation.size()!=0) defaultAnimation.clear();
         for(Frame image: images)
             defaultAnimation.add(image);
     }
@@ -72,12 +79,13 @@ public class Sprite extends ImageView {
             animationCycle++;
         }
         frameDelay++;
+        if( currentFrame.framerate()==9999) frameDelay = 0;
     }
 
     public void update(boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
         moveTo(x, y);
         //for non-moving animations
-        if (!type.hasMovementAnimation() && defaultAnimation.size()>0){
+        if (!type.hasMovementAnimation() && defaultAnimation.size()>0 && animationactive){
             animate(defaultAnimation);
         }
         //for moving animations
