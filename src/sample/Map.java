@@ -201,7 +201,7 @@ public class Map {
       }
     }
 
-    //Nick's functions for making the background graphics
+//Nick's functions for making the background graphics
 
     private void createLayer3Clouds(){
         Object cloud = new Object(Type.LAYER3, new Frame("/graphics/clouds1.png"));
