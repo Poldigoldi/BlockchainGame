@@ -120,7 +120,9 @@ public class Main extends Application {
         map = new Map(level); //initialises level based on level number input
         appRoot.getChildren().addAll(map.mapRoot());
         //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
-        map.addPlayer(player, PLAYERSTARTX, PLAYERSTARTY);
+        map.addPlayer(player, 70, map.level().height() - 135);
+        map.mapRoot().setTranslateX(0);
+        map.mapRoot().setTranslateY(- map.level().height() + HEIGHT);
         /*Initialise help pop up*/
         try {
             helpPopUp = new HelpPopUp("Press 'E' to open terminal", WIDTH - 400, HEIGHT - 70);
