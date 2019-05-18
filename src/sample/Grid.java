@@ -20,6 +20,10 @@ public class Grid {
       7 -> interactive button ORANGE
       8 -> interactive button RED
       MV -> Moving Platform
+      W -> Weapon
+      I -> MiniGame Block
+      B -> Big Door
+      T -> Terminal
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
@@ -46,11 +50,11 @@ public class Grid {
   private String[] map1 = new String[]{
           "40000000000000000000004",
           "40000000000000000000004",
-          "40000000000000000000004",
+          "400000000000000000000B4",
           "400000000000000MV004444",
           "40000123000000000000004",
-          "400000000000MV000000004",
-          "44444000000000000000004",
+          "40I0000000MVßß000000004",
+          "444440000000000012300T4",
           "40000000000000000004444",
           "40000000000000000000004",
           "4000000000MV00000550004",
@@ -58,7 +62,7 @@ public class Grid {
           "40000000007080004444444",
           "40000000123123004000000",
           "40000000000000004000074",
-          "40000066000000004000044",
+          "400W0066000000004000044",
           "40123000000000004555444",
           "400000MV000000000000004",
           "400000000000000MV000004",
