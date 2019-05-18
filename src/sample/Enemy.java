@@ -13,7 +13,7 @@ public class Enemy extends Person {
     private int countMoveLeft;
     private int countMoveRight;
     private int limitMoves = 400;
-    private boolean print = true;
+    private boolean print = false;
 
     // Global variables
     private final int OFFSET = 5;
