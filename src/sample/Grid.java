@@ -16,6 +16,7 @@ public class Grid {
       1,2,3,4 -> platform
       5 -> dynamic platform
       6 -> interactive button
+      MV -> Moving Platform
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
