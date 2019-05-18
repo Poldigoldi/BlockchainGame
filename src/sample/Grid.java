@@ -72,7 +72,6 @@ public class Grid {
           "40000000MV000000000000004",
           "4000000000000000000000004",
           "4444444444444444444444444"
-
   };
 
   private String[] map2 = new String[]{
@@ -116,10 +115,11 @@ public class Grid {
         }
         if (value == '5'){
          Platform platform = new Platform(Type.PLATFORM,"orange");
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
           platform.setDisappear(true);
+          platform.setAlive(false);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.DARKORANGE);
+          platform.setCollisionBox(0,0,0,0, Color.RED);
+          Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.RED);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
           outline.setY(y * 64);
@@ -128,9 +128,10 @@ public class Grid {
         }
         if (value == '6') {
           Platform platform = new Platform(Type.PLATFORM, "red", platformright);
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.RED);
           platform.setDisappear(true);
+          platform.setAlive(false);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
+          platform.setCollisionBox(0,0,0,0, Color.RED);
           Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.RED);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
