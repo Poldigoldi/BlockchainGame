@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -38,25 +40,23 @@ public class Main extends Application {
     private AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
 
     //global variables
-    private final int WIDTH = 960, HEIGHT = 640;
-    private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300;
-    private final int PLAYER_START_LIVES = 4;
+    private int WIDTH, HEIGHT;
+    private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300, PLAYER_START_LIVES = 4;
     private final int TIME_LIMIT = 60 * 20 * 1; // 20 seconds
     private Mode mode = Mode.STARTMENU;
     private int counter;
     private int timeCounter = 0;
-    private KeyPad keyPad = new KeyPad(WIDTH, HEIGHT);
     private HelpPopUp helpPopUp;
     private boolean doorunlocked = false;
     private Object healthbar;
-
+    private Stage stage;
     private AnchorPane appRoot = new AnchorPane();
     private Map map;
     private Scene mainScene;
-    private GameOver gameOver = new GameOver(WIDTH, HEIGHT);
-    private GameMenu gameMenu = new GameMenu(WIDTH, HEIGHT);
-    private InstructionScreen instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
-
+    private KeyPad keyPad;
+    private GameOver gameOver;
+    private GameMenu gameMenu;
+    private InstructionScreen instructionScreen;
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private Player player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, PLAYER_START_LIVES);
     private ArrayList<Bullet> bulletsFired = new ArrayList<>();
@@ -67,13 +67,28 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage = primaryStage;
+        //set Stage boundaries to visible bounds of the main screen, reinitialise everything
+        this.WIDTH = (int)primaryScreenBounds.getWidth();
+        this.HEIGHT = (int)primaryScreenBounds.getHeight();
+        stage.setX(primaryScreenBounds.getMinX());
+        stage.setY(primaryScreenBounds.getMinY());
+        stage.setWidth(WIDTH);
+        stage.setHeight(HEIGHT);
+        //PREPARE ROOT NODES FROM DIFFERENT CLASSES
+        keyPad = new KeyPad(WIDTH, HEIGHT);
+        gameOver = new GameOver(WIDTH, HEIGHT);
+        gameMenu = new GameMenu(WIDTH, HEIGHT);
+        instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
+        //SET THE SCENE
         menuMediaPlayer.play();
         menuMediaPlayer.setVolume(20);
-        //initialise Scene/game
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
+        //RUN
         primaryStage.setScene(mainScene);
         primaryStage.show();
         runGame(primaryStage);
@@ -100,7 +115,6 @@ public class Main extends Application {
         BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         appRoot.setBackground(new Background(background));
-
         //initialise map / contents of the appRoot (i.e. the player, platforms, blocks, etc.)
         map = new Map(level); //initialises level based on level number input
         appRoot.getChildren().addAll(map.mapRoot());
@@ -140,7 +154,7 @@ public class Main extends Application {
 
     private void update(Stage stage) {
 
-        stage.setTitle(player.getLives() + "");
+
         if (keyPad.isCodeCorrect()) {
             map.bigdoor().sprite.setanimation(true);
             mainScene.setRoot(appRoot);
@@ -200,10 +214,12 @@ public class Main extends Application {
 
     //updates the screen X based on player position
     private void moveScreenX(int movement) {
-        if (player.getX() > WIDTH / 2 + 8 && player.getX() < map.level().width() - WIDTH / 2 - 32) {
+        stage.setTitle(WIDTH + "");
+        if (player.getX() > WIDTH/2 + 40 && player.getX() < map.level().width() - WIDTH / 2 + 40) {
+            map.mapRoot().setTranslateX(map.level().width() - player.getX() - 0.5*WIDTH - 200);
             counter++;
             //this moves everything in the screen with the character
-            map.mapRoot().setTranslateX(map.level().width() - player.getX() - WIDTH);
+
             //this is for parallax scrolling of background elements
             if (counter == 5 || counter == 10) {
                 for (Object object : map.animatedObjects())
@@ -219,10 +235,13 @@ public class Main extends Application {
 
     //updates the screen Y based on player position
     private void moveScreenY() {
-
+        if (player.getY() > HEIGHT / 2 + 40 && player.getY() < map.level().height() - HEIGHT / 2 + 40) {
+            map.mapRoot().setTranslateY(-player.getY() + HEIGHT / 2);
+        }
+        /*
         if (player.getY() > HEIGHT / 2 + 40 && player.getY() < map.level().height() - HEIGHT / 2 - 64) {
             map.mapRoot().setTranslateY(map.level().height() - player.getY() - HEIGHT);
-        }
+        }*/
     }
 
     private void UpdateAnimatedObjects() {

@@ -32,10 +32,12 @@ public class Map {
     public void initialiseLevel1() {
         level = new Grid(1);
         currentLevel = 1;
+        /*
         createLayer4Mountains();
         createLayer3Clouds();
         createLayer2Mountains();
         createLayer1Clouds();
+        */
         createDoodads();
         createEnemies();
         addAnimatedPlatforms();
