@@ -2,6 +2,8 @@ package sample;
 
 import javafx.scene.Group;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
@@ -10,6 +12,7 @@ public class Map {
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<Enemy> enemies = new ArrayList<> ();
+    private HacKing king;
     private Group mapRoot = new Group();
     private Grid level;
     private int currentLevel;
@@ -45,6 +48,7 @@ public class Map {
         currentLevel = 2;
         createLayer3Clouds();
         generalInitialiser();
+        addEnemy (3);
     }
 
     public void generalInitialiser(){
@@ -102,12 +106,10 @@ public class Map {
     }
 
     //Enemies
-
     private void createEnemies () {
         addEnemy (0);
         addEnemy (1);
         addEnemy (2);
-        addEnemy (3);
     }
     public void addEnemy (int typeId){
         Enemy enemy;
@@ -120,15 +122,20 @@ public class Map {
                 break;
             case 3:
                 enemy = new HacKing (200, 500);
+                king = (HacKing)enemy;
                 break;
-
             default: // Enemy will be between bottom and middle - anywhere
                 enemy = new Enemy (1300, 500, true, 800, 50);
                 break;
         }
         addAnimatedObjects(enemy);
         enemies.add (enemy);
-        enemies.add (enemy);
+    }
+
+    public void addRandomEnemy() {
+        // randomise position and behaviour of enemy created
+        int rand = new Random ().nextInt(3);
+        addEnemy (rand);
     }
 
     private void createDoodads(){
@@ -307,4 +314,11 @@ public class Map {
         }
     }
 
+    public HacKing getKing() {
+        return king;
+    }
+
+    public void setKing(HacKing king) {
+        this.king = king;
+    }
 }
