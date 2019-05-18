@@ -7,23 +7,21 @@ import javafx.scene.paint.Color;
 import java.nio.file.Paths;
 
 /*Nick made major changes to this class. A player is an Object that can JUMP and hold items */
-public class Player extends Object {
+public class Player extends Person {
     //sounds
     AudioClip jumpSound = new AudioClip(Paths.get("src/sound/jump.wav").toUri().toString());
 
     //variables
     private int WIDTH = 30, HEIGHT = 60;
-    private int lives;
     private boolean canDie;
     private String name;
     private Luggage luggage;
     private String facing;
 
     public Player(String name, int STARTX, int STARTY, int START_LIVES) {
-        super(Type.PLAYER);
+        super(Type.PLAYER, START_LIVES);
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
         this.canDie = true;
-        this.lives = START_LIVES;
         this.name = name;
         this.luggage = new Luggage();
         this.facing = "RIGHT";
@@ -92,29 +90,6 @@ public class Player extends Object {
         return this.luggage;
     }
 
-    public int getLives () {
-        return this.lives;
-    }
-
-    public void setLives (int lives) {
-        this.lives = lives;
-    }
-
-    public void winOneLive () {
-        this.lives++;
-    }
-
-    public void LooseOneLive () {
-        this.lives--;
-    }
-
-    public boolean isCanDie() {
-        return canDie;
-    }
-
-    public void setCanDie(boolean canDie) {
-        this.canDie = canDie;
-    }
     public String getFacing() {
         return facing;
     }
