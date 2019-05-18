@@ -47,7 +47,6 @@ public class Map {
         generalInitialiser();
     }
 
-
     public void generalInitialiser(){
         for(Shape outline : level.outlines()) {
             mapRoot.getChildren().add(outline);
@@ -128,6 +127,7 @@ public class Map {
                 break;
         }
         addAnimatedObjects(enemy);
+        enemies.add (enemy);
         enemies.add (enemy);
     }
 

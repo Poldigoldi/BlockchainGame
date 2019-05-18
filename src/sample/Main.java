@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 
 public class Main extends Application {
@@ -177,6 +178,7 @@ public class Main extends Application {
             ListenerItemsEvent();
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
+            ListenerHackingAttack ();
             ListenerPlayerKillEnemy();
             ListenerButtons();
             UpdateAnimatedObjects();
@@ -346,8 +348,31 @@ public class Main extends Application {
         }
     }
 
-
     /* ----------- ENEMIES ------------ */
+    private void ListenerHackingAttack () {
+        // TODO: cannot cycle through enemies and add one to it, need to have hacking stored individualy in map
+        for (Enemy enemy : map.getEnemies ()) {
+            if (enemy instanceof HacKing) {
+                HacKing king = (HacKing) enemy;
+                if (king.isCanAttack ()) {
+                    switch (king.getAttackMode ()) {
+                        case 1:
+                            // new wave of enemy
+                            addRandomEnemy ();
+                            break;
+                        case 2:
+                            // send missiles
+                            Bullet bullet = new Bullet(king.getX() + 5, king.getY() + king.height / 4, true);
+                            map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
+                            bulletsFired.add(bullet);
+                            System.out.println ("MISSILES !!!!");
+                            break;
+                    }
+                    king.nextAttackMode ();
+                }
+            }
+        }
+    }
 
     private void ListenerEnemies() {
         for (Enemy enemy : map.getEnemies()) {
@@ -366,7 +391,6 @@ public class Main extends Application {
             }
         }
     }
-
     // Sends a new wave of enemy to the game every so often
     // New enemies are sent 1 by 1 (every second)
     // will keep going until there is more 10 enemies on the map
@@ -379,12 +403,12 @@ public class Main extends Application {
         }
     }
 
-    private void addRandomEnemy() {/*
+    private void addRandomEnemy() { /*
         // randomise position and behaviour of enemy created
-        int rand = new Random().nextInt(3);
-        map.addEnemy(rand);
-        Enemy newEnemy = map.getEnemies().get(map.getEnemies().size() - 1); //retrieve last enemy added
-        map.animatedObjects().add(newEnemy);*/
+        int rand = new Random ().nextInt(3);
+        map.addEnemy (rand);
+        Enemy newEnemy = map.getEnemies ().get (map.getEnemies ().size () - 1); //retrieve last enemy added
+        animatedObjects.add (newEnemy); */
     }
 
     /* ----------- BUTTONS ------------ */
@@ -547,5 +571,4 @@ public class Main extends Application {
 
 
 }
-
 
