@@ -81,7 +81,7 @@ public class Main extends Application {
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
-        initContent(2);
+        initContent(1);
         initialiseHealthbar();
     }
 
