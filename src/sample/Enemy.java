@@ -3,6 +3,7 @@ package sample;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Enemy extends Person {
@@ -12,7 +13,7 @@ public class Enemy extends Person {
     private int countMoveLeft;
     private int countMoveRight;
     private int limitMoves = 400;
-    private boolean print = false;
+    private boolean print = true;
 
     // Global variables
     private final int OFFSET = 5;
@@ -122,7 +123,7 @@ public class Enemy extends Person {
         /**
          @output: 'true' if there is a big gap that the enemy cannot jump without dying
          **/
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
             if ( (platform.getY () >= (getY () + height) )
                 && platform.getX () > getX ()
                 && platform.getX () < getX () + width + 2*platform.width) {
@@ -136,7 +137,7 @@ public class Enemy extends Person {
         /**
          @output: 'true' if there is a big gap that the enemy cannot jump without dying
          **/
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
             if ( (platform.getY () >= (getY () + height) )
                     && platform.getX () < getX ()
                     && platform.getX () > getX () - width - 2*platform.width) {
@@ -186,11 +187,17 @@ public class Enemy extends Person {
             and gap between is 1-2 platform length (condition 3, 4 and 5)
 
          **/
-        for (Object platform : map.getLevel ().platforms ()) {
+        // here we need to filter the array the other way
+        // in order to consider the platforms from right to left side of enemy
+        ArrayList<Platform> arr = map.getLevel ().platforms ();
+
+        for (int i=0; i<arr.size (); i++) {
+            Platform platform = arr.get (arr.size ()-1 - i);
             // case 1: enemy has no gap on his LEFT
-            if (platform.getX () <= getX ()
-                && platform.getX () >= getX () - 2 * platform.width
-                    && platform.getY () >= getY ()) {
+            if (platform.getX () < getX ()
+                && platform.getX () > platform.width + OFFSET
+                && platform.getX () > getX () - 2 * platform.width
+                && platform.getY () >= getY() + height) {
                 return false;
             }
             // case 2: enemy has a gap on his LEFT, small enough to jump
@@ -213,7 +220,7 @@ public class Enemy extends Person {
           * if a block is on LEFT, next to him (condition 2 and 3)
           * if the block is just above him (condition 4 and 5)
          */
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
             if (    getX () + width < map.getLevel ().width() - platform.width - OFFSET
                     && (platform.getX () > getX() + width)
                     && (platform.getX () <= getX() + width + OFFSET)
@@ -233,7 +240,7 @@ public class Enemy extends Person {
           * if a block is on LEFT, next to him (condition 2 and 3)
           * if the block is just above him (condition 4 and 5)
          */
-        for (Object platform : map.getLevel ().platforms ()) {
+        for (Platform platform : map.getLevel ().platforms ()) {
 
 
             if (    getX () > platform.width + OFFSET
@@ -255,7 +262,7 @@ public class Enemy extends Person {
          **/
         int rand = new Random ().nextInt(JUMP_PROBA_RANGE);
         if (rand != 1) {
-            for (Object p : map.getLevel ().platforms ()) {
+            for (Platform p : map.getLevel ().platforms ()) {
                 // only jump if there is a platform so he doesn't die
                 if (p.getY () > getY () + height) {
                     if (   (side == "RIGHT" && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
