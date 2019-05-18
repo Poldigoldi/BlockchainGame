@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane onKeyReleased="#spinWheel" prefHeight="640.0" prefWidth="960.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.KeyGameController">
+<AnchorPane fx:id="root" onKeyReleased="#spinWheel" prefHeight="640.0" prefWidth="960.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.KeyGameController">
    <children>
       <ImageView fitHeight="622.0" fitWidth="893.0" layoutX="43.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" scaleX="1.1" scaleY="1.03">
          <image>
@@ -168,7 +168,7 @@
             </Label>
          </children>
       </Group>
-      <Group fx:id="verify" layoutX="59.0" layoutY="-6.0" visible="false">
+      <Group fx:id="verify" layoutX="59.0" layoutY="-5.0" visible="false">
          <children>
             <HBox layoutX="104.0" layoutY="275.0" prefHeight="104.0" prefWidth="673.0">
                <children>
@@ -187,7 +187,7 @@
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="50.0" layoutX="35.0" layoutY="27.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="11.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="cPK1" prefHeight="95.0" prefWidth="147.0" style="-fx-background-color: #1fffec;">
+                  <AnchorPane fx:id="pPK" prefHeight="95.0" prefWidth="147.0" style="-fx-background-color: #1fffec;">
                      <children>
                         <AnchorPane layoutX="7.0" layoutY="9.0" prefHeight="86.0" prefWidth="131.0" style="-fx-border-color: green; -fx-border-width: 5; -fx-background-color: black;">
                            <children>
@@ -274,10 +274,33 @@
          </cursor>
       </Button>
       <Rectangle fx:id="signitureBounds" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="86.0" layoutX="407.0" layoutY="280.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="131.0" />
-      <Group layoutX="452.0" layoutY="159.0" visible="false">
+      <Group disable="true" layoutX="452.0" layoutY="159.0" visible="false">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#434343" height="435.0" layoutX="-205.0" layoutY="-54.0" stroke="BLACK" strokeType="INSIDE" width="464.0" />
+         </children>
+      </Group>
+      <Group fx:id="instructionPane">
+         <children>
+            <AnchorPane layoutX="71.0" layoutY="55.0" prefHeight="523.0" prefWidth="814.0" style="-fx-background-color: #770815;">
+               <children>
+                  <ImageView fitHeight="339.0" fitWidth="262.0" layoutX="56.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/minigameimages/privateKeyMa.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="instructions" fill="#ffcf00" fontSmoothingType="LCD" layoutX="309.0" layoutY="178.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="464.00000431891567">
+                     <font>
+                        <Font name="Courier New" size="26.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="pressEnter" layoutX="362.0" layoutY="472.0" prefHeight="28.0" prefWidth="409.0" text="Press Enter to continue..." textFill="#ffcf00" visible="false">
+                     <font>
+                        <Font name="Courier New" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children>
       </Group>
    </children>

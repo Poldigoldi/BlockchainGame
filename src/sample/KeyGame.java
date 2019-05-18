@@ -72,6 +72,7 @@ public class KeyGame extends Application {
         return timeline;
     }
 
+
     public void start(Stage primaryStage) throws Exception{
 
         s = new Scene(root, 960,640);

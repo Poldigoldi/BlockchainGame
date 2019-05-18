@@ -1,19 +1,21 @@
 package sample;
 
-import javafx.animation.Timeline;
+import javafx.animation.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -23,11 +25,9 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 
+import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class KeyGameController implements Initializable {
@@ -38,7 +38,10 @@ public class KeyGameController implements Initializable {
         private Group encryption;
 
         @FXML
-    Label hello;
+        AnchorPane root;
+
+        @FXML
+        Label hello;
 
         @FXML
         private Circle myCircle;
@@ -68,10 +71,19 @@ public class KeyGameController implements Initializable {
         private Group verify;
 
         @FXML
-        private AnchorPane cPK1;
+        private Group instructionPane;
+
+        @FXML
+        private AnchorPane pPK;
 
         @FXML
         private ImageView tickOrCross;
+
+        @FXML
+        Label pressEnter;
+
+        @FXML
+        private Text instructions;
 
         @FXML
         private Group signiture;
@@ -79,9 +91,13 @@ public class KeyGameController implements Initializable {
         @FXML
         private AnchorPane cPK;
 
+        private int instructionString = 1;
+
         double origTranslateX, origTranslateY, oringinalLocationX, oringinalLocationY, saveX, saveY, newTranslateX, newTranslateY;
 
         boolean added = false;
+
+        Timer timer;
 
         private Button insideButton;
 
@@ -104,13 +120,17 @@ public class KeyGameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        /*
+        text();
+
+
+
+
+
         myCircle.setStroke(Color.BLACK);
         Image alphabet = new Image("/graphics/minigameimages/images.jpg",false);
         myCircle.setFill(new ImagePattern(alphabet));
-        circleCentre = new Coordinate((int)myCircle.getCenterX(), (int)myCircle.getCenterY());*/
+        circleCentre = new Coordinate((int)myCircle.getCenterX(), (int)myCircle.getCenterY());
 
-        verify();
     }
 
     @FXML
@@ -206,6 +226,86 @@ public class KeyGameController implements Initializable {
    }
 
 
+   void text() {
+        ArrayList<String> messages = new ArrayList<>();
+       messages.add("Ahoy Chaps! You have entered the mysterious Block!");
+       messages.add("A block in a blockchain, is simply a piece of information or message.");
+       messages.add("These messages are extremely safe, and allow messages to be sent very secretly.");
+       messages.add("Like all secret messages, you must use a number or 'key' to change the original message to make it unreadable to other people.");
+       messages.add("The special thing about block chain is it uses 2 keys to make it extra safe!");
+       messages.add("I am a very, very secret key and only my owner (you) can ever know me.");
+       messages.add("This means if you want to send a secret message, you do not have to share your secret key with anyone else!");
+       messages.add("The other key is called a public key.... Hi Sally!");
+       messages.add("The public key, unlike me, is known to everyone. This means people can lock the message using your public key, and you can unlock it using your private key!");
+       messages.add("The public and and the private key together form a key pair to make keeping messages extra safe.");
+       messages.add("In this level, Clueso is tyring to send you a secret message that you can use as a password to the next level.");
+       messages.add("To make the message safe, Clueso has used your public key to encrypt the message.");
+       messages.add("This is usually done using special algorithms, but in this level you will use a wheel to decrypt the message.");
+       messages.add("You must use your private key to decrypt it!");
+       messages.add("Use left and right to move, and space to select the letter");
+
+       textAnimation(messages.get(0));
+
+
+       root.addEventHandler(KeyEvent.KEY_PRESSED, e ->
+       {
+         if (e.getCode()==KeyCode.ENTER) {
+
+             pressEnter.setVisible(false);
+             if (instructionString < messages.size()){
+                 textAnimation(messages.get(instructionString));
+                 instructionString++;
+             }
+
+             else if (!instructionPane.isVisible()) {
+                 instructionPane.setVisible(true);
+             }
+             else {
+                 instructionPane.setVisible(false);
+             }
+         }
+
+       });
+
+
+
+
+   }
+
+   boolean textAnimation(String s) {
+
+       //Media sound = new Media(new File("graphics/minigameimages/keyPress.mp3").toURI().toString());
+       //MediaPlayer mp = new MediaPlayer(sound);
+
+       IntegerProperty count = new SimpleIntegerProperty(0);
+       Timeline timeline = new Timeline();
+
+       KeyFrame kf = new KeyFrame(
+               Duration.seconds(0.05), e -> {
+           if (count.get() > s.length()) {
+               timeline.stop();
+               pressEnter.setVisible(true);
+
+           } else {
+               instructions.setText(s.substring(0, count.get()));
+               //mp.play();
+               count.set(count.get()+1);
+           }
+
+       }
+       );
+       timeline.getKeyFrames().add(kf);
+       timeline.setCycleCount(Animation.INDEFINITE);
+
+
+       timeline.play();
+       return false;
+
+   }
+
+
+
+
 
 
 
@@ -225,6 +325,7 @@ public class KeyGameController implements Initializable {
 
 
     void verify() {
+
 
         if (signiture.isVisible()) {
             signiture.setVisible(false);
@@ -263,55 +364,56 @@ public class KeyGameController implements Initializable {
         cPublicKey.setOnMouseReleased(buttonOnMouseReleasedEventHandler);
     }
 
+    class NextTask extends TimerTask {
+        public void run() {
+            verify();
+            timer.cancel();
+        }
+    }
+
     boolean checkBounds(int sceneX, int sceneY) {
 
         int acceptionBound = 10;
 
-     //   if (signiture.isVisible()) {
 
-           if((sceneX > (int)signitureBounds.getLayoutX()-acceptionBound  &&
-               sceneX < (int)signitureBounds.getLayoutX()+acceptionBound) ||
-              (sceneY > (int)signitureBounds.getLayoutY()-acceptionBound  &&
-               sceneY < (int)signitureBounds.getLayoutY()+acceptionBound)) {
-               return true;
+           if ((sceneX > (int)signitureBounds.getLayoutX()-acceptionBound  &&
+                sceneX < (int)signitureBounds.getLayoutX()+acceptionBound) ||
+               (sceneY > (int)signitureBounds.getLayoutY()-acceptionBound  &&
+                sceneY < (int)signitureBounds.getLayoutY()+acceptionBound)) {
+                return true;
            }
            return false;
 
-      //  }
-     //   return false;
 
-   /*     boolean checkBounds(int sceneX, int sceneY, int boundsX, int boundsY) {
-
-            int acceptionBound = 10;
-
-            if((sceneX > (int)signitureBounds.getLayoutX()-acceptionBound  &&
-                    sceneX < (int)signitureBounds.getLayoutX()+acceptionBound) ||
-                    (sceneY > (int)signitureBounds.getLayoutY()-acceptionBound  &&
-                            sceneY < (int)signitureBounds.getLayoutY()+acceptionBound)) {
-                return true;
-            }
-            return false;*/
     }
-
-
-
 
     @FXML
     void checker(Button source) {
 
-        if (source.equals(cPrivateKey)) {
+        if (source.equals(cPrivateKey) && signiture.isVisible()) {
             insideButton = null;
             cPK.setStyle("-fx-background-color: green");
-            Timeline t = new Timeline();
-            t.setOnFinished(e->verify());
-            t.setDelay(new Duration(900));
-            t.play();
+            pPK.setStyle("-fx-background-color: green");
+            timer = new Timer();
+            timer.schedule(new NextTask(), 1000);
+
+
+        }
+        else if (source.equals(pPublicKey) && signiture.isVisible()) {
 
         }
         else {
             added = true;
             cPK.setStyle("-fx-background-color: red");
+            pPK.setStyle("-fx-background-color: red");
         }
+
+    }
+
+    @FXML
+    void changeText() {
+
+
 
     }
 
@@ -325,7 +427,7 @@ public class KeyGameController implements Initializable {
                         oringinalLocationX = t.getSceneX();
                         oringinalLocationY = t.getSceneY();
                         saveX = ((Button)(t.getSource())).getLayoutX();
-                        saveY= ((Button)(t.getSource())).getLayoutY();
+                        saveY = ((Button)(t.getSource())).getLayoutY();
                         origTranslateX = ((Button)(t.getSource())).getTranslateX();
                         origTranslateY = ((Button)(t.getSource())).getTranslateY();
                     }
@@ -346,7 +448,6 @@ public class KeyGameController implements Initializable {
                         ((Button)(t.getSource())).setTranslateX(newTranslateX);
                         ((Button)(t.getSource())).setTranslateY(newTranslateY);
                     }
-
                 }
             };
 
@@ -377,7 +478,7 @@ public class KeyGameController implements Initializable {
                         insideButton = null;
                         ((Button)(t.getSource())).setTranslateX(0);
                         ((Button)(t.getSource())).setTranslateY(0);
-                        cPK.setStyle("-fx-background-color: #1fffec");
+                         cPK.setStyle("-fx-background-color: #1fffec");
                     }
                 }
             };
