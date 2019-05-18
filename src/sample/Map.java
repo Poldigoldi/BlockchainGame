@@ -49,7 +49,6 @@ public class Map {
         createLayer3Clouds();
         generalInitialiser();
         addEnemy (3);
-        addEnemy (2);
     }
 
     public void generalInitialiser(){
@@ -119,7 +118,7 @@ public class Map {
                 enemy = new Enemy (200, 100, true, 800, 100);
                 break;
             case 2: // Enemy stay more at top of map - anywhere
-                enemy = new Enemy (600, 500, false, 800, 10);
+                enemy = new Enemy (600, 500, true, 800, 10);
                 break;
             case 3:
                 enemy = new HacKing (300, 500);
