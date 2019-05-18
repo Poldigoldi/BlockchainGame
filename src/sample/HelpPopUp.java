@@ -19,7 +19,7 @@ class HelpPopUp {
         popUp.setTranslateX(posX);
         popUp.setTranslateY(posY);
         popUp.setDisable(true);
-        popUp.setMinSize(300,50);
+        popUp.setMinSize(350,50);
         popUp.setFont(Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16));
         popUp.setStyle("-fx-control-inner-background: #000000; -fx-text-inner-color: #39ff14; -fx-opacity: 0.8;");
     }
