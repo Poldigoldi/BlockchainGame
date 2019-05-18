@@ -59,7 +59,7 @@ public class Main extends Application {
 
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private Player player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, PLAYER_START_LIVES);
-    private ArrayList<Bullet> bulletsFired = new ArrayList<Bullet>();
+    private ArrayList<Bullet> bulletsFired = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -81,7 +81,7 @@ public class Main extends Application {
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
-        initContent(1);
+        initContent(2);
         initialiseHealthbar();
     }
 
@@ -165,7 +165,6 @@ public class Main extends Application {
             } else if (isPressed(KeyCode.D)) {
                 player.setFacingRight(true);
                 if (player.move_X(5, map)) moveScreenX(5);
-
             }
             if (isPressed(KeyCode.W)) {
                 player.jump();
@@ -182,10 +181,12 @@ public class Main extends Application {
             ListenerPlayerKillEnemy();
             ListenerButtons();
             UpdateAnimatedObjects();
-            ListenerGameOver();
             ListenerTimeBeforeNewEnemyWave();
             ListenerDoodads();
             ListenerHelpPopUp();
+        }
+        if (mode == Mode.PLATFORMGAME || mode == Mode.GAMEOVER) {
+            ListenerGameOver();
         }
     }
 
@@ -330,12 +331,13 @@ public class Main extends Application {
 
     private void ListenerPlayerKillEnemy() {
         // moves existing bullets
+        ArrayList<Bullet> deads = new ArrayList<> ();
         for (Bullet bullet: bulletsFired) {
             bullet.move(map);
             for (Enemy enemy : map.getEnemies()) {
                 if (bullet.isAlive() && enemy.isCanDie() && enemy.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
                     map.removeBullet(bullet);
-                    bulletsFired.remove(bullet);
+                    deads.add (bullet);
                     enemy.looseOneLife();
                     enemy.setCanDie(false);
                 } else {
@@ -346,32 +348,40 @@ public class Main extends Application {
                 }
             }
         }
+        bulletsFired.removeAll (deads);
     }
 
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack () {
-        // TODO: cannot cycle through enemies and add one to it, need to have hacking stored individualy in map
-        for (Enemy enemy : map.getEnemies ()) {
-            if (enemy instanceof HacKing) {
-                HacKing king = (HacKing) enemy;
-                if (king.isCanAttack ()) {
-                    switch (king.getAttackMode ()) {
-                        case 1:
-                            // new wave of enemy
-                            addRandomEnemy ();
-                            break;
-                        case 2:
-                            // send missiles
-                            Bullet bullet = new Bullet(king.getX() + 5, king.getY() + king.height / 4, true);
-                            map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
-                            bulletsFired.add(bullet);
-                            System.out.println ("MISSILES !!!!");
-                            break;
-                    }
-                    king.nextAttackMode ();
-                }
-            }
+        HacKing king = map.getKing ();
+        if (king == null) {
+            System.out.println ("king null pointer");
+            return;
         }
+        if (king.isCanAttack ()) {
+            switch (king.getAttackMode ()) {
+                case 1:
+                    // new wave of enemy
+                    System.out.println ("ATTACK 1");
+                    map.addRandomEnemy ();
+                    break;
+                case 2:
+                    // send missiles
+                    System.out.println ("ATTACK 2");
+                    shootOneBullet (king, true);
+                    shootOneBullet (king, false);
+                    break;
+            }
+            king.nextAttackMode ();
+        }
+    }
+
+    private void shootOneBullet (Object shooter, boolean shootRight) {
+        double directionX = shooter.getX() - 5;
+        if (shootRight) { directionX += shooter.width + 10; }
+        Bullet bullet = new Bullet(directionX - 20, shooter.getY() + shooter.height / 4, shootRight);
+        map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
+        bulletsFired.add(bullet);
     }
 
     private void ListenerEnemies() {
@@ -395,20 +405,14 @@ public class Main extends Application {
     // New enemies are sent 1 by 1 (every second)
     // will keep going until there is more 10 enemies on the map
     private void ListenerTimeBeforeNewEnemyWave() {
-        timeCounter++;
-        int WAVE_SIZE = 3;
-        if (map.getEnemies().size() < 10) {
-            if (timeCounter >= TIME_LIMIT && timeCounter % 60 == 0) addRandomEnemy();
-            if (timeCounter > TIME_LIMIT + WAVE_SIZE * 60) timeCounter = 0;
+        if (map.getCurrentLevel () == 1) {
+            timeCounter++;
+            int WAVE_SIZE = 3;
+            if (map.getEnemies().size() < 10) {
+                if (timeCounter >= TIME_LIMIT && timeCounter % 60 == 0) map.addRandomEnemy();
+                if (timeCounter > TIME_LIMIT + WAVE_SIZE * 60) timeCounter = 0;
+            }
         }
-    }
-
-    private void addRandomEnemy() { /*
-        // randomise position and behaviour of enemy created
-        int rand = new Random ().nextInt(3);
-        map.addEnemy (rand);
-        Enemy newEnemy = map.getEnemies ().get (map.getEnemies ().size () - 1); //retrieve last enemy added
-        animatedObjects.add (newEnemy); */
     }
 
     /* ----------- BUTTONS ------------ */

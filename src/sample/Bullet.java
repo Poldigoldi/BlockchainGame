@@ -6,16 +6,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Bullet extends Object {
-    int frame = 0;
-    final int SPEED_MAGNITUDE = 6;
-    final boolean playerFacingRight;
-    Label label = new Label("01010");
+
+    // GLOBAL VARIABLES
+    private final int WIDHT = 20;
+    private final int HEIGHT = 15;
+    private final int SPEED_MAGNITUDE = 6;
+    private final boolean playerFacingRight;
+
+    private int frame = 0;
+    private Label label = new Label("01010");
     private String style = "  -fx-background-color: rgba(0,0,0,0.5);  -fx-text-fill: #39ff14;";
-    Font font = Font.font("Verdana", 8);
+    private Font font = Font.font("Verdana", 8);
 
     Bullet (double startx, double starty, boolean facingRight) {
         super(Type.BULLET, new Frame("/graphics/item1.png"));
-        setCollisionBox (startx, starty, 20, 15, Color.BLACK);
+        setCollisionBox (startx, starty, WIDHT, HEIGHT, Color.BLACK);
         this.playerFacingRight = facingRight;
         label.setStyle(style);
         label.setFont(font);
@@ -48,5 +53,14 @@ public class Bullet extends Object {
         if(x==0 || x==1) return "0";
         if(x==3 || x==4) return "1";
         return " ";
+    }
+
+
+    public int getWIDHT() {
+        return WIDHT;
+    }
+
+    public int getHEIGHT() {
+        return HEIGHT;
     }
 }
