@@ -20,7 +20,7 @@ public class HacKing extends Enemy {
 
     // Constructor
     public HacKing (int startx, int starty) {
-        super (startx, starty, true,  500, 50);
+        super (startx, starty, false,  500, 50);
         this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
         setLives (MAX_LIVES);
         this.attack_mode = 1;

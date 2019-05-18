@@ -354,6 +354,10 @@ public class Main extends Application {
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack () {
         HacKing king = map.getKing ();
+        if (king == null) {
+            System.out.println ("king null pointer");
+            return;
+        }
         if (king.isCanAttack ()) {
             switch (king.getAttackMode ()) {
                 case 1:
@@ -364,13 +368,20 @@ public class Main extends Application {
                 case 2:
                     // send missiles
                     System.out.println ("ATTACK 2");
-                    Bullet bullet = new Bullet(king.getX() + king.width + 5, king.getY() + king.height / 4, true);
-                    map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
-                    bulletsFired.add(bullet);
+                    shootOneBullet (king, true);
+                    shootOneBullet (king, false);
                     break;
             }
             king.nextAttackMode ();
         }
+    }
+
+    private void shootOneBullet (Object shooter, boolean shootRight) {
+        double directionX = shooter.getX() - 5;
+        if (shootRight) { directionX += shooter.width + 10; }
+        Bullet bullet = new Bullet(directionX - 20, shooter.getY() + shooter.height / 4, shootRight);
+        map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
+        bulletsFired.add(bullet);
     }
 
     private void ListenerEnemies() {
