@@ -58,7 +58,7 @@ public class Main extends Application {
     private GameMenu gameMenu;
     private InstructionScreen instructionScreen;
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
-    private Player player = new Player("Hero", PLAYERSTARTX, PLAYERSTARTY, PLAYER_START_LIVES);
+    private Player player;
     private ArrayList<Bullet> bulletsFired = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -77,6 +77,7 @@ public class Main extends Application {
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
         //PREPARE ROOT NODES FROM DIFFERENT CLASSES
+        player =  new Player("Hero", WIDTH/2, HEIGHT/2, PLAYER_START_LIVES);
         keyPad = new KeyPad(WIDTH, HEIGHT);
         gameOver = new GameOver(WIDTH, HEIGHT);
         gameMenu = new GameMenu(WIDTH, HEIGHT);
@@ -214,9 +215,9 @@ public class Main extends Application {
 
     //updates the screen X based on player position
     private void moveScreenX(int movement) {
-        stage.setTitle(WIDTH + "");
-        if (player.getX() > WIDTH/2 + 40 && player.getX() < map.level().width() - WIDTH / 2 + 40) {
-            map.mapRoot().setTranslateX(map.level().width() - player.getX() - 0.5*WIDTH - 200);
+        stage.setTitle(map.level().width() +"");
+        if (player.getX() > WIDTH/2 + 5 && player.getX() < map.level().width() - WIDTH / 2) {
+            map.mapRoot().setTranslateX(-player.getX()+0.5*WIDTH);
             counter++;
             //this moves everything in the screen with the character
 
@@ -229,13 +230,13 @@ public class Main extends Application {
                 for (Object object : map.animatedObjects())
                     if (object.type == Type.LAYER4) object.setX(object.getX() - movement / 5);
                 counter = 0;
-            }
+           }
         }
     }
 
     //updates the screen Y based on player position
     private void moveScreenY() {
-        if (player.getY() > HEIGHT / 2 + 40 && player.getY() < map.level().height() - HEIGHT / 2 + 40) {
+        if (player.getY() > HEIGHT / 2 + 40 && player.getY() < map.level().height() - HEIGHT / 2 + 12) {
             map.mapRoot().setTranslateY(-player.getY() + HEIGHT / 2);
         }
         /*
@@ -478,7 +479,7 @@ public class Main extends Application {
     private boolean isObjectOutOfBounds(Object object) {
         if (object.getY() > map.level().height()
                 || object.getX() >= map.level().width() - map.level().getOBJ_WIDTH()
-                || object.getX() < map.level().getOBJ_WIDTH()) {
+                || object.getX() < 0) {
             return true;
         }
         return false;
