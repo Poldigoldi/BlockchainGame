@@ -46,7 +46,7 @@ public class Grid {
           "444440000000005550004",
           "4000013000001300800004",
           "4000000001300001223004",
-          "4000000000001300000004",
+          "400MOV0000001300000004",
           "4444444400400000130004",
           "4000000066600000000004",
           "400004400000040#004444",
@@ -94,6 +94,12 @@ public class Grid {
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
           platforms.add(platform);
         }
+        if (value == 'M' || value == 'O' || value == 'V') {
+          Platform platform = new Platform(Type.PLATFORM, 200, x, y, OBJ_WIDTH, platformleft);
+          if (value == 'O') platform = new Platform(Type.PLATFORM, 200, x+OBJ_WIDTH, y,  OBJ_WIDTH, platformmiddle);
+          if (value == 'V') platform = new Platform(Type.PLATFORM, 200, x+2*OBJ_WIDTH, y,  OBJ_WIDTH,  platformright);
+          platforms.add(platform);
+        }
         if (value == '5'){
          Platform platform = new Platform(Type.PLATFORM,"orange");
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
@@ -118,16 +124,16 @@ public class Grid {
           outlines.add(outline);
           platforms.add(platform);
         }
-          if (value == '7') {
-            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", buttonUp, buttonDown);
-            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
-            buttons.add(button);
-          }
-          if (value == '8') {
-            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", buttonUpRed, buttonDown);
-            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
-            buttons.add(button);
-          }
+        if (value == '7') {
+          PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", buttonUp, buttonDown);
+          button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
+          buttons.add(button);
+        }
+        if (value == '8') {
+          PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", buttonUpRed, buttonDown);
+          button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
+          buttons.add(button);
+        }
         x++;
       }
     }

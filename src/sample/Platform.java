@@ -1,13 +1,16 @@
 package sample;
 
+import javafx.animation.AnimationTimer;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
 
 
-public class Platform extends Object{
+public class Platform extends Object {
   private boolean canDisappear = false;
   private String colour;
   private ArrayList<Integer> collisionValues = new ArrayList<>();
@@ -34,6 +37,34 @@ public class Platform extends Object{
             new Frame("/graphics/orangePlatform3.png"),
             new Frame("/graphics/orangePlatform2.png"));
   }
+
+  public Platform(Type type, int movement, double currentX, double currentY, int obj_width, Frame... frame) {
+    super(type, frame);
+    isMoving = true;
+    alive = true;
+      setCollisionBox(currentX * obj_width, currentY * 64, obj_width, 10, Color.GREEN);
+      new AnimationTimer() {
+          boolean direction = true;
+          int i = 0;
+          public void handle(long now) {
+              if (direction) {
+                  i += 2;
+              }
+              if (!direction) {
+                  i -= 2;
+              }
+              if (i >= movement) {
+                  direction = false;
+              }
+              if (i <= 0) {
+                  direction = true;
+              }
+              double newX = currentX + i;
+              box.setTranslateX(newX);
+          }
+      }.start();
+  }
+
 
   public void setCollisionValues(int x, int y, int width, int height) {
     if (canDisappear == true) {

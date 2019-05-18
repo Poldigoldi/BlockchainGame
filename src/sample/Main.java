@@ -174,6 +174,7 @@ public class Main extends Application {
             healthbar.setX(-map.mapRoot().getTranslateX()+50);
             healthbar.setY(-map.mapRoot().getTranslateY()+50);
             ListenerEnemies();
+            MovePlatforms();
             ListenerItemsEvent();
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
@@ -188,6 +189,10 @@ public class Main extends Application {
         if (mode == Mode.PLATFORMGAME || mode == Mode.GAMEOVER) {
             ListenerGameOver();
         }
+    }
+
+    private void MovePlatforms() {
+
     }
 
     /*Use this method if you want to change the content and position of the popup*/

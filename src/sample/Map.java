@@ -195,7 +195,7 @@ public class Map {
 
     private void addAnimatedPlatforms(){
       for(Platform platform : level.platforms()){
-        if (platform.getColour() != null){
+        if (platform.getColour() != null || platform.isMoving){
           animatedObjects.add(platform);
         }
       }
