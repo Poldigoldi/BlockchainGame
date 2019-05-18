@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.scene.paint.Color;
-
  /*
       This class creates user intractable button objects
       they have a value of if pressed or not

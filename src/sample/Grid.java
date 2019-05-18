@@ -13,9 +13,12 @@ public class Grid {
 
       # Elements #
       0 -> nothing
-      1,2,3,4 -> platform
-      5 -> dynamic platform
-      6 -> interactive button
+      1,2,3 -> platform
+      4 -> Block
+      5 -> dynamic platform ORANGE
+      6 -> dynamic platform RED
+      7 -> interactive button ORANGE
+      8 -> interactive button RED
       MV -> Moving Platform
 
       # Constructor #
@@ -41,27 +44,35 @@ public class Grid {
   String [] map;
 
   private String[] map1 = new String[]{
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "000000000000MV00000000000",
-          "0050607080000000000000000",
-          "1111111222022233333333000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
-          "0000000000000000000000000",
+          "4000000000000000000000004",
+          "4000000000000000000000004",
+          "4000000000000000000000004",
+          "4000000000000000000000004",
+          "400000000000000MV00004444",
+          "4000000000000000000000004",
+          "4000012300000000000000004",
+          "4000000000000000000000004",
+          "400000000000MV00000000004",
+          "4444400000000000000000004",
+          "4000000000000000000004444",
+          "400000000MV00000000000004",
+          "4000000000000000000550004",
+          "4006600000000000000000004",
+          "40000000007080000000000004",
+          "4000000012312300004444444",
+          "4000550000000000004000004",
+          "4000000000000000004000084",
+          "4000000000000000004000044",
+          "4012300000000000004555444",
+          "4000000000000000000000004",
+          "4000000000MV0000000000004",
+          "4000000000000000000000004",
+          "40000000000000000000MV004",
+          "4000000000000000000000004",
+          "40000000MV000000000000004",
           "4000000000000000000000004",
           "4444444444444444444444444"
+
   };
 
   private String[] map2 = new String[]{
@@ -103,11 +114,6 @@ public class Grid {
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
           platforms.add(platform);
         }
-        if (value == 'M' || value == 'V') {
-          Platform platform = new Platform(Type.PLATFORM, 400, x, y, OBJ_WIDTH, platformleft);
-          if (value == 'V') platform = new Platform(Type.PLATFORM, 400, x+OBJ_WIDTH, y, OBJ_WIDTH, platformright);
-          platforms.add(platform);
-        }
         if (value == '5'){
          Platform platform = new Platform(Type.PLATFORM,"orange");
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
@@ -142,6 +148,16 @@ public class Grid {
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
             buttons.add(button);
           }
+        if (value == 'M') {
+          Platform platform = new Platform(Type.PLATFORM, 400, platformleft);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+          platforms.add(platform);
+        }
+        if (value == 'V') {
+          Platform platform = new Platform(Type.PLATFORM, 400, platformright);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+          platforms.add(platform);
+        }
         x++;
       }
     }
