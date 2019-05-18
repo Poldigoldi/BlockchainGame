@@ -108,7 +108,7 @@ public class Main extends Application {
         map.addPlayer(player, PLAYERSTARTX, PLAYERSTARTY);
         /*Initialise help pop up*/
         try {
-            helpPopUp = new HelpPopUp("Press 'E' to open door", WIDTH - 400, HEIGHT - 70);
+            helpPopUp = new HelpPopUp("Press 'E' to open terminal", WIDTH - 400, HEIGHT - 70);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -245,9 +245,12 @@ public class Main extends Application {
     }
 
     private void ListenerHelpPopUp() {
-        if (map.getCurrentLevel() == 1 && player.getX() > 1270 && player.getY() == 644) {
+        if (map.inRangeOfTerminal(player.getX(), player.getY())) {
             helpPopUp.setVisible(true);
-        } else helpPopUp.setVisible(false);
+        }
+        else {
+            helpPopUp.setVisible(false);
+        }
     }
 
 

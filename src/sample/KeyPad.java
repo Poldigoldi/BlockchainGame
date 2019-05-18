@@ -101,6 +101,7 @@ public class KeyPad {
         keyPad.setVgap(10);
 
         root.getChildren().addAll(backgroundView, keyPad);
+
     }
 
     Group getRoot() {
