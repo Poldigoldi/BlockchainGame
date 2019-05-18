@@ -159,14 +159,14 @@ public class Main extends Application {
         if (mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
-            if (isPressed(KeyCode.A)) {
+            if (isPressed(KeyCode.LEFT)) {
                 player.setFacingRight(false);
                 if (player.move_X(-5, map)) moveScreenX(-5);
-            } else if (isPressed(KeyCode.D)) {
+            } else if (isPressed(KeyCode.RIGHT)) {
                 player.setFacingRight(true);
                 if (player.move_X(5, map)) moveScreenX(5);
             }
-            if (isPressed(KeyCode.W)) {
+            if (isPressed(KeyCode.SPACE)) {
                 player.jump();
             }
 
@@ -315,13 +315,13 @@ public class Main extends Application {
     private void ListenerPlayerUseWeapon() {
         if (player.hasWeapon()) {
             // If player allowed to use weapon and has bullets left
-            if (isPressed(KeyCode.SPACE) && player.canUseWeapon()) {
+            if (isPressed(KeyCode.W) && player.canUseWeapon()) {
                 shootOneBullet (player, player.isFacingRight ());
                 player.getLuggage().getWeapon().looseOneBullet();
                 player.getLuggage().getWeapon().setCanShoot(false);
             }
             // User can only shoot 1 bullet when press key (un-press & press again to shoot)
-            if (!isPressed(KeyCode.SPACE)) {
+            if (!isPressed(KeyCode.W)) {
                 player.getLuggage().getWeapon().setCanShoot(true);
             }
         }
@@ -346,10 +346,14 @@ public class Main extends Application {
         for (Bullet bullet: bulletsFired) {
             bullet.move(map);
             for (Enemy enemy : map.getEnemies ()) {
+                // if Hacking shooting, his bullets won't hurt the enemies
                 if (!bullet.isPlayerShooting ()) {
                     waitsSomeoneHitBullet (bullet, player);
                 }
-                waitsSomeoneHitBullet (bullet, enemy);
+                // if player shooting, his bullets wont hurt himself
+                else {
+                    waitsSomeoneHitBullet (bullet, enemy);
+                }
             }
 
         }
