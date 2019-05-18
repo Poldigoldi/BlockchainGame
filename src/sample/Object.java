@@ -152,6 +152,12 @@ public class Object  {
                             if(isLanded==false && (this.type == Type.PLAYER ||this.type == Type.ENEMY)) landSound.play();
                             canJump = true;
                             isLanded = true;
+                            if (object.isMoving && object.isMovingRight()) {
+                                setX(getX() + 2);
+                            }
+                            else if (object.isMoving && !object.isMovingRight()) {
+                                setX(getX() - 2);
+                            }
                             return;
                         }
                     } else { // Moving up

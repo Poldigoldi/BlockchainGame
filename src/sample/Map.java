@@ -197,13 +197,13 @@ public class Map {
 
     private void addAnimatedPlatforms(){
       for(Platform platform : level.platforms()){
-        if (platform.getColour() != null){
+        if (platform.getColour() != null || platform.isMoving){
           animatedObjects.add(platform);
         }
       }
     }
 
-    //Nick's functions for making the background graphics
+//Nick's functions for making the background graphics
 
     private void createLayer3Clouds(){
         Object cloud = new Object(Type.LAYER3, new Frame("/graphics/clouds1.png"));

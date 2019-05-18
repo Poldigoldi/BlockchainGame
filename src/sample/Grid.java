@@ -102,6 +102,11 @@ public class Grid {
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
           platforms.add(platform);
         }
+        if (value == 'M' || value == 'V') {
+          Platform platform = new Platform(Type.PLATFORM, 400, x, y, OBJ_WIDTH, platformleft);
+          if (value == 'V') platform = new Platform(Type.PLATFORM, 400, x+OBJ_WIDTH, y, OBJ_WIDTH, platformright);
+          platforms.add(platform);
+        }
         if (value == '5'){
          Platform platform = new Platform(Type.PLATFORM,"orange");
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.DARKORANGE);
