@@ -178,7 +178,7 @@ public class Main extends Application {
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
             ListenerHackingAttack ();
-            ListenerPlayerKillEnemy();
+            ListenerBullets ();
             ListenerButtons();
             UpdateAnimatedObjects();
             ListenerTimeBeforeNewEnemyWave();
@@ -288,7 +288,7 @@ public class Main extends Application {
                     collision++;
                     // Waits that player moves out from the enemy to loose another life
                     if (player.isCanDie()) {
-                        player.LooseOneLive();
+                        player.looseOneLife();
                         player.setCanDie(false);
                     }
                     if(player.getLives()==3){
@@ -327,22 +327,31 @@ public class Main extends Application {
         }
     }
 
-    private void ListenerPlayerKillEnemy() {
+    private void waitsSomeoneHitBullet (Bullet bullet, Person person) {
+
+        if ( person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
+            map.removeBullet(bullet);
+            person.looseOneLife();
+            person.setCanDie(false);
+        } else {
+            person.setCanDie(true);
+        }
+        if (person.getLives() == 0) {
+            person.setAlive(false);
+        }
+    }
+
+    private void ListenerBullets() {
         // moves existing bullets
         for (Bullet bullet: bulletsFired) {
             bullet.move(map);
-            for (Enemy enemy : map.getEnemies()) {
-                if (bullet.isAlive() && enemy.isCanDie() && enemy.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
-                    map.removeBullet(bullet);
-                    enemy.looseOneLife();
-                    enemy.setCanDie(false);
-                } else {
-                    enemy.setCanDie(true);
+            for (Enemy enemy : map.getEnemies ()) {
+                if (!bullet.isPlayerShooting ()) {
+                    waitsSomeoneHitBullet (bullet, player);
                 }
-                if (enemy.getLives() == 0) {
-                    enemy.setAlive(false);
-                }
+                waitsSomeoneHitBullet (bullet, enemy);
             }
+
         }
         bulletsFired.removeIf (bullet -> !bullet.isAlive ());
     }
@@ -350,19 +359,16 @@ public class Main extends Application {
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack () {
         HacKing king = map.getKing ();
-        if (king == null) {
-            return;
-        }
+        if (king == null) { return; }
+
         if (king.isCanAttack ()) {
             switch (king.getAttackMode ()) {
                 case 1:
                     // new wave of enemy
-                    System.out.println ("ATTACK 1");
                     map.addRandomEnemy ();
                     break;
                 case 2:
                     // send missiles in both directions
-                    System.out.println ("ATTACK 2");
                     shootOneBullet (king, true);
                     shootOneBullet (king, false);
                     break;
@@ -372,13 +378,14 @@ public class Main extends Application {
     }
 
     private void shootOneBullet (Object shooter, boolean shootRight) {
+        boolean isPlayerShooter = shooter instanceof Player;
         final int BULLET_WIDTH = 20;
         final int OFFSET = 5;
         double directionX = shooter.getX() - BULLET_WIDTH - OFFSET;
         if (shootRight) {
             directionX += shooter.width + BULLET_WIDTH + 2 * OFFSET;
         }
-        Bullet bullet = new Bullet(directionX, shooter.getY() + shooter.height / 4, shootRight);
+        Bullet bullet = new Bullet(directionX, shooter.getY() + shooter.height / 4, shootRight, isPlayerShooter);
         map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
         bulletsFired.add(bullet);
     }
