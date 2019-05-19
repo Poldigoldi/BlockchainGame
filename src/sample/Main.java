@@ -106,7 +106,7 @@ public class Main extends Application {
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
-        initContent(1);
+        initContent(2);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
 
@@ -339,7 +339,7 @@ public class Main extends Application {
 
     private void ListenerPlayerLives() {
         int collision = 0;
-        for (Enemy enemy : map.getEnemies()) {
+        for (Person enemy : map.getEnemies()) {
             if (enemy.isAlive()) {
                 if (player.box.getBoundsInParent().intersects(enemy.box.getBoundsInParent())) {
                     collision++;
@@ -396,7 +396,7 @@ public class Main extends Application {
         // moves existing bullets
         for (Bullet bullet: bulletsFired) {
             bullet.move(map);
-            for (Enemy enemy : map.getEnemies ()) {
+            for (Person enemy : map.getEnemies ()) {
                 // if Hacking shooting, his bullets won't hurt the enemies
                 if (!bullet.isPlayerShooting ()) {
                     waitsSomeoneHitBullet (bullet, player);
@@ -406,7 +406,6 @@ public class Main extends Application {
                     waitsSomeoneHitBullet (bullet, enemy);
                 }
             }
-
         }
         bulletsFired.removeIf (bullet -> !bullet.isAlive ());
     }
@@ -420,6 +419,7 @@ public class Main extends Application {
             switch (king.getAttackMode ()) {
                 case 1:
                     // new wave of enemy
+                    map.addRandomEnemy ();
                     map.addRandomEnemy ();
                     break;
                 case 2:
@@ -446,14 +446,14 @@ public class Main extends Application {
     }
 
     private void ListenerEnemies() {
-        for (Enemy enemy : map.getEnemies()) {
+        for (Person enemy : map.getEnemies()) {
             // check if enemy died
             if(enemy.isAlive()){
                 if (isObjectOutOfBounds(enemy)) {
                     enemy.setAlive(false);
                 }
-                if (enemy.getCanMove()) {
-                    enemy.giveMotion(map);
+                if (enemy instanceof Enemy && ((Enemy)enemy).getCanMove()) {
+                    ((Enemy)enemy).giveMotion(map);
                 }
             }
             if (enemy.sprite.dead()){
