@@ -7,12 +7,13 @@ import java.util.ArrayList;
 
 
 public class Platform extends Object {
-  private boolean canDisappear = false;
+  private boolean disappearing = false;
   private String colour;
   private boolean timed = false;
   private ArrayList<Integer> collisionValues = new ArrayList<>();
   private boolean movingRight = true;
-  int collisionCount = 0;
+  private int updateCount;
+  int activateDisappear = 0;
   boolean resetWait = true;
 
 
@@ -72,6 +73,10 @@ public class Platform extends Object {
       }.start();
   }
 
+  public void calculateUpdate(int updateCount) {
+      this.updateCount = updateCount + 50;
+  }
+
 
   public void setCollisionValues(int x, int y, int width, int height) {
       collisionValues.add(x);
@@ -85,13 +90,15 @@ public class Platform extends Object {
     setCollisionBox(collisionValues.get(0), collisionValues.get(1), collisionValues.get(2), collisionValues.get(3), Color.DARKORANGE);
   }
 
+  public boolean disappearing(){return disappearing;}
+
 
   public void setDisappear(boolean disappear) {
-    this.canDisappear = disappear;
+    this.disappearing = disappear;
   }
 
   public boolean canDisappear() {
-    return this.canDisappear;
+    return this.disappearing;
   }
 
   public String getColour() {
@@ -103,6 +110,15 @@ public class Platform extends Object {
     }
 
     public boolean isTimed() {return timed;}
+
+    public boolean matchUpdate(int updateCount) {
+      if (this.updateCount == updateCount) return true;
+      return false;
+    }
+
+    public Integer getUpdateCount() {
+      return updateCount;
+    }
 
 
 }

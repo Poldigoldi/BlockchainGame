@@ -70,6 +70,7 @@ public class Main extends Application {
     private Player player;
     private ArrayList<Bullet> bulletsFired = new ArrayList<>();
     private Font font;
+    private int updateCount = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -187,6 +188,7 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
+        updateCount ++;
         stage.setTitle(player.getLives() +"");
 
         if (keyPad.isCodeCorrect()) {
@@ -504,45 +506,25 @@ public class Main extends Application {
     /* ----------- PLATFORMS ------------ */
     private void ListenerPlatforms() {
         for (Platform platform : map.getLevel().platforms()) {
-            if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && platform.collisionCount == 0) {
-                if (platform.isTimed() == true) {
-                    System.out.println("here");
-                    platform.collisionCount += 1;
-                    Frame frame = new Frame("/graphics/orangePlatform4.png");
-                    platform.sprite.setImage(frame);
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-
-                        @Override
-                        public void run() {
-                            platform.setCollisionBox(0, 0, 0, 0, Color.RED);
-                            platform.setAlive(false);
-                            timer.cancel();
-                            timer.purge();
-                        }
-                    }, 2000);
+            if (platform.isTimed() == true) {
+                if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && !platform.disappearing()) {
+                    platform.setDisappear(true);
+                    platform.sprite.setImage(new Image("/graphics/orangePlatform4.png"));
+                    platform.calculateUpdate(updateCount);
                 }
 
-
-            }
-            if (platform.isAlive() == false && platform.isTimed() == true && platform.resetWait == true) {
-                platform.resetWait = false;
-                platform.setAlive(true);
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-
-                    @Override
-                    public void run() {
-                        platform.setAlive(true);
-                        platform.restoreCollisionBox();
-                        Frame frame = new Frame("/graphics/orangePlatform1.png");
-                        platform.sprite.setImage(frame);
-                        platform.resetWait = true;
-                        platform.collisionCount = 0;
-                        timer.cancel();
-                        timer.purge();
-                    }
-                }, 2000);
+                if (platform.disappearing() && platform.matchUpdate(updateCount)) {
+                    System.out.println("here");
+                    platform.setAlive(false);
+                    platform.setDisappear(false);
+                    platform.setCollisionBox(0, 0, 0, 0, Color.RED);
+                    platform.calculateUpdate(updateCount);
+                }
+                if (platform.isAlive() == false && platform.matchUpdate(updateCount)) {
+                    platform.setAlive(true);
+                    platform.sprite.setImage(new Image("/graphics/orangePlatform1.png"));
+                    platform.restoreCollisionBox();
+                }
             }
         }
     }
