@@ -78,6 +78,9 @@ class InfoBar {
 
     void updateWeapon(boolean hasWeapon){
         if(hasWeapon) power1.sprite.setdefaultanimationchoice(2);
+        else {
+            power1.sprite.setdefaultanimationchoice(1);
+        }
     }
 
 
