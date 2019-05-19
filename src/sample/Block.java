@@ -2,7 +2,7 @@ package sample;
 
 
 /* An item is an object with extra methods*/
-public class Block extends Collectable {
+class Block extends Collectable {
     private final String name;
 
     Block (String name) {
@@ -17,5 +17,4 @@ public class Block extends Collectable {
                                     new Frame("/graphics/item6.png"));
         setItemType (Type.BLOCK);
     }
-
 }

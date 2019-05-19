@@ -32,7 +32,7 @@ public class Bullet extends Object {
 
     public Label label(){ return label; }
 
-    public void move (Map map) {
+    void move(Map map) {
         label.setTranslateX(box.getTranslateX());
         label.setTranslateY(box.getTranslateY()-5);
         int speed = (playerFacingRight ? 1 : -1) * SPEED_MAGNITUDE;
@@ -66,7 +66,7 @@ public class Bullet extends Object {
         return HEIGHT;
     }
 
-    public boolean isPlayerShooting() {
+    boolean isPlayerShooting() {
         return isPlayerShooting;
     }
 }

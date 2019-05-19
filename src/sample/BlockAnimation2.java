@@ -1,26 +1,14 @@
 package sample;
 
-
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.awt.event.ActionEvent;
-import java.sql.Time;
 
 public class BlockAnimation2  {
-
-
-
     public void start(Group bridge) {
-
-
         final ImageView bridge1 = new ImageView("graphics/minigameimages/animation/message1.png");
         bridge1.setFitWidth(400);
         bridge1.setPreserveRatio(true);
@@ -41,9 +29,6 @@ public class BlockAnimation2  {
         bridge5.setFitWidth(400);
         bridge5.setPreserveRatio(true);
         bridge5.setSmooth(true);
-
-
-
 
         Timeline tl = new Timeline();
         tl.setCycleCount(1);
@@ -69,15 +54,6 @@ public class BlockAnimation2  {
             bridge.getChildren().setAll(bridge5);
         }
         ));
-
-
         tl.play();
-
-
-
-
     }
-
-
-
 }
