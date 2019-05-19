@@ -37,7 +37,7 @@ public class Object  {
     public int height;
     boolean canJump = true;
     Point2D Velocity = new Point2D(0,0);
-    private boolean facingRight;
+    public boolean facingRight;
     boolean movingDown;
     boolean isMoving;
     boolean isLanded;

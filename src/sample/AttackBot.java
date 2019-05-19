@@ -12,10 +12,10 @@ public class AttackBot extends Object {
 
     public AttackBot(Type type, Frame ... frame) {
         super(type);
-        sprite.loadDefaultImages(new Frame("/graphics/attackbot1.png", 8),
+        sprite.loadDefaultImages(new Frame("graphics/attackbot1.png", 8),
                 new Frame("/graphics/attackbot2.png", 9),
                 new Frame("/graphics/attackbot3.png", 10),
-                new Frame("/graphics/attackbot4.png.", 11),
+                new Frame("/graphics/attackbot4.png", 11),
                 new Frame("/graphics/attackbot5.png", 10),
                 new Frame("/graphics/attackbot4.png", 9),
                 new Frame("/graphics/attackbot3.png", 8),
@@ -23,7 +23,7 @@ public class AttackBot extends Object {
         sprite.loadDefault2Images(new Frame("/graphics/attackbotright1.png", 8),
                 new Frame("/graphics/attackbotright2.png", 9),
                 new Frame("/graphics/attackbotright3.png", 10),
-                new Frame("/graphics/attackbotright4.png.", 11),
+                new Frame("/graphics/attackbotright4.png", 11),
                 new Frame("/graphics/attackbotright5.png", 10),
                 new Frame("/graphics/attackbotright4.png", 9),
                 new Frame("/graphics/attackbotright3.png", 8),
