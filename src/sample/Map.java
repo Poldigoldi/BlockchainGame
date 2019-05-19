@@ -140,7 +140,7 @@ public class Map {
                 enemy = new Enemy (600, 500, true, 800, 10);
                 break;
             case 3:
-                enemy = new HacKing (300, 500);
+                enemy = new HacKing (700, 450);
                 this.king = (HacKing) enemy;
                 break;
             default: // Enemy will be between bottom and middle - anywhere

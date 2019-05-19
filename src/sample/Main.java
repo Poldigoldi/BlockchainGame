@@ -415,6 +415,8 @@ public class Main extends Application {
         HacKing king = map.getKing ();
         if (king == null) { return; }
 
+        king.move (map);
+
         if (king.isCanAttack ()) {
             switch (king.getAttackMode ()) {
                 case 1:
@@ -432,7 +434,7 @@ public class Main extends Application {
         }
     }
 
-    private void shootOneBullet (Object shooter, boolean shootRight) {
+    private void shootOneBullet (Person  shooter, boolean shootRight) {
         boolean isPlayerShooter = shooter instanceof Player;
         final int BULLET_WIDTH = 20;
         final int OFFSET = 5;
