@@ -26,6 +26,7 @@ public class Person extends Object {
     }
 
     public void looseOneLife () {
+        if(this.type==type.ENEMY) this.setspin(true);
         this.lives--;
     }
 

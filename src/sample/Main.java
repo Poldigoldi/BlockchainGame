@@ -50,7 +50,7 @@ public class Main extends Application {
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300, PLAYER_START_LIVES = 4;
     private final int TIME_LIMIT = 60 * 20 * 1; // 20 seconds
     private Mode mode = Mode.STARTMENU;
-    private int counter;
+
     private int timeCounter = 0;
     private TextArea popUp = new TextArea("");
     private boolean doorunlocked = false;
@@ -147,7 +147,7 @@ public class Main extends Application {
         BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         appRoot.setBackground(new Background(background));
-        map = new Map(level); //initialises level based on level number input
+        map = new Map(level, WIDTH, HEIGHT); //initialises level based on level number input
         map.addPlayer(player, 70, map.level().height() - 135);
         map.mapRoot().setTranslateX(0);
         map.mapRoot().setTranslateY(- map.level().height() + HEIGHT);
@@ -208,10 +208,10 @@ public class Main extends Application {
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed(KeyCode.LEFT)) {
                 player.setFacingRight(false);
-                if (player.move_X(-5, map)) moveScreenX(-5);
+                if (player.move_X(-5, map)) map.moveScreenX(-5, player);
             } else if (isPressed(KeyCode.RIGHT)) {
                 player.setFacingRight(true);
-                if (player.move_X(5, map)) moveScreenX(5);
+                if (player.move_X(5, map)) map.moveScreenX(5, player);
             }
             if (isPressed(KeyCode.SPACE)) {
                 player.jump();
@@ -256,25 +256,7 @@ public class Main extends Application {
        // helpPopUp.setPopUpText(content);
     }
 
-    //updates the screen X based on player position
-    private void moveScreenX(int movement) {
-        if (player.getX() > WIDTH/2 + 5 && player.getX() < map.level().width() - WIDTH / 2) {
-            map.mapRoot().setTranslateX(-player.getX()+0.5*WIDTH);
-            counter++;
-            //this moves everything in the screen with the character
 
-            //this is for parallax scrolling of background elements
-            if (counter == 5 || counter == 10) {
-                for (Object object : map.animatedObjects())
-                    if (object.type == Type.LAYER2) object.setX(object.getX() - movement / 5);
-            }
-            if (counter == 10) {
-                for (Object object : map.animatedObjects())
-                    if (object.type == Type.LAYER4) object.setX(object.getX() - movement / 5);
-                counter = 0;
-           }
-        }
-    }
 
     //updates the screen Y based on player position
     private void moveScreenY() {

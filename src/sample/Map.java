@@ -18,9 +18,11 @@ public class Map {
     private int currentLevel;
     private Object terminal, bigdoor;
     private ArrayList<HelpPopUp> helpers = new ArrayList<>();
+    private int WIDTH, HEIGHT;
 
-
-    public Map(int level){
+    public Map(int level, int WIDTH, int HEIGTH){
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
         if(level==1){
             initialiseLevel1();
         }
@@ -327,5 +329,30 @@ public class Map {
 
     public void setKing(HacKing king) {
         this.king = king;
+    }
+    /*** SCREEN MOVEMENT
+     *
+     *
+     */
+
+    //updates the screen X based on player position
+    private int counter;
+    public void moveScreenX(int movement, Object player) {
+        if (player.getX() > WIDTH/2 + 5 && player.getX() < level().width() - WIDTH / 2) {
+            mapRoot().setTranslateX(-player.getX()+0.5*WIDTH);
+            counter++;
+            //this moves everything in the screen with the character
+
+            //this is for parallax scrolling of background elements
+            if (counter == 5 || counter == 10) {
+                for (Object object : animatedObjects)
+                    if (object.type == Type.LAYER2) object.setX(object.getX() - 0.2*movement);
+            }
+            if (counter == 10) {
+                for (Object object : animatedObjects)
+                    if (object.type == Type.LAYER4) object.setX(object.getX() - 0.2*movement);
+                counter = 0;
+            }
+        }
     }
 }

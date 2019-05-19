@@ -1,11 +1,13 @@
 package sample;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Rotate;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -41,6 +43,8 @@ public class Object  {
     public boolean movingDown;
     public boolean isMoving;
     public boolean isLanded;
+    private boolean spin;
+    private int spincounter;
 
     //sounds
     AudioClip landSound = new AudioClip(Paths.get("src/sound/land.wav").toUri().toString());
@@ -50,6 +54,7 @@ public class Object  {
         sprite = new Sprite(type, defaultFrame);
         this.type = type;
         this.alive = true;
+        sprite.setRotationAxis(Rotate.Y_AXIS);
     }
 
     //creates a collision box, this is initially a rectangle, but in the future it could be other shapes.
@@ -87,6 +92,7 @@ public class Object  {
     //this would include the player, enemies, cubes falling from the sky etc.
     void update(Map map){
         //update Sprite position and animation
+        spin();
         if (! this.alive) {
             setVisible (false);
         } else {
@@ -108,6 +114,17 @@ public class Object  {
     void applyGravity() {
         if (this.Velocity.getY () < 10) {
             this.Velocity = this.Velocity.add(0, 1);
+        }
+    }
+
+    private void spin() {
+        if (spin) {
+            spincounter++;
+            sprite.setRotate(sprite.getRotate()+0.4*(60-spincounter));
+            if(spincounter==65){
+                spin = false;
+                sprite.setRotate(0);
+            }
         }
     }
 
@@ -153,10 +170,12 @@ public class Object  {
                             canJump = true;
                             isLanded = true;
                             if (object.isMoving && object.isMovingRight()) {
-                                setX(getX() + 2);
+                               move_X(2, map);
+                               if(this.type==type.PLAYER) map.moveScreenX(2, this);
                             }
                             else if (object.isMoving && !object.isMovingRight()) {
-                                setX(getX() - 2);
+                               move_X(-2, map);
+                                if(this.type==type.PLAYER) map.moveScreenX(-2, this);
                             }
                             return;
                         }
@@ -193,6 +212,8 @@ public class Object  {
 
 
     //getters, setters
+
+    public void setspin(boolean spin){this.spin = spin;}
 
     public double getX(){ return box.getTranslateX();}
 
