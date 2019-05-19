@@ -367,7 +367,7 @@ public class Main extends Application {
 
     private void ListenerPlayerLives() {
         int collision = 0;
-        for (Enemy enemy : map.getEnemies()) {
+        for (Person enemy : map.getEnemies()) {
             if (enemy.isAlive()) {
                 if (player.box.getBoundsInParent().intersects(enemy.box.getBoundsInParent())) {
                     collision++;

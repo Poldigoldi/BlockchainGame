@@ -152,7 +152,8 @@ public class Object  {
         return true;
     }
 
-    private void move_Y(int value, Map map) {
+
+     void move_Y(int value, Map map) {
         movingDown = value > 0; // (Y=0) at the top of the frame
         for (int i=0; i<Math.abs(value); i++) {
             /* Check for collisions between player and platforms */
