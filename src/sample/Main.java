@@ -333,13 +333,21 @@ public class Main extends Application {
         for (Collectable item : map.getItems()) {
             if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
-                if (item.isAlive()) {
+                if (item.isAlive() && item.getItemType() != Type.HEART ) {
                     player.getLuggage().take(item);
                     map.hideEntity(item);
                     infobar.updateWeapon(true);
                     if (item.getItemType() == Type.BLOCK) {
                         miniGameKey();
                     }
+                }
+               else if (item.isAlive() && item.getItemType() == Type.HEART ) {
+                   if(player.getLives() < 4) {
+                       map.hideEntity(item);
+                       item.setAlive(false);
+                       player.addLife();
+                       infobar.updateHealthFill(player.getLives());
+                   }
                 }
             }
         }
@@ -377,6 +385,10 @@ public class Main extends Application {
         if (collision == 0) {
             player.setCanDie(true);
         }
+    }
+
+    private void ListenerGainLife() {
+
     }
 
     private void ListenerPlayerUseWeapon() {
