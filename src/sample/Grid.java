@@ -26,6 +26,7 @@ public class Grid {
       B -> Big Door
       T -> Terminal
       D -> disappearing Platform
+      R -> attackbot + solid block
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
@@ -57,13 +58,13 @@ public class Grid {
             "4    44          55   4",
             "4  66                 4",
             "4  4      7 8   4444444",
-            "4       123123  4     4",
+            "4H      123123  R     4",
             "44              4    84",
             "4  W  66        4   744",
             "4               4555444",
             "4  DDD                4",
-            "4 4          MV       4",
-            "44  123  MV           4",
+            "4            MV       4",
+            "4   123  MV           4",
             "4                     4",
             "44444444444444444444444",
     };
@@ -110,7 +111,7 @@ public class Grid {
     for (int y = 0; y < height; y++) {
       int x = 0;
       for (char value : map[y].toCharArray()) {
-        if (value == '4') {
+        if (value == '4' || value == 'R') {
           Platform platform = new Platform(Type.SOLID, block);
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
           platforms.add(platform);

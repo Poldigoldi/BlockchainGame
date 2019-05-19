@@ -43,6 +43,7 @@ public class Map {
                 if(level.map()[y].charAt(x) == '7') addButton(x, y, '7');
                 if(level.map()[y].charAt(x) == '8') addButton(x, y, '8');
                 if(level.map()[y].charAt(x) == 'H') addLife(x, y);
+                if(level.map()[y].charAt(x) == 'R') addAttackBot(x, y);
             }
         }
     }
@@ -57,12 +58,10 @@ public class Map {
         createLayer2Mountains();
         createLayer1Clouds();
         */
-        addAttackBot(8,8);
-        addAttackBot(13,8);
-        addToGrid();
         createEnemies();
         addAnimatedPlatforms();
         generalInitialiser();
+        addToGrid();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.", true);
         addHelper(20, 7, "Press E to interact with the terminal!", false);
@@ -163,6 +162,7 @@ public class Map {
     public void addAttackBot(int x, int y){
         AttackBot attackBot = new AttackBot(Type.ATTACKBOT, new Frame("/graphics/attackbot1.png"));
         attackBot.setCollisionBox(x*64, y*64, 50, 50, Color.PURPLE);
+        attackBot.sprite.toFront();
         addAnimatedObjects(attackBot);
         mapRoot.getChildren().add(attackBot.laser());
         attackbots.add(attackBot);
