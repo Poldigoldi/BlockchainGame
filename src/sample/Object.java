@@ -207,9 +207,13 @@ public class Object  {
     public static double random(double min, double max){ return (Math.random()*((max-min)+1))+min; }
 
 
+
     //getters, setters
 
-    void setspin(boolean spin){this.spin = spin;}
+    public void setspin(boolean spin){
+        spincounter = 0;
+        this.spin = spin;
+    }
 
     public double getX(){ return box.getTranslateX();}
 
