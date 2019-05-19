@@ -548,13 +548,14 @@ public class Main extends Application {
         }
     }
 
-    private void gameOver() {
-        if (isPressed(KeyCode.SPACE)) {
-            mainScene.setRoot(appRoot);
-            keys.clear(); /**added to prevent input from previous game being called on reset**/
-            mode = Mode.PLATFORMGAME;
-        }
+  private void gameOver() {
+    if (isPressed(KeyCode.SPACE)) {
+      player.getLuggage().removeWeapon();
+      mainScene.setRoot(appRoot);
+      keys.clear(); /**added to prevent input from previous game being called on reset**/
+      mode = Mode.PLATFORMGAME;
     }
+  }
 
 
     /***************************************************************************

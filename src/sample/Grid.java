@@ -7,6 +7,7 @@ import javafx.scene.shape.Shape;
 
 public class Grid {
 
+
   /*
       This class enables to create a level of the game using an Array od String
       A Grid object will be created when we initialise the game Map
@@ -36,12 +37,12 @@ public class Grid {
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
   private Frame block = new Frame("/graphics/block.png");
 
-  private ArrayList<Platform> platforms = new ArrayList<> ();
+  private ArrayList<Platform> platforms = new ArrayList<>();
   private ArrayList<Shape> outlines = new ArrayList<>();
   private final int OBJ_WIDTH = 64;
   int width;
   int height;
-  String [] map;
+  String[] map;
 
   private String[] map1 = new String[]{
           "40000000000000000000004",
@@ -88,7 +89,7 @@ public class Grid {
   /* Constructor */
   Grid(int level) {
     map = map1;
-    if(level == 2) map = map2;
+    if (level == 2) map = map2;
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {
@@ -106,12 +107,12 @@ public class Grid {
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
           platforms.add(platform);
         }
-        if (value == '5'){
-         Platform platform = new Platform(Type.PLATFORM,"orange");
+        if (value == '5') {
+          Platform platform = new Platform(Type.PLATFORM, "orange");
           platform.setDisappear(true);
           platform.setAlive(false);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          platform.setCollisionBox(0,0,0,0, Color.ORANGE);
+          platform.setCollisionBox(0, 0, 0, 0, Color.ORANGE);
           Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.ORANGE);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
@@ -124,7 +125,7 @@ public class Grid {
           platform.setDisappear(true);
           platform.setAlive(false);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-          platform.setCollisionBox(0,0,0,0, Color.RED);
+          platform.setCollisionBox(0, 0, 0, 0, Color.RED);
           Rectangle outline = new Rectangle(OBJ_WIDTH, 10, Color.RED);
           outline.opacityProperty().setValue(0.25);
           outline.setX(x * OBJ_WIDTH);
@@ -142,28 +143,30 @@ public class Grid {
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
           platforms.add(platform);
         }
-        if(value == 'D') {
+        if (value == 'D') {
           Platform platform = new Platform(Type.PLATFORM, true);
-            platform.setAlive(true);
-            platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
-            platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
-              platforms.add(platform);
-          }
+          platform.setAlive(true);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+          platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
+          platforms.add(platform);
+        }
         x++;
       }
     }
   }
 
-   /* ------ Getters ------- */
+  /* ------ Getters ------- */
 
-  public String[] map(){return map;}
-
-  int height(){
-    return height*OBJ_WIDTH;
+  public String[] map() {
+    return map;
   }
 
-  int width(){
-    return width*OBJ_WIDTH;
+  int height() {
+    return height * OBJ_WIDTH;
+  }
+
+  int width() {
+    return width * OBJ_WIDTH;
   }
 
   int getOBJ_WIDTH() {
@@ -177,6 +180,5 @@ public class Grid {
   ArrayList<Shape> outlines() {
     return this.outlines;
   }
-
-
 }
+
