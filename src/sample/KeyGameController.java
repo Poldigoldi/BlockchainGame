@@ -266,6 +266,8 @@ public class KeyGameController implements Initializable {
                "graphics/minigameimages/animation/message4.png","graphics/minigameimages/animation/message5.png",
                "graphics/minigameimages/animation/message6.png","graphics/minigameimages/animation/message7.png"
        ));
+       ArrayList<String> message2 = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message6.png","graphics/minigameimages/animation/message7.png"
+       ));
         switch (instructionString) {
 
             case 1: {
@@ -277,6 +279,12 @@ public class KeyGameController implements Initializable {
                BlockAnimation messageAnimation2 = new BlockAnimation();
                 messageAnimation2.start(b, message, 400, 800);
                 break;
+            }
+            case 3: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, message2, 400, 200);
+                break;
+
             }
 
 
