@@ -1,7 +1,7 @@
 package sample;
 
 public enum Type {
-    SOLID, PLAYER, PLATFORM, PLATFORMBUTTON, ITEM, WEAPON, BULLET, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY, DOODAD, ABSTRACT;
+    SOLID, PLAYER, PLATFORM, PLATFORMBUTTON, ITEM, WEAPON, BULLET, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY, DOODAD, ABSTRACT, ATTACKBOT;
 
     //used in update to see whether to apply falling
     public boolean hasGravity(){

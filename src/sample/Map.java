@@ -12,6 +12,7 @@ public class Map {
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<Enemy> enemies = new ArrayList<> ();
+    private ArrayList<AttackBot> attackbots = new ArrayList<> ();
     private HacKing king;
     private Group mapRoot = new Group();
     private Grid level;
@@ -56,6 +57,8 @@ public class Map {
         createLayer2Mountains();
         createLayer1Clouds();
         */
+        addAttackBot(8,8);
+        addAttackBot(13,8);
         addToGrid();
         createEnemies();
         addAnimatedPlatforms();
@@ -155,6 +158,14 @@ public class Map {
         // randomise position and behaviour of enemy created
         int rand = new Random ().nextInt(3);
         addEnemy (rand);
+    }
+
+    public void addAttackBot(int x, int y){
+        AttackBot attackBot = new AttackBot(Type.ATTACKBOT, new Frame("/graphics/attackbot1.png"));
+        attackBot.setCollisionBox(x*64, y*64, 50, 50, Color.PURPLE);
+        addAnimatedObjects(attackBot);
+        mapRoot.getChildren().add(attackBot.laser());
+        attackbots.add(attackBot);
     }
 
     private void addHelper(int x, int y, String string, Boolean faceRight){
@@ -319,6 +330,8 @@ public class Map {
     public Object bigdoor(){ return bigdoor;}
 
     public ArrayList<HelpPopUp> helpers(){ return helpers;}
+
+    public ArrayList<AttackBot> attackbots(){return attackbots;}
 
     public ArrayList<Object> animatedObjects() {
         return animatedObjects;

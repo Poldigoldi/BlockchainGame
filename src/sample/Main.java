@@ -225,6 +225,7 @@ public class Main extends Application {
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
             ListenerHackingAttack ();
+            ListenerAttackBots();
             ListenerBullets ();
             ListenerButtons();
             UpdateAnimatedObjects();
@@ -278,6 +279,32 @@ public class Main extends Application {
     /***************************************************************************
      *                              LISTENERS FOR EVENTS
      * **********************************************************************/
+
+    private void ListenerAttackBots(){
+        //for attackbots
+            for(AttackBot attackBot: map.attackbots()) {
+                    if(attackBot.moveLaser(player.getX(), player.getY())==true && player.isCanDie()) {
+                        player.looseOneLife();
+                        player.setCanDie(false);
+                        playerhurtSound.play();
+                        infobar.updateHealthEmpty(player.getLives());
+                    }
+                if (attackBot.counter() < 300) {
+                    if (attackBot.getX() < player.getX()) {
+                        attackBot.sprite.offset(15, 0);
+                        attackBot.sprite.setdefaultanimationchoice(2);
+                        attackBot.setFacingRight(true);
+                    } else {
+                        attackBot.sprite.offset(0, 0);
+                        attackBot.sprite.setdefaultanimationchoice(1);
+                        attackBot.setFacingRight(false);
+                    }
+                }
+
+            }
+
+
+    }
 
     private void ListenerDoodads() {
         if (map.getCurrentLevel() == 1 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
