@@ -88,7 +88,6 @@ public class Main extends Application {
     stage.setWidth(WIDTH);
     stage.setHeight(HEIGHT);
     //PREPARE ROOT NODES FROM DIFFERENT CLASSES
-    player = new Player("Hero", WIDTH / 2, HEIGHT / 2, PLAYER_START_LIVES);
     keyPad = new KeyPad(WIDTH, HEIGHT);
     gameOver = new GameOver(WIDTH, HEIGHT);
     gameMenu = new GameMenu(WIDTH, HEIGHT);
@@ -141,7 +140,8 @@ public class Main extends Application {
   }
 
   private void initContent(int level) {
-    if (gameMediaPlayer.getStatus() != MediaPlayer.Status.PLAYING && mode == Mode.PLATFORMGAME)
+      player = new Player("Hero", WIDTH / 2, HEIGHT / 2, PLAYER_START_LIVES);
+      if (gameMediaPlayer.getStatus() != MediaPlayer.Status.PLAYING && mode == Mode.PLATFORMGAME)
       gameMediaPlayer.play();
     appRoot.getChildren().clear();
     //initialise background
@@ -159,13 +159,12 @@ public class Main extends Application {
   /*Changes the level based on level number. New levels can be created in Grid class*/
   private void changeLevel(int level) {
     map.removePlayer(player);
-    for (Object barcontents : infobar.infoBarList()) {
+      for (Object barcontents : infobar.infoBarList()) {
       map.mapRoot().getChildren().remove(barcontents.box);
       map.mapRoot().getChildren().remove(barcontents.sprite);
     }
     initContent(level);
     addLabels();
-    player.setLives(4);
     infobar.updateHealthFill(4);
     infobar.updateWeapon(player.hasWeapon());
     appRoot.getChildren().addAll(map.mapRoot());
