@@ -29,6 +29,9 @@ public class Person extends Object {
         if(this.type==type.ENEMY) this.setspin(true);
         this.lives--;
     }
+    void addLife() {
+        this.lives ++;
+    }
 
     boolean isCanDie() {
         return canDie;
