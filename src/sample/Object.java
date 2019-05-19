@@ -92,7 +92,7 @@ public class Object  {
     //this would include the player, enemies, cubes falling from the sky etc.
     void update(Map map){
         //update Sprite position and animation
-        spin();
+        if(spin) spin();
         if (! this.alive) {
             setVisible (false);
         } else {
@@ -118,13 +118,12 @@ public class Object  {
     }
 
     private void spin() {
-        if (spin) {
-            spincounter++;
-            sprite.setRotate(sprite.getRotate()+0.4*(60-spincounter));
-            if(spincounter==65){
-                spin = false;
-                sprite.setRotate(0);
-            }
+        spincounter++;
+        sprite.setRotate(sprite.getRotate()+0.4*(60-spincounter));
+        if(spincounter==65){
+            spin = false;
+            sprite.setRotate(0);
+            spincounter = 0;
         }
     }
 

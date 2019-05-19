@@ -477,7 +477,7 @@ public class Main extends Application {
 
     /* ----------- BUTTONS ------------ */
     private void ListenerButtons() {
-        for (PlatformButton button : map.getLevel().buttons()) {
+        for (PlatformButton button : map.buttons()) {
             if (!(this.player.box.getBoundsInParent()).intersects(button.box.getBoundsInParent())) {
                 button.setPressed(false);
             }

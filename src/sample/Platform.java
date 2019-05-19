@@ -28,12 +28,22 @@ public class Platform extends Object {
     super(type);
     this.colour = colour;
     alive = true;
-    sprite.loadDefaultImages(new Frame("/graphics/orangePlatform1.png", 100),
-            new Frame("/graphics/orangePlatform2.png"),
-            new Frame("/graphics/orangePlatform3.png"),
-            new Frame("/graphics/orangePlatform4.png", 40),
-            new Frame("/graphics/orangePlatform3.png"),
-            new Frame("/graphics/orangePlatform2.png"));
+    if(colour.equals("orange")) {
+        sprite.loadDefaultImages(new Frame("/graphics/orangePlatform1.png", 100),
+                new Frame("/graphics/orangePlatform2.png"),
+                new Frame("/graphics/orangePlatform3.png"),
+                new Frame("/graphics/orangePlatform4.png", 40),
+                new Frame("/graphics/orangePlatform3.png"),
+                new Frame("/graphics/orangePlatform2.png"));
+    }
+      if(colour.equals("red")) {
+          sprite.loadDefaultImages(new Frame("/graphics/redPlatform1.png", 100),
+                  new Frame("/graphics/redPlatform2.png"),
+                  new Frame("/graphics/redPlatform3.png"),
+                  new Frame("/graphics/redPlatform4.png", 40),
+                  new Frame("/graphics/redPlatform3.png"),
+                  new Frame("/graphics/redPlatform2.png"));
+      }
   }
 
   public Platform(Type type, int movement, Frame... frame) {

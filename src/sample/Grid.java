@@ -35,12 +35,7 @@ public class Grid {
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
   private Frame block = new Frame("/graphics/block.png");
 
-  private Frame buttonUp = new Frame("/graphics/buttonUp.png");
-  private Frame buttonUpRed = new Frame("/graphics/buttonUpRed.png");
-  private Frame buttonDown = new Frame("/graphics/buttonDown.png");
-
   private ArrayList<Platform> platforms = new ArrayList<> ();
-  private ArrayList<PlatformButton> buttons = new ArrayList<>();
   private ArrayList<Shape> outlines = new ArrayList<>();
   private final int OBJ_WIDTH = 64;
   int width;
@@ -124,7 +119,7 @@ public class Grid {
           platforms.add(platform);
         }
         if (value == '6') {
-          Platform platform = new Platform(Type.PLATFORM, "red", platformright);
+          Platform platform = new Platform(Type.PLATFORM, "red");
           platform.setDisappear(true);
           platform.setAlive(false);
           platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
@@ -136,16 +131,6 @@ public class Grid {
           outlines.add(outline);
           platforms.add(platform);
         }
-          if (value == '7') {
-            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", buttonUp, buttonDown);
-            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.ORANGE);
-            buttons.add(button);
-          }
-          if (value == '8') {
-            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", buttonUpRed, buttonDown);
-            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
-            buttons.add(button);
-          }
         if (value == 'M') {
           Platform platform = new Platform(Type.PLATFORM, 400, platformleft);
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
@@ -185,8 +170,5 @@ public class Grid {
     return this.outlines;
   }
 
-  ArrayList<PlatformButton> buttons() {
-    return this.buttons;
-  }
 
 }

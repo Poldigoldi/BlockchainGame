@@ -25,7 +25,7 @@ public class Enemy extends Person {
     private final int MAX_MOVES_AMPLITUDE;
 
     public Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
-        super(Type.ENEMY, 2);
+        super(Type.ENEMY, 3);
         this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
         this.canMove = canMove;
         this.alive = true;

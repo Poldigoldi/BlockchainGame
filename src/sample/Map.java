@@ -19,6 +19,7 @@ public class Map {
     private Object terminal, bigdoor;
     private ArrayList<HelpPopUp> helpers = new ArrayList<>();
     private int WIDTH, HEIGHT;
+    private ArrayList<PlatformButton> buttons = new ArrayList<>();
 
     public Map(int level, int WIDTH, int HEIGTH){
         this.WIDTH = WIDTH;
@@ -39,6 +40,8 @@ public class Map {
                 if(level.map()[y].charAt(x) == 'B') addBigDoor(x, y);
                 if(level.map()[y].charAt(x) == 'I') addBlock(x, y);
                 if(level.map()[y].charAt(x) == 'W') addWeapon(x, y);
+                if(level.map()[y].charAt(x) == '7') addButton(x, y, '7');
+                if(level.map()[y].charAt(x) == '8') addButton(x, y, '8');
             }
         }
     }
@@ -59,7 +62,7 @@ public class Map {
         generalInitialiser();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.", true);
-        addHelper(22, 5, "Press E to interact with the terminal!", false);
+        addHelper(20, 7, "Press E to interact with the terminal!", false);
     }
 
     public void initialiseLevel2(){
@@ -77,9 +80,6 @@ public class Map {
         //Adds every platform object within the level
         for (Platform platform : level.platforms()) {
             showEntity(platform);
-        }
-        for (PlatformButton button : level.buttons()) {
-            showEntity(button);
         }
     }
 
@@ -205,6 +205,33 @@ public class Map {
         addItem (weapon1);
     }
 
+    private void addButton (int x, int y, char value) {
+        if (value == '7') {
+            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", new Frame("/graphics/buttonUp.png"), new Frame("/graphics/buttonDown.png"));
+            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.ORANGE);
+            buttons.add(button);
+            showEntity(button);
+        }
+        if (value == '8') {
+            PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", new Frame("/graphics/buttonUpRed.png"), new Frame("/graphics/buttonDownRed.png"));
+            button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
+            buttons.add(button);
+            showEntity(button);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     //RANGE
 
     public boolean inRangeOfTerminal(double playerx, double playery){
@@ -305,6 +332,10 @@ public class Map {
         return items;
     }
 
+    ArrayList<PlatformButton> buttons() {
+        return this.buttons;
+    }
+
     public Grid getLevel () {
         return this.level;
     }
@@ -314,7 +345,7 @@ public class Map {
     }
 
     public void setButton(String colour) {
-        for(PlatformButton button : level.buttons()){
+        for(PlatformButton button : buttons){
             if(!button.getColour().equals(colour)){
                 button.buttonUp();
             }
