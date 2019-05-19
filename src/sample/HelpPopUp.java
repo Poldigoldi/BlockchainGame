@@ -56,7 +56,7 @@ class HelpPopUp {
 
     public boolean inRange(double playerx, double playery){
         double distance = Math.sqrt(Math.pow((playerx - helper.box.getTranslateX()), 2) + Math.pow((playery - helper.box.getTranslateY()), 2));
-        if(distance < 400){
+        if(distance < 200){
             helper.sprite.setdefaultanimationchoice(1);
             return true;
         }
