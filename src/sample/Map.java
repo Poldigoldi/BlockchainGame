@@ -199,7 +199,7 @@ public class Map {
     }
 
     private void addWeapon (int x, int y) {
-        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
+        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 10000000);
         weapon1.setCollisionBox (x*64, y*64, 25, 25, Color.BLUEVIOLET);
         addItem (weapon1);
     }

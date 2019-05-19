@@ -45,10 +45,12 @@ class GameMenu {
 
         //Buttons
         startGame.setFont(tinyFont);
+        startGame.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
         startGame.setTranslateX(WIDTH/2-50);
         startGame.setTranslateY(HEIGHT/2+100);
 
         instructions.setFont(tinyFont);
+        instructions.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
         instructions.setTranslateX(WIDTH/2-80);
         instructions.setTranslateY(HEIGHT/2+150);
 

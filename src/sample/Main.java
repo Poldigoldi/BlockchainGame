@@ -17,7 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
