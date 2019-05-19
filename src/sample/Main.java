@@ -251,13 +251,6 @@ public class Main extends Application {
 
     }
 
-    /*Use this method if you want to change the content and position of the popup*/
-    private void handlePopUp(String content, double posX, double posY, int radius, boolean visible) {
-       // helpPopUp.setPopUpText(content);
-    }
-
-
-
     //updates the screen Y based on player position
     private void moveScreenY() {
         if (player.getY() > HEIGHT / 2 + 40 && player.getY() < map.level().height() - HEIGHT / 2 + 12) {
@@ -605,23 +598,40 @@ public class Main extends Application {
 
     /*Handles all button clicks on the keyPad*/
     private void handleKeyPad() {
-        keyPad.getOne().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getOne().getValue()))));
-        keyPad.getTwo().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getTwo().getValue()))));
-        keyPad.getThree().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getThree().getValue()))));
-        keyPad.getFour().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getFour().getValue()))));
-        keyPad.getFive().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getFive().getValue()))));
-        keyPad.getSix().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getSix().getValue()))));
-        keyPad.getSeven().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getSeven().getValue()))));
-        keyPad.getEight().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getEight().getValue()))));
-        keyPad.getNine().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getNine().getValue()))));
-        keyPad.getZero().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getZero().getValue()))));
+        keyPad.getQ().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getQ().getValue())));
+        keyPad.getW().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getW().getValue())));
+        keyPad.getE().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getE().getValue())));
+        keyPad.getR().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getR().getValue())));
+        keyPad.getT().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getT().getValue())));
+        keyPad.getY().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getY().getValue())));
+        keyPad.getU().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getU().getValue())));
+        keyPad.getI().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getI().getValue())));
+        keyPad.getO().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getO().getValue())));
+        keyPad.getP().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getP().getValue())));
+        keyPad.getA().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getA().getValue())));
+        keyPad.getS().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getS().getValue())));
+        keyPad.getD().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getD().getValue())));
+        keyPad.getF().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getF().getValue())));
+        keyPad.getG().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getG().getValue())));
+        keyPad.getH().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getH().getValue())));
+        keyPad.getJ().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getJ().getValue())));
+        keyPad.getK().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getK().getValue())));
+        keyPad.getL().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getL().getValue())));
+        keyPad.getY().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getY().getValue())));
+        keyPad.getX().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getX().getValue())));
+        keyPad.getC().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getC().getValue())));
+        keyPad.getV().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getV().getValue())));
+        keyPad.getB().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getB().getValue())));
+        keyPad.getN().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getN().getValue())));
+        keyPad.getM().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getM().getValue())));
+
         keyPad.getClear().setOnAction(event -> keyPad.setDisplayText(""));
         keyPad.getExit().setOnAction(event -> {
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
         });
         keyPad.getEnter().setOnAction(event -> {
-            if (keyPad.getDisplayText().equals("1234")) {
+            if (keyPad.getDisplayText().equals("secret")) {
                 mainScene.setRoot(appRoot);
                 keyPad.setCodeCorrect(true);
                 doorunlocked = true;
