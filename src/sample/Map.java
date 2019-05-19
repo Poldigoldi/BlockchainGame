@@ -59,6 +59,7 @@ public class Map {
         generalInitialiser();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.", true);
+        addHelper(22, 5, "Press E to interact with the terminal!", false);
     }
 
     public void initialiseLevel2(){
