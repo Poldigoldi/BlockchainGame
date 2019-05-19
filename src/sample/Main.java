@@ -416,7 +416,7 @@ public class Main extends Application {
         // moves existing bullets
         for (Bullet bullet : bulletsFired) {
             bullet.move(map);
-            for (Enemy enemy : map.getEnemies()) {
+            for (Person enemy : map.getEnemies ()) {
                 // if Hacking shooting, his bullets won't hurt the enemies
                 if (!bullet.isPlayerShooting()) {
                     waitsSomeoneHitBullet(bullet, player);
@@ -438,23 +438,26 @@ public class Main extends Application {
             return;
         }
 
-        if (king.isCanAttack()) {
-            switch (king.getAttackMode()) {
+        king.move (map);
+
+        if (king.isCanAttack ()) {
+            switch (king.getAttackMode ()) {
                 case 1:
                     // new wave of enemy
-                    map.addRandomEnemy();
+                    map.addRandomEnemy ();
+                    map.addRandomEnemy ();
                     break;
                 case 2:
                     // send missiles in both directions
-                    shootOneBullet(king, true);
-                    shootOneBullet(king, false);
+                    shootOneBullet (king, true);
+                    shootOneBullet (king, false);
                     break;
             }
-            king.nextAttackMode();
+            king.nextAttackMode ();
         }
     }
 
-    private void shootOneBullet(Object shooter, boolean shootRight) {
+    private void shootOneBullet (Person  shooter, boolean shootRight) {
         boolean isPlayerShooter = shooter instanceof Player;
         final int BULLET_WIDTH = 20;
         final int OFFSET = 5;
@@ -468,14 +471,14 @@ public class Main extends Application {
     }
 
     private void ListenerEnemies() {
-        for (Enemy enemy : map.getEnemies()) {
+        for (Person enemy : map.getEnemies()) {
             // check if enemy died
             if (enemy.isAlive()) {
                 if (isObjectOutOfBounds(enemy)) {
                     enemy.setAlive(false);
                 }
-                if (enemy.getCanMove()) {
-                    enemy.giveMotion(map);
+                if (enemy instanceof Enemy && ((Enemy)enemy).getCanMove()) {
+                    ((Enemy)enemy).giveMotion(map);
                 }
             }
             if (enemy.sprite.dead()) {

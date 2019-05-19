@@ -11,8 +11,8 @@ public class Map {
 
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<Collectable> items = new ArrayList<>();
-    private ArrayList<Enemy> enemies = new ArrayList<> ();
     private ArrayList<AttackBot> attackbots = new ArrayList<> ();
+    private ArrayList<Person> enemies = new ArrayList<> ();
     private HacKing king;
     private Group mapRoot = new Group();
     private Grid level;
@@ -132,8 +132,8 @@ public class Map {
         addEnemy (1);
         addEnemy (2);
     }
-    private void addEnemy(int typeId){
-        Enemy enemy;
+    public void addEnemy (int typeId){
+        Person enemy;
         switch (typeId){
             case 1:  // Enemy stay more at bottom of map - on left side
                 enemy = new Enemy (200, 100, true, 800, 100);
@@ -142,8 +142,8 @@ public class Map {
                 enemy = new Enemy (600, 500, true, 800, 10);
                 break;
             case 3:
-                enemy = new HacKing (300, 500);
-                king = (HacKing)enemy;
+                enemy = new HacKing (700, 450);
+                this.king = (HacKing) enemy;
                 break;
             default: // Enemy will be between bottom and middle - anywhere
                 enemy = new Enemy (1300, 500, true, 800, 50);
@@ -343,7 +343,7 @@ public class Map {
         return animatedObjects;
     }
 
-    ArrayList<Enemy> getEnemies() {
+    public ArrayList<Person> getEnemies () {
         return enemies;
     }
 

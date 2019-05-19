@@ -38,12 +38,12 @@ public class Grid {
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
   private Frame block = new Frame("/graphics/block.png");
 
-  private ArrayList<Platform> platforms = new ArrayList<>();
+  private ArrayList<Platform> platforms = new ArrayList<> ();
   private ArrayList<Shape> outlines = new ArrayList<>();
   private final int OBJ_WIDTH = 64;
   int width;
   int height;
-  String[] map;
+  String [] map;
 
     private String[] map1 = new String[]{
             "4                     4",
@@ -196,5 +196,6 @@ public class Grid {
   ArrayList<Shape> outlines() {
     return this.outlines;
   }
-}
 
+
+}

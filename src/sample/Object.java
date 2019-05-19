@@ -98,6 +98,8 @@ public class Object  {
             if(type.hasGravity()) {
                 //for Everything else that has gravity
                 applyGravity();
+            }
+            if (type.hasGravity () ||type == Type.KING) {
                 updateY(map);
                 updateX(map);
                 isMoving = false;
