@@ -44,6 +44,9 @@ public class KeyGameController implements Initializable {
         Label hello;
 
         @FXML
+        Group b;
+
+        @FXML
         private Circle myCircle;
 
         @FXML
@@ -59,6 +62,13 @@ public class KeyGameController implements Initializable {
         private Button pPrivateKey;
 
         @FXML
+        private ImageView keyImage;
+
+    @FXML
+    private ImageView keyImage1;
+
+
+    @FXML
         private Button pPublicKey;
 
         @FXML
@@ -185,71 +195,43 @@ public class KeyGameController implements Initializable {
             }
         }
 
-     /*   if (event.getCode() == KeyCode.ENTER) {
-            if (instruction1.isVisible()){
-                instruction1.setVisible(false);
-                image.setVisible(true);
-            }
-            else if (image.isVisible()) {
-                image.setVisible(false);
-                instruction2.setVisible(true);
-            }
-            else if (instruction2.isVisible()){
-                help.setVisible(false);
-            }
-            else {
-                help.setVisible(true);
-            }
-        }*/
+
 
         System.out.println(alphaIndex);
-      /*  if (event.getEventType() == KeyEvent.KEY_PRESSED) {
 
-            if (isPressed(KeyCode.LEFT)) {
-
-                System.out.print(myCircle.getRotate());
-                System.out.println("press occured!");
-
-                myCircle.setRotate(myCircle.getRotate() - (360 / 26));
-
-            }
-        }*/
     }
 
     //TODO : to checks for Hbox labels secret word
 
-    String getRandomWord(int i) {
-       return new ArrayList<>(Arrays.asList(
-                "HASH", "PARTY", "BROWNS", "ARE", "TASTY"
-        )).get(i);
 
-   }
 
 
    void text() {
+
         ArrayList<String> messages = new ArrayList<>();
-       messages.add("Ahoy Chaps! You have entered the mysterious Block!");
+       messages.add("Ahoy Chaps! You have entered the mysterious Block!\n Let's take a look...");
        messages.add("A block in a blockchain, is simply a piece of information or message.");
-       messages.add("These messages are extremely safe, and allow messages to be sent very secretly.");
-       messages.add("Like all secret messages, you must use a number or 'key' to change the original message to make it unreadable to other people.");
-       messages.add("The special thing about block chain is it uses 2 keys to make it extra safe!");
-       messages.add("I am a very, very secret key and only my owner (you) can ever know me.");
-       messages.add("This means if you want to send a secret message, you do not have to share your secret key with anyone else!");
-       messages.add("The other key is called a public key.... Hi Sally!");
-       messages.add("The public key, unlike me, is known to everyone. This means people can lock the message using your public key, and you can unlock it using your private key!");
-       messages.add("The public and and the private key together form a key pair to make keeping messages extra safe.");
-       messages.add("In this level, Clueso is tyring to send you a secret message that you can use as a password to the next level.");
-       messages.add("To make the message safe, Clueso has used your public key to encrypt the message.");
-       messages.add("This is usually done using special algorithms, but in this level you will use a wheel to decrypt the message.");
-       messages.add("You must use your private key to decrypt it!");
+       messages.add("These messages are safe and secure to send and receive.");
+       messages.add("Before blockchain, sending secret messages meant you both needed to know the same secret key.");
+       messages.add("This meant the secret key would have to be exchanged if people wanted to send secret messages, which isn't very safe.");
+       messages.add("In blockchain, each person has 1 secret key, and 1 public key.");
+       messages.add("This allows for a message to be locked using a private key, and unlocked using a public key!");
+       messages.add("That means that you don't need to tell anyone your secret key, so information cannot be leaked.");
+       messages.add("Clueso wants to send you a message.");
+       messages.add("He will lock or encrypt the message using his private key.");
+       messages.add("You must decrypt the message with your public key!");
+       messages.add("The message will be the code for you to get to the next level!");
        messages.add("Use left and right to move, and space to select the letter");
 
        textAnimation(messages.get(0));
+       BlockAnimation ba = new BlockAnimation();
+       ba.start(b, new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/bridge1.png")), 0, 0);
 
 
        root.addEventHandler(KeyEvent.KEY_PRESSED, e ->
        {
          if (e.getCode()==KeyCode.ENTER) {
+
 
              pressEnter.setVisible(false);
              if (instructionString < messages.size()){
@@ -260,6 +242,7 @@ public class KeyGameController implements Initializable {
              else if (!instructionPane.isVisible()) {
                  instructionPane.setVisible(true);
              }
+
              else {
                  instructionPane.setVisible(false);
              }
@@ -267,9 +250,38 @@ public class KeyGameController implements Initializable {
 
        });
 
+   }
+
+   void animation() {
+        ArrayList<String> bridge = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/bridge1.png",
+                "graphics/minigameimages/animation/bridge2.png", "graphics/minigameimages/animation/bridge3.png",
+                "graphics/minigameimages/animation/bridge4.png","graphics/minigameimages/animation/bridge5.png",
+                "graphics/minigameimages/animation/bridge6.png","graphics/minigameimages/animation/bridge7.png",
+                "graphics/minigameimages/animation/bridge8.png","graphics/minigameimages/animation/bridge9.png",
+                "graphics/minigameimages/animation/bridge10.png","graphics/minigameimages/animation/bridge11.png",
+                "graphics/minigameimages/animation/bridge12.png","graphics/minigameimages/animation/bridge13.png"
+                ));
+       ArrayList<String> message = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message1.png",
+               "graphics/minigameimages/animation/message2.png", "graphics/minigameimages/animation/message3.png",
+               "graphics/minigameimages/animation/message4.png","graphics/minigameimages/animation/message5.png",
+               "graphics/minigameimages/animation/message6.png","graphics/minigameimages/animation/message7.png"
+       ));
+        switch (instructionString) {
+
+            case 1: {
+                BlockAnimation bridgeAnimation = new BlockAnimation();
+                bridgeAnimation.start(b, bridge, 400, 400);
+                break;
+            }
+            case 2: {
+               BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, message, 400, 800);
+                break;
+            }
 
 
-
+            default: return;
+        }
    }
 
    boolean textAnimation(String s) {
@@ -283,7 +295,9 @@ public class KeyGameController implements Initializable {
        KeyFrame kf = new KeyFrame(
                Duration.seconds(0.05), e -> {
            if (count.get() > s.length()) {
+
                timeline.stop();
+               animation();
                pressEnter.setVisible(true);
 
            } else {
@@ -393,13 +407,14 @@ public class KeyGameController implements Initializable {
         if (source.equals(cPrivateKey) && signiture.isVisible()) {
             insideButton = null;
             cPK.setStyle("-fx-background-color: green");
-            pPK.setStyle("-fx-background-color: green");
+
             timer = new Timer();
             timer.schedule(new NextTask(), 1000);
 
 
         }
         else if (source.equals(pPublicKey) && signiture.isVisible()) {
+            pPK.setStyle("-fx-background-color: green");
 
         }
         else {

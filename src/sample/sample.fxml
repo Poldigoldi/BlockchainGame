@@ -282,14 +282,9 @@
       </Group>
       <Group fx:id="instructionPane">
          <children>
-            <AnchorPane layoutX="71.0" layoutY="55.0" prefHeight="523.0" prefWidth="814.0" style="-fx-background-color: #770815;">
+            <AnchorPane layoutX="71.0" layoutY="55.0" prefHeight="523.0" prefWidth="814.0" style="-fx-background-color: #FFFFFF;">
                <children>
-                  <ImageView fitHeight="339.0" fitWidth="262.0" layoutX="56.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/minigameimages/privateKeyMa.png" />
-                     </image>
-                  </ImageView>
-                  <Text fx:id="instructions" fill="#ffcf00" fontSmoothingType="LCD" layoutX="309.0" layoutY="178.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="464.00000431891567">
+                  <Text fx:id="instructions" fill="#ffcf00" fontSmoothingType="LCD" layoutX="122.0" layoutY="345.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="688.0000043189157">
                      <font>
                         <Font name="Courier New" size="26.0" />
                      </font>
@@ -299,6 +294,12 @@
                         <Font name="Courier New" size="24.0" />
                      </font>
                   </Label>
+                  <ImageView fx:id="keyImage1" fitHeight="266.0" fitWidth="122.0" layoutY="301.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../graphics/minigameimages/privateKeyMa.png" />
+                     </image>
+                  </ImageView>
+                  <Group fx:id="b" layoutX="200.0" layoutY="30.0" />
                </children>
             </AnchorPane>
          </children>
