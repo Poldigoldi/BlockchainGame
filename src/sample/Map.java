@@ -32,7 +32,6 @@ public class Map {
         }
     }
 
-
     private void addToGrid(){
         for(int y = 0; y< level.height; y++){
             for(int x = 0; x < level.width; x++){
@@ -47,7 +46,7 @@ public class Map {
     }
 
     //ORDERING IS IMPORTANT!
-    public void initialiseLevel1() {
+    private void initialiseLevel1() {
         level = new Grid(1);
         currentLevel = 1;
         /*
@@ -65,7 +64,7 @@ public class Map {
         addHelper(20, 7, "Press E to interact with the terminal!", false);
     }
 
-    public void initialiseLevel2(){
+    private void initialiseLevel2(){
         level = new Grid(2);
         currentLevel = 2;
         createLayer3Clouds();
@@ -73,7 +72,7 @@ public class Map {
         addEnemy (3);
     }
 
-    public void generalInitialiser(){
+    private void generalInitialiser(){
         for(Shape outline : level.outlines()) {
             mapRoot.getChildren().add(outline);
         }
@@ -83,35 +82,35 @@ public class Map {
         }
     }
 
-    public void addItem (Collectable item) {
+    void addItem(Collectable item) {
         /* add Block to Map */
         items.add (item);
         animatedObjects.add(item);
         showEntity(item);
     }
 
-    public void addPlayer(Object player, int startx, int starty){
+    void addPlayer(Object player, int startx, int starty){
         showEntity(player);
         player.setX(startx);
         player.setY(starty);
         animatedObjects.add(player);
     }
 
-    public void removeBullet(Bullet bullet){
+    void removeBullet(Bullet bullet){
         bullet.setAlive(false);
         mapRoot.getChildren ().remove (bullet.label());
         hideEntity(bullet);
     }
 
-    public void removePlayer(Object player){
+    void removePlayer(Object player){
         hideEntity(player);
     }
 
-    public void showEntity(Object object) {
+    private void showEntity(Object object) {
         object.add(mapRoot);
     }
 
-    public void hideEntity(Object object) {
+    void hideEntity(Object object) {
         mapRoot.getChildren ().remove (object.sprite);
         mapRoot.getChildren ().remove (object.box);
     }
@@ -130,7 +129,7 @@ public class Map {
         addEnemy (1);
         addEnemy (2);
     }
-    public void addEnemy (int typeId){
+    private void addEnemy(int typeId){
         Enemy enemy;
         switch (typeId){
             case 1:  // Enemy stay more at bottom of map - on left side
@@ -151,7 +150,7 @@ public class Map {
         enemies.add (enemy);
     }
 
-    public void addRandomEnemy() {
+    void addRandomEnemy() {
         // randomise position and behaviour of enemy created
         int rand = new Random ().nextInt(3);
         addEnemy (rand);
@@ -193,7 +192,7 @@ public class Map {
         this.bigdoor = bigdoor;
     }
 
-    public void addBlock(int x, int y){
+    private void addBlock(int x, int y){
         Block block = new Block ("block");
         block.setCollisionBox(x*64, y*64 , 16, 16, Color.DARKRED);
         addItem(block);
@@ -234,14 +233,14 @@ public class Map {
 
     //RANGE
 
-    public boolean inRangeOfTerminal(double playerx, double playery){
+    boolean inRangeOfTerminal(double playerx, double playery){
         if(terminal == null) return false;
         double distance = Math.sqrt(Math.pow((playerx - terminal.box.getTranslateX()), 2) + Math.pow((playery - terminal.box.getTranslateY()), 2));
         if(distance < 60) return true;
         return false;
     }
 
-    public boolean inRangeOfBigDoor(double playerx, double playery){
+    boolean inRangeOfBigDoor(double playerx, double playery){
         if(bigdoor == null) return false;
         double distance = Math.sqrt(Math.pow((playerx - bigdoor.box.getTranslateX()), 2) + Math.pow((playery - bigdoor.box.getTranslateY()), 2));
         if(distance < 10) return true;
@@ -310,25 +309,25 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
-    public Group mapRoot() {
+    Group mapRoot() {
         return mapRoot;
     }
 
-    public Grid level() { return level; }
+    Grid level() { return level; }
 
-    public Object bigdoor(){ return bigdoor;}
+    Object bigdoor(){ return bigdoor;}
 
-    public ArrayList<HelpPopUp> helpers(){ return helpers;}
+    ArrayList<HelpPopUp> helpers(){ return helpers;}
 
-    public ArrayList<Object> animatedObjects() {
+    ArrayList<Object> animatedObjects() {
         return animatedObjects;
     }
 
-    public ArrayList<Enemy> getEnemies () {
+    ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
-    public ArrayList<Collectable> getItems() {
+    ArrayList<Collectable> getItems() {
         return items;
     }
 
@@ -336,11 +335,11 @@ public class Map {
         return this.buttons;
     }
 
-    public Grid getLevel () {
+    Grid getLevel() {
         return this.level;
     }
 
-    public int getCurrentLevel() {
+    int getCurrentLevel() {
         return currentLevel;
     }
 
@@ -355,7 +354,7 @@ public class Map {
         }
     }
 
-    public HacKing getKing() {
+    HacKing getKing() {
         return king;
     }
 
@@ -369,7 +368,7 @@ public class Map {
 
     //updates the screen X based on player position
     private int counter;
-    public void moveScreenX(int movement, Object player) {
+    void moveScreenX(int movement, Object player) {
         if (player.getX() > WIDTH/2 + 5 && player.getX() < level().width() - WIDTH / 2) {
             mapRoot().setTranslateX(-player.getX()+0.5*WIDTH);
             counter++;

@@ -6,9 +6,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Enemy extends Person {
-
-
+class Enemy extends Person {
     private boolean canMove;
     private int countMoveLeft;
     private int countMoveRight;
@@ -24,7 +22,7 @@ public class Enemy extends Person {
     private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
 
-    public Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
+    Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
         super(Type.ENEMY, 3);
         this.setCollisionBox(startx, starty , 38, 48, Color.INDIANRED);
         this.canMove = canMove;
@@ -70,7 +68,7 @@ public class Enemy extends Person {
         sprite.offset(-5, -16);
     }
 
-    public void giveMotion (Map map) {
+    void giveMotion(Map map) {
         /**
          This method defines the motion logic of the enemy
 
@@ -292,7 +290,7 @@ public class Enemy extends Person {
 
     /* -------------------------- GETTERS & SETTERS -------------------------- */
 
-    public boolean getCanMove() {
+    boolean getCanMove() {
         return canMove;
     }
 

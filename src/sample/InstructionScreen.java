@@ -81,7 +81,7 @@ class InstructionScreen {
         return root;
     }
 
-    public Button returnButton(){ return returnButton;}
+    Button returnButton(){ return returnButton;}
 
     private void returnPress(ActionEvent e) {
         System.out.println("click");

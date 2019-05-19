@@ -1,7 +1,7 @@
 package sample;
 
 
-public class Luggage {
+class Luggage {
     private Block block;
     private Weapon weapon;
 

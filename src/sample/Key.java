@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class Key {
+class Key {
     private Button button = new Button();
     private String value;
 

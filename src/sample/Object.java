@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -8,7 +7,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
-
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -33,16 +31,16 @@ public class Object  {
     public Sprite sprite;
 
     //Object variables
-    public boolean alive;
+    boolean alive;
     public Type type;
     public int width;
     public int height;
-    public boolean canJump = true;
-    public Point2D Velocity = new Point2D(0,0);
-    public boolean facingRight;
-    public boolean movingDown;
-    public boolean isMoving;
-    public boolean isLanded;
+    boolean canJump = true;
+    Point2D Velocity = new Point2D(0,0);
+    private boolean facingRight;
+    boolean movingDown;
+    boolean isMoving;
+    boolean isLanded;
     private boolean spin;
     private int spincounter;
 
@@ -132,7 +130,7 @@ public class Object  {
 
 
     //returns true if the move is not blocked
-    public boolean move_X(int value, Map map) {
+    boolean move_X(int value, Map map) {
         isMoving = true;
         facingRight = value > 0;
         for (Object object : map.level().platforms()) {
@@ -152,7 +150,7 @@ public class Object  {
         return true;
     }
 
-    public void move_Y(int value, Map map) {
+    private void move_Y(int value, Map map) {
         movingDown = value > 0; // (Y=0) at the top of the frame
         for (int i=0; i<Math.abs(value); i++) {
             /* Check for collisions between player and platforms */
@@ -195,7 +193,7 @@ public class Object  {
         return false;
     }
 
-    public void died(){
+    void died(){
         sprite.activateDeathAnimation();
         box.setVisible(false);
     }
@@ -211,7 +209,7 @@ public class Object  {
 
     //getters, setters
 
-    public void setspin(boolean spin){this.spin = spin;}
+    void setspin(boolean spin){this.spin = spin;}
 
     public double getX(){ return box.getTranslateX();}
 
@@ -221,17 +219,17 @@ public class Object  {
 
     public void setY(double y){ box.setTranslateY(y);}
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
-    public void setAlive(boolean alive) {
+    void setAlive(boolean alive) {
         this.alive = alive;
     }
 
-    public void setFacingRight (boolean facingRight){ this.facingRight = facingRight;}
+    void setFacingRight(boolean facingRight){ this.facingRight = facingRight;}
 
-    public boolean isFacingRight() {
+    boolean isFacingRight() {
         return facingRight;
     }
 }

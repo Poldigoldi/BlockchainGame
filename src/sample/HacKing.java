@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
  *
  */
 
-public class HacKing extends Enemy {
+class HacKing extends Enemy {
 
     private final int MAX_LIVES = 2;
     private final int TIME_BETWEEN_ATTACK = 60 * 2;
@@ -19,7 +19,7 @@ public class HacKing extends Enemy {
     private int attack_mode; // 1 for enemy wave - 2 for missiles
 
     // Constructor
-    public HacKing (int startx, int starty) {
+    HacKing(int startx, int starty) {
         super (startx, starty, false,  500, 50);
         this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
         setLives (MAX_LIVES);
@@ -28,15 +28,15 @@ public class HacKing extends Enemy {
     }
 
 
-    public int getAttackMode() {
+    int getAttackMode() {
         return attack_mode;
     }
 
-    public void nextAttackMode () {
+    void nextAttackMode() {
         this.attack_mode = this.attack_mode % 2 + 1;
     }
 
-    public boolean isCanAttack () {
+    boolean isCanAttack() {
         counter++;
         if (counter == TIME_BETWEEN_ATTACK) {
             counter = 0;

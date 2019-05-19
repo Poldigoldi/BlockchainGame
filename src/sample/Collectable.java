@@ -25,11 +25,11 @@ public class Collectable extends Object {
         this.unique = unique;
     }
 
-    public Type getItemType() {
+    Type getItemType() {
         return itemType;
     }
 
-    public void setItemType(Type itemType) {
+    void setItemType(Type itemType) {
         this.itemType = itemType;
     }
 }

@@ -9,9 +9,6 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class BlockAnimation  {
-
-
-
     public void start(Group bridge, ArrayList<String> stillFrames, int gap, int start) {
         Timeline tl = new Timeline();
         tl.setCycleCount(1);

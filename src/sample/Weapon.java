@@ -32,11 +32,11 @@ public class Weapon extends Collectable {
         return name;
     }
 
-    public boolean isCanShoot() {
+    boolean isCanShoot() {
         return canShoot;
     }
 
-    public void setCanShoot(boolean canShoot) {
+    void setCanShoot(boolean canShoot) {
         this.canShoot = canShoot;
     }
 
@@ -44,12 +44,11 @@ public class Weapon extends Collectable {
         bullets++;
     }
 
-    public void looseOneBullet () {
+    void looseOneBullet() {
         bullets--;
     }
 
-    public int getBullets() {
+    int getBullets() {
         return bullets;
     }
-
 }

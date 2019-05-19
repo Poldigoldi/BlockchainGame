@@ -23,17 +23,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-
-import java.io.File;
 import java.net.URL;
 import java.util.*;
 
 
 public class KeyGameController implements Initializable {
-
-
-
         @FXML
         private Group encryption;
 
@@ -129,23 +123,16 @@ public class KeyGameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         text();
-
-
-
-
 
         myCircle.setStroke(Color.BLACK);
         Image alphabet = new Image("/graphics/minigameimages/images.jpg",false);
         myCircle.setFill(new ImagePattern(alphabet));
         circleCentre = new Coordinate((int)myCircle.getCenterX(), (int)myCircle.getCenterY());
-
     }
 
     @FXML
     void spinWheel(KeyEvent event) {
-
         double SPIN_VALUE = 13.8;
         if (event.getCode() == KeyCode.LEFT) {
 
@@ -162,7 +149,6 @@ public class KeyGameController implements Initializable {
             else {
                 alphaIndex--;
             }
-
         }
         if (event.getCode() == KeyCode.RIGHT) {
 
@@ -181,7 +167,6 @@ public class KeyGameController implements Initializable {
                 alphaIndex++;
             }
         }
-
         if (event.getCode() == KeyCode.SPACE) {
             if (compareWord()) {
                 wordBox.getChildren().get(index).setVisible(true);
@@ -194,20 +179,14 @@ public class KeyGameController implements Initializable {
                 System.out.print("Game over, try a new word");
             }
         }
-
-
-
         System.out.println(alphaIndex);
-
     }
-
     //TODO : to checks for Hbox labels secret word
 
 
 
 
    void text() {
-
         ArrayList<String> messages = new ArrayList<>();
        messages.add("Ahoy Chaps! You have entered the mysterious Block!\n Let's take a look...");
        messages.add("A block in a blockchain, is simply a piece of information or message.");
@@ -319,7 +298,6 @@ public class KeyGameController implements Initializable {
        timeline.getKeyFrames().add(kf);
        timeline.setCycleCount(Animation.INDEFINITE);
 
-
        timeline.play();
        return false;
 
@@ -332,7 +310,6 @@ public class KeyGameController implements Initializable {
 
 
     Boolean compareWord() {
-
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
         if (word.charAt(index) == alphabet.charAt(alphaIndex)) {
             return true;
@@ -341,10 +318,8 @@ public class KeyGameController implements Initializable {
     }
 
     String getWord() {
-
         return "secret";
     }
-
 
     void verify() {
 
