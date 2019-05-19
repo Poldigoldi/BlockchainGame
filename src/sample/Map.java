@@ -17,6 +17,7 @@ public class Map {
     private Grid level;
     private int currentLevel;
     private Object terminal, bigdoor;
+    private ArrayList<HelpPopUp> helpers = new ArrayList<>();
 
 
     public Map(int level){
@@ -54,6 +55,8 @@ public class Map {
         createEnemies();
         addAnimatedPlatforms();
         generalInitialiser();
+        addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
+        addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.", true);
     }
 
     public void initialiseLevel2(){
@@ -149,6 +152,12 @@ public class Map {
         // randomise position and behaviour of enemy created
         int rand = new Random ().nextInt(3);
         addEnemy (rand);
+    }
+
+    private void addHelper(int x, int y, String string, Boolean faceRight){
+        HelpPopUp popup = new HelpPopUp(x, y, string, faceRight);
+        helpers.add(popup);
+        addAnimatedObjects(popup.helper());
     }
 
     private void addTerminal(int x, int y){
@@ -278,6 +287,8 @@ public class Map {
     public Grid level() { return level; }
 
     public Object bigdoor(){ return bigdoor;}
+
+    public ArrayList<HelpPopUp> helpers(){ return helpers;}
 
     public ArrayList<Object> animatedObjects() {
         return animatedObjects;

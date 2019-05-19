@@ -4,26 +4,26 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 
 public class Main extends Application {
@@ -46,14 +46,16 @@ public class Main extends Application {
 
     //global variables
     private int WIDTH, HEIGHT;
+    private int level = 1;
     private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300, PLAYER_START_LIVES = 4;
     private final int TIME_LIMIT = 60 * 20 * 1; // 20 seconds
     private Mode mode = Mode.STARTMENU;
     private int counter;
     private int timeCounter = 0;
-    private HelpPopUp helpPopUp;
+    private TextArea popUp = new TextArea("");
     private boolean doorunlocked = false;
-    private Object healthbar;
+    private InfoBar infobar;
+    private Object speaker;
     private Stage stage;
     private AnchorPane appRoot = new AnchorPane();
     private Map map;
@@ -65,6 +67,7 @@ public class Main extends Application {
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private Player player;
     private ArrayList<Bullet> bulletsFired = new ArrayList<>();
+    private Font font;
 
     public static void main(String[] args) {
         launch(args);
@@ -74,6 +77,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         stage = primaryStage;
+        initialiseFonts();
         //set Stage boundaries to visible bounds of the main screen, reinitialise everything
         this.WIDTH = (int)primaryScreenBounds.getWidth();
         this.HEIGHT = (int)primaryScreenBounds.getHeight();
@@ -103,13 +107,35 @@ public class Main extends Application {
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
         initContent(1);
-        initialiseHealthbar();
+        initialiseLabels();
+        appRoot.getChildren().addAll(map.mapRoot());
+
     }
 
-    private void initialiseHealthbar() {
-        healthbar = new Object(Type.ABSTRACT, new Frame( "/graphics/3lives1.png"));
-        healthbar.setCollisionBox(50,50,50,50, Color.WHITE);
-        map.addAnimatedObjects(healthbar);
+    private void initialiseLabels() {
+        infobar = new InfoBar();
+        speaker = new Object(Type.ABSTRACT, new Frame( "/graphics/helpspeaker1.png"));
+        speaker.sprite.loadDefaultImages(new Frame("/graphics/helpspeaker1.png", 30),
+                new Frame("/graphics/helpspeaker2.png", 8),
+                new Frame("/graphics/helpspeaker3.png", 8),
+                new Frame("/graphics/helpspeaker4.png", 8),
+                new Frame("/graphics/helpspeaker5.png", 8));
+        popUp.setWrapText(true);
+        popUp.setDisable(true);
+        popUp.setStyle( "-fx-background-color: black" );
+        popUp.setFont(font);
+        popUp.setMinSize(WIDTH-490,80);
+        popUp.setMaxSize(WIDTH-490,80);
+        popUp.setFont(font);
+        addLabels();
+    }
+
+    private void addLabels(){
+        for(Object barcontents: infobar.infoBarList()){
+            map.addAnimatedObjects(barcontents);
+        }
+        map.addAnimatedObjects(speaker);
+        map.mapRoot().getChildren().addAll(popUp, infobar.infoBarGroup());
     }
 
     private void initContent(int level) {
@@ -121,28 +147,26 @@ public class Main extends Application {
         BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         appRoot.setBackground(new Background(background));
-        //initialise map / contents of the appRoot (i.e. the player, platforms, blocks, etc.)
         map = new Map(level); //initialises level based on level number input
-        appRoot.getChildren().addAll(map.mapRoot());
-        //for anything that is animated, add them here, e.g. spinning blocks, player, clouds.
         map.addPlayer(player, 70, map.level().height() - 135);
         map.mapRoot().setTranslateX(0);
         map.mapRoot().setTranslateY(- map.level().height() + HEIGHT);
-        /*Initialise help pop up*/
-        try {
-            helpPopUp = new HelpPopUp("Press 'E' to open terminal", WIDTH - 400, HEIGHT - 70);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        appRoot.getChildren().add(helpPopUp.getPopUp());
-        helpPopUp.setVisible(false);
     }
 
 
     /*Changes the level based on level number. New levels can be created in Grid class*/
     private void changeLevel(int level) {
         map.removePlayer(player);
+        for(Object barcontents: infobar.infoBarList()){
+            map.mapRoot().getChildren().remove(barcontents.box);
+            map.mapRoot().getChildren().remove(barcontents.sprite);
+        }
         initContent(level);
+        addLabels();
+        player.setLives(4);
+        infobar.updateHealthFill(4);
+        infobar.updateWeapon(player.hasWeapon());
+        appRoot.getChildren().addAll(map.mapRoot());
     }
 
     private void runGame(Stage stage) {
@@ -161,7 +185,7 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
-
+        stage.setTitle(player.getLives() +"");
 
         if (keyPad.isCodeCorrect()) {
             map.bigdoor().sprite.setanimation(true);
@@ -194,8 +218,7 @@ public class Main extends Application {
             }
 
             moveScreenY();
-            healthbar.setX(-map.mapRoot().getTranslateX()+50);
-            healthbar.setY(-map.mapRoot().getTranslateY()+50);
+            positionLabels();
             ListenerEnemies();
             MovePlatforms();
             ListenerItemsEvent();
@@ -214,21 +237,27 @@ public class Main extends Application {
         }
     }
 
+    private void positionLabels() {
+        infobar.positionBar(-map.mapRoot().getTranslateX()+25, -map.mapRoot().getTranslateY()+25);
+        popUp.setTranslateX(-map.mapRoot().getTranslateX()+435);
+        popUp.setTranslateY(-map.mapRoot().getTranslateY()+25);
+        popUp.toFront();
+        speaker.setX(-map.mapRoot().getTranslateX()+330);
+        speaker.setY(-map.mapRoot().getTranslateY()+25);
+        speaker.sprite.toFront();
+    }
+
     private void MovePlatforms() {
 
     }
 
     /*Use this method if you want to change the content and position of the popup*/
     private void handlePopUp(String content, double posX, double posY, int radius, boolean visible) {
-        helpPopUp.setPopUpText(content);
-        helpPopUp.setPosX(posX + radius);
-        helpPopUp.setPosY(posY - radius);
-        helpPopUp.setVisible(visible);
+       // helpPopUp.setPopUpText(content);
     }
 
     //updates the screen X based on player position
     private void moveScreenX(int movement) {
-        stage.setTitle(map.level().width() +"");
         if (player.getX() > WIDTH/2 + 5 && player.getX() < map.level().width() - WIDTH / 2) {
             map.mapRoot().setTranslateX(-player.getX()+0.5*WIDTH);
             counter++;
@@ -273,16 +302,25 @@ public class Main extends Application {
             openKeyPad();
         }
         if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY())) {
-            changeLevel(2);
+            level=2;
+            changeLevel(level);
         }
     }
 
     private void ListenerHelpPopUp() {
-        if (map.inRangeOfTerminal(player.getX(), player.getY())) {
-            helpPopUp.setVisible(true);
+        boolean visible = false;
+        for(HelpPopUp helper: map.helpers()) {
+            if (helper.inRange(player.getX(), player.getY())) {
+                popUp.setText(helper.string());
+                visible = true;
+            }
         }
-        else {
-            helpPopUp.setVisible(false);
+        if(visible) {
+            if (popUp.getOpacity() < 1) popUp.setOpacity(popUp.getOpacity() + 0.05);
+            if (speaker.sprite.getOpacity() < 1) speaker.sprite.setOpacity(popUp.getOpacity());
+        } else {
+            if (popUp.getOpacity() > 0) popUp.setOpacity(popUp.getOpacity() - 0.05);
+            if (speaker.sprite.getOpacity() > 0) speaker.sprite.setOpacity(popUp.getOpacity());
         }
     }
 
@@ -293,9 +331,10 @@ public class Main extends Application {
         for (Collectable item : map.getItems()) {
             if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
-                if (item.isAlive() && isPressed(KeyCode.E)) {
+                if (item.isAlive()) {
                     player.getLuggage().take(item);
                     map.hideEntity(item);
+                    infobar.updateWeapon(true);
                     if (item.getItemType() == Type.BLOCK) {
                         miniGameKey();
                     }
@@ -327,18 +366,7 @@ public class Main extends Application {
                         player.looseOneLife();
                         player.setCanDie(false);
                         playerhurtSound.play();
-                    }
-                    if(player.getLives()==3){
-                        healthbar.sprite.loadDefaultImages(new Frame("/graphics/2lives1.png", 7),
-                                new Frame("/graphics/2lives2.png", 10),
-                                new Frame("/graphics/2lives3.png", 15),
-                                new Frame("/graphics/2lives4.png", 9999));
-                    }
-                    if(player.getLives()==2){
-                        healthbar.sprite.loadDefaultImages(new Frame("/graphics/1life1.png", 7),
-                                new Frame("/graphics/1life2.png", 10),
-                                new Frame("/graphics/1life3.png", 15),
-                                new Frame("/graphics/1life4.png", 9999));
+                        infobar.updateHealthEmpty(player.getLives());
                     }
                 }
             }
@@ -510,16 +538,14 @@ public class Main extends Application {
             mainScene.setRoot(gameOver.returnRoot());
             defeatSound.play();
             mode = Mode.GAMEOVER;
-            changeLevel(1);
-            player.setLives(3);
+            player.setLives(4);
+            changeLevel(level);
         }
     }
 
     private void gameOver() {
         if (isPressed(KeyCode.SPACE)) {
             mainScene.setRoot(appRoot);
-            player.setLives(PLAYER_START_LIVES);
-            initialiseHealthbar();
             keys.clear(); /**added to prevent input from previous game being called on reset**/
             mode = Mode.PLATFORMGAME;
         }
@@ -623,6 +649,13 @@ public class Main extends Application {
         });
     }
 
+    private void initialiseFonts(){
+        try {
+            font = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16);
+        } catch (FileNotFoundException e) {
+            font = Font.font("Verdana", 16);
+        }
+    }
 
 }
 

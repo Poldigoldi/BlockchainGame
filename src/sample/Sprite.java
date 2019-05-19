@@ -1,5 +1,4 @@
 package sample;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +6,9 @@ import java.util.List;
 //set framerate to 9999 for no looping
 public class Sprite extends ImageView {
     private boolean animationactive = true;
-    private List<Frame> defaultAnimation = new ArrayList<>();
+    int defaultAnimationChoice = 1;
+    private List<Frame> defaultAnimation1 = new ArrayList<>();
+    private List<Frame> defaultAnimation2 = new ArrayList<>();
     private List<Frame> defaultLeftAnimation = new ArrayList<>();
     private List<Frame> defaultRightAnimation = new ArrayList<>();
     private List<Frame> motionRightAnimation = new ArrayList<>();
@@ -52,12 +53,28 @@ public class Sprite extends ImageView {
 
     public void setanimation(boolean active){ animationactive = active;}
 
+    public void setdefaultanimationchoice(int choice) {
+        if(defaultAnimationChoice != choice){
+            defaultAnimationChoice = choice;
+            animationCycle = 0;
+            frameDelay = 0;
+        }
+    }
+
     public void loadDefaultImages(Frame... images){
         animationCycle = 0;
         frameDelay = 0;
-        if(defaultAnimation.size()!=0) defaultAnimation.clear();
+        if(defaultAnimation1.size()!=0) defaultAnimation1.clear();
         for(Frame image: images)
-            defaultAnimation.add(image);
+            defaultAnimation1.add(image);
+    }
+
+    public void loadDefault2Images(Frame... images){
+        animationCycle = 0;
+        frameDelay = 0;
+        if(defaultAnimation2.size()!=0) defaultAnimation2.clear();
+        for(Frame image: images)
+            defaultAnimation2.add(image);
     }
 
     public void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
@@ -85,8 +102,9 @@ public class Sprite extends ImageView {
     public void update(boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
         moveTo(x, y);
         //for non-moving animations
-        if (!type.hasMovementAnimation() && defaultAnimation.size()>0 && animationactive){
-            animate(defaultAnimation);
+        if (!type.hasMovementAnimation() && defaultAnimation1.size()>0 && animationactive){
+            if(defaultAnimationChoice==1) animate(defaultAnimation1);
+            if(defaultAnimationChoice==2) animate(defaultAnimation2);
         }
         //for moving animations
         //jumping
