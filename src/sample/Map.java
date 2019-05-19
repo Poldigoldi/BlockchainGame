@@ -42,6 +42,7 @@ public class Map {
                 if(level.map()[y].charAt(x) == 'W') addWeapon(x, y);
                 if(level.map()[y].charAt(x) == '7') addButton(x, y, '7');
                 if(level.map()[y].charAt(x) == '8') addButton(x, y, '8');
+                if(level.map()[y].charAt(x) == 'H') addLife(x, y);
             }
         }
     }
@@ -229,6 +230,12 @@ public class Map {
             showEntity(button);
         }
     }
+    private void addLife (int x, int y) {
+        Life life = new Life ("life");
+        life.setCollisionBox(x*64, y*64 , 16, 16, Color.DARKRED);
+        addItem(life);
+    }
+
 
 
 
