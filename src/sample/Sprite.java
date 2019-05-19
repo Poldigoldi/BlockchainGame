@@ -17,15 +17,20 @@ public class Sprite extends ImageView {
     private List<Frame> fallLeftAnimation = new ArrayList<>();
     private List<Frame> jumpRightAnimation = new ArrayList<>();
     private List<Frame> jumpLeftAnimation = new ArrayList<>();
+    private List<Frame> deathAnimation = new ArrayList<>();
     private int animationCycle;
     private Frame currentFrame;
     private int frameDelay;
+    private boolean dying = false;
+    private boolean dead = false;
     private int xoffset, yoffset;
     private Type type;
 
     public void moveTo(double x, double y){
-        setTranslateX(x + xoffset);
-        setTranslateY(y + yoffset);
+        if(!dying) {
+            setTranslateX(x + xoffset);
+            setTranslateY(y + yoffset);
+        }
     }
 
     public void offset(int x, int y){
@@ -77,6 +82,8 @@ public class Sprite extends ImageView {
             defaultAnimation2.add(image);
     }
 
+    public void loadDeathImages(Frame... images){ for(Frame image: images) deathAnimation.add(image); }
+
     public void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
     public void loadDefaultLeftImages(Frame... images){ for(Frame image: images) defaultLeftAnimation.add(image); }
 
@@ -99,8 +106,21 @@ public class Sprite extends ImageView {
         if( currentFrame.framerate()==9999) frameDelay = 0;
     }
 
+    public void activateDeathAnimation(){
+        if(!dying) {
+            dying = true;
+            animationCycle = 0;
+            frameDelay = 0;
+        }
+    }
+
     public void update(boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
         moveTo(x, y);
+        if(dying){
+            System.out.println("working");
+            animate(deathAnimation);
+            return;
+        }
         //for non-moving animations
         if (!type.hasMovementAnimation() && defaultAnimation1.size()>0 && animationactive){
             if(defaultAnimationChoice==1) animate(defaultAnimation1);
@@ -134,8 +154,13 @@ public class Sprite extends ImageView {
     private void animate(List<Frame> images){
         updateFrame();
         if(images.size()==0) return;
-        if(animationCycle>=images.size()) animationCycle = 0;
+        if(dying && animationCycle==images.size()-1) dead = true;
+        if(animationCycle>=images.size()){
+            animationCycle = 0;
+        }
         currentFrame = images.get(animationCycle);
         setImage(images.get(animationCycle));
     }
+
+    public boolean dead(){return dead;}
 }

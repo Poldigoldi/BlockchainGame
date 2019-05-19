@@ -385,8 +385,10 @@ public class Main extends Application {
         } else {
             person.setCanDie(true);
         }
-        if (person.getLives() == 0) {
+        if (person.getLives() == 0 && person.isAlive()) {
             person.setAlive(false);
+            enemy1dieSound.play();
+            person.died();
         }
     }
 
@@ -446,20 +448,19 @@ public class Main extends Application {
     private void ListenerEnemies() {
         for (Enemy enemy : map.getEnemies()) {
             // check if enemy died
-            if (isObjectOutOfBounds(enemy)) {
-                enemy.setAlive(false);
+            if(enemy.isAlive()){
+                if (isObjectOutOfBounds(enemy)) {
+                    enemy.setAlive(false);
+                }
+                if (enemy.getCanMove()) {
+                    enemy.giveMotion(map);
+                }
             }
-            // if enemy alive - give motion
-            if (enemy.isAlive() && enemy.getCanMove()) {
-                enemy.giveMotion(map);
-            }
-            // if enemy is dead
-            if (enemy.isAlive() == false){
-                enemy1dieSound.play();
+            if (enemy.sprite.dead()){
                 map.hideEntity(enemy);
             }
         }
-        map.getEnemies ().removeIf (enemy -> !enemy.isAlive ());
+        map.getEnemies ().removeIf (enemy -> enemy.sprite.dead());
     }
     // Sends a new wave of enemy to the game every so often
     // New enemies are sent 1 by 1 (every second)
