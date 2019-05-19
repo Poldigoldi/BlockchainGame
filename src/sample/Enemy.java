@@ -54,6 +54,19 @@ public class Enemy extends Person {
                 new Frame("/graphics/enemy1_jump_left1.png", 10));
         sprite.loadjumpRightImages(
                 new Frame("/graphics/enemy1_jump_right1.png", 10));
+        sprite.loadDeathImages(
+                new Frame("/graphics/enemy1die1.png", 15),
+                new Frame("/graphics/enemy1die2.png", 15),
+                new Frame("/graphics/enemy1die3.png", 10),
+                new Frame("/graphics/enemy1die4.png", 8),
+                new Frame("/graphics/enemy1die5.png", 8),
+                new Frame("/graphics/enemy1die6.png", 7),
+                new Frame("/graphics/enemy1die7.png", 6),
+                new Frame("/graphics/enemy1die8.png", 5),
+                new Frame("/graphics/enemy1die9.png", 6),
+                new Frame("/graphics/enemy1die10.png", 7),
+                new Frame("/graphics/enemy1die11.png", 8),
+                new Frame("/graphics/enemy1die12.png", 9999));
         sprite.offset(-5, -16);
     }
 

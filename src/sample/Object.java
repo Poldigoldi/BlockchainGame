@@ -93,10 +93,6 @@ public class Object  {
     void update(Map map){
         //update Sprite position and animation
         if(spin) spin();
-        if (! this.alive) {
-            setVisible (false);
-        } else {
-            setVisible (true);
             sprite.update(facingRight, isMoving, isLanded, movingDown, box.getTranslateX(), box.getTranslateY());
             //for Clouds
             if(type == Type.LAYER3){ circumnavigate(0.05, map); }
@@ -108,7 +104,6 @@ public class Object  {
                 updateX(map);
                 isMoving = false;
             }
-        }
     }
 
     void applyGravity() {
@@ -200,6 +195,10 @@ public class Object  {
         return false;
     }
 
+    public void died(){
+        sprite.activateDeathAnimation();
+        box.setVisible(false);
+    }
 
     //for clouds
     private void circumnavigate(double speed, Map map){
