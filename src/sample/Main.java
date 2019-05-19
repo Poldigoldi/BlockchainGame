@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Main extends Application {
@@ -221,6 +223,7 @@ public class Main extends Application {
             positionLabels();
             ListenerEnemies();
             MovePlatforms();
+            ListenerPlatforms();
             ListenerItemsEvent();
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
@@ -494,6 +497,52 @@ public class Main extends Application {
                     }
                 }
                 button.setPressed(true);
+            }
+        }
+    }
+
+    /* ----------- PLATFORMS ------------ */
+    private void ListenerPlatforms() {
+        for (Platform platform : map.getLevel().platforms()) {
+            if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && platform.collisionCount == 0) {
+                if (platform.isTimed() == true) {
+                    System.out.println("here");
+                    platform.collisionCount += 1;
+                    Frame frame = new Frame("/graphics/orangePlatform4.png");
+                    platform.sprite.setImage(frame);
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+
+                        @Override
+                        public void run() {
+                            platform.setCollisionBox(0, 0, 0, 0, Color.RED);
+                            platform.setAlive(false);
+                            timer.cancel();
+                            timer.purge();
+                        }
+                    }, 2000);
+                }
+
+
+            }
+            if (platform.isAlive() == false && platform.isTimed() == true && platform.resetWait == true) {
+                platform.resetWait = false;
+                platform.setAlive(true);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        platform.setAlive(true);
+                        platform.restoreCollisionBox();
+                        Frame frame = new Frame("/graphics/orangePlatform1.png");
+                        platform.sprite.setImage(frame);
+                        platform.resetWait = true;
+                        platform.collisionCount = 0;
+                        timer.cancel();
+                        timer.purge();
+                    }
+                }, 2000);
             }
         }
     }
