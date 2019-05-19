@@ -483,11 +483,11 @@ public class Main extends Application {
             }
             if (!button.isPressed() && (this.player.box.getBoundsInParent()).intersects(button.box.getBoundsInParent()) && player.movingDown && !player.isLanded) {
                 for (Platform platform : map.getLevel().platforms()) {
-                    if (platform.canDisappear() && platform.isAlive() && platform.getColour().equals(button.getColour())) {
+                    if (platform.canDisappear() && platform.isAlive() && !platform.getColour().equals(button.getColour())) {
                         platform.setAlive(false);
                         platform.setCollisionBox(0, 0, 0, 0, Color.DARKORANGE);
                         map.setButton(button.getColour());
-                    } else if (platform.canDisappear() && !platform.isAlive() && !platform.getColour().equals(button.getColour())) {
+                    } else if (platform.canDisappear() && !platform.isAlive() && platform.getColour().equals(button.getColour())) {
                         platform.restoreCollisionBox();
                         platform.setAlive(true);
                         map.setButton(button.getColour());
