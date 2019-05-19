@@ -93,7 +93,7 @@ public class Main extends Application {
         instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
         //SET THE SCENE
         menuMediaPlayer.play();
-        menuMediaPlayer.setVolume(20);
+        menuMediaPlayer.setVolume(100);
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
@@ -518,11 +518,11 @@ public class Main extends Application {
             return;
         }
         if (mode != mode.GAMEOVER) { //This get called when you're playing and then you DIE!
-            mainScene.setRoot(gameOver.returnRoot());
             defeatSound.play();
             mode = Mode.GAMEOVER;
             player.setLives(4);
             changeLevel(level);
+            mainScene.setRoot(gameOver.returnRoot());
         }
     }
 

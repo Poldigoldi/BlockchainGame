@@ -1,13 +1,6 @@
 package sample;
 
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 class HelpPopUp {
  //   private Rectangle popUp = new Rectangle(10, 10, Color.GREEN);
