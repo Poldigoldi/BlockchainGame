@@ -41,4 +41,6 @@ class Luggage {
     Weapon getWeapon () {
         return this.weapon;
     }
+
+    void removeWeapon () {this.weapon = null;}
 }

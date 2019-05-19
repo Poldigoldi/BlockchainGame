@@ -13,8 +13,6 @@ public class Platform extends Object {
   private ArrayList<Integer> collisionValues = new ArrayList<>();
   private boolean movingRight = true;
   private int updateCount;
-  int activateDisappear = 0;
-  boolean resetWait = true;
 
 
 
