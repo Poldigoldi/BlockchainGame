@@ -58,10 +58,10 @@ public class Grid {
           "40000000123123004000004",
           "44000000000000004000084",
           "400W0066000000004000744",
-          "40123000000000004555444",
-          "400400MV000000000000004",
-          "400000000000000MV000004",
-          "44000000000MV0000000004",
+          "40DDDDDDDDDDDDDD4555444",
+          "40000000000000000000004",
+          "4040000000000MV00000004",
+          "44004400000MV0000000004",
           "40000000000000000000004",
           "44444444444444444444444"
   };
@@ -141,6 +141,13 @@ public class Grid {
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
           platforms.add(platform);
         }
+        if(value == 'D') {
+          Platform platform = new Platform(Type.PLATFORM, true);
+            platform.setAlive(true);
+            platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+            platform.setCollisionValues(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10);
+              platforms.add(platform);
+          }
         x++;
       }
     }

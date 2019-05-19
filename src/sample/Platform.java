@@ -7,15 +7,27 @@ import java.util.ArrayList;
 
 
 public class Platform extends Object {
-  private boolean canDisappear = false;
+  private boolean disappearing = false;
   private String colour;
+  private boolean timed = false;
   private ArrayList<Integer> collisionValues = new ArrayList<>();
   private boolean movingRight = true;
+  private int updateCount;
+  int activateDisappear = 0;
+  boolean resetWait = true;
+
 
 
     Platform(Type type, Frame ... frame) {
     super(type);
     sprite = new Sprite(type, frame);
+  }
+
+  Platform (Type type, boolean timed) {
+      super(type);
+      this.timed = timed;
+      Frame frame = new Frame("/graphics/orangePlatform1.png");
+      sprite.setImage(frame);
   }
 
   Platform(Type type,String colour, Frame ... frame) {
@@ -71,14 +83,16 @@ public class Platform extends Object {
       }.start();
   }
 
+  public void calculateUpdate(int updateCount) {
+      this.updateCount = updateCount + 50;
+  }
+
 
   public void setCollisionValues(int x, int y, int width, int height) {
-    if (canDisappear == true) {
       collisionValues.add(x);
       collisionValues.add(y);
       collisionValues.add(width);
       collisionValues.add(height);
-    }
   }
 
 
@@ -86,13 +100,15 @@ public class Platform extends Object {
     setCollisionBox(collisionValues.get(0), collisionValues.get(1), collisionValues.get(2), collisionValues.get(3), Color.DARKORANGE);
   }
 
+  public boolean disappearing(){return disappearing;}
+
 
   public void setDisappear(boolean disappear) {
-    this.canDisappear = disappear;
+    this.disappearing = disappear;
   }
 
   public boolean canDisappear() {
-    return this.canDisappear;
+    return this.disappearing;
   }
 
   public String getColour() {
@@ -101,6 +117,17 @@ public class Platform extends Object {
 
     public boolean isMovingRight() {
         return movingRight;
+    }
+
+    public boolean isTimed() {return timed;}
+
+    public boolean matchUpdate(int updateCount) {
+      if (this.updateCount == updateCount) return true;
+      return false;
+    }
+
+    public Integer getUpdateCount() {
+      return updateCount;
     }
 
 

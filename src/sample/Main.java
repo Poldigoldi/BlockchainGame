@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Main extends Application {
@@ -68,6 +70,7 @@ public class Main extends Application {
     private Player player;
     private ArrayList<Bullet> bulletsFired = new ArrayList<>();
     private Font font;
+    private int updateCount = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -185,6 +188,7 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
+        updateCount ++;
         stage.setTitle(player.getLives() +"");
 
         if (keyPad.isCodeCorrect()) {
@@ -221,6 +225,7 @@ public class Main extends Application {
             positionLabels();
             ListenerEnemies();
             MovePlatforms();
+            ListenerPlatforms();
             ListenerItemsEvent();
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
@@ -488,6 +493,31 @@ public class Main extends Application {
                     }
                 }
                 button.setPressed(true);
+            }
+        }
+    }
+
+    /* ----------- PLATFORMS ------------ */
+    private void ListenerPlatforms() {
+        for (Platform platform : map.getLevel().platforms()) {
+            if (platform.isTimed() == true) {
+                if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && !platform.disappearing()) {
+                    platform.setDisappear(true);
+                    platform.sprite.setImage(new Image("/graphics/orangePlatform4.png"));
+                    platform.calculateUpdate(updateCount);
+                }
+
+                if (platform.disappearing() && platform.matchUpdate(updateCount)) {
+                    platform.setAlive(false);
+                    platform.setDisappear(false);
+                    platform.setCollisionBox(0, 0, 0, 0, Color.RED);
+                    platform.calculateUpdate(updateCount);
+                }
+                if (platform.isAlive() == false && platform.matchUpdate(updateCount)) {
+                    platform.setAlive(true);
+                    platform.sprite.setImage(new Image("/graphics/orangePlatform1.png"));
+                    platform.restoreCollisionBox();
+                }
             }
         }
     }
