@@ -514,7 +514,6 @@ public class Main extends Application {
                 }
 
                 if (platform.disappearing() && platform.matchUpdate(updateCount)) {
-                    System.out.println("here");
                     platform.setAlive(false);
                     platform.setDisappear(false);
                     platform.setCollisionBox(0, 0, 0, 0, Color.RED);
