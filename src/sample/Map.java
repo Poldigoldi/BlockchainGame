@@ -75,6 +75,7 @@ public class Map {
         level = new Grid(2);
         currentLevel = 2;
         createLayer3Clouds();
+        addAnimatedPlatforms();
         generalInitialiser();
         addToGrid ();
         addEnemy (3);
