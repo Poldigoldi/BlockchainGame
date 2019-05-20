@@ -68,7 +68,9 @@ public class Map {
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
                 "Use 'A','W',D' to move", true);
-        addHelper(20, 7, "Press E to interact with the terminal!", false);
+        addHelper(22, 4, "Press E to interact with the terminal!\nHave you found the password yet?", false);
+        addHelper(0,4, "Walk into the block to start the Mini Game. \n" +
+                "Complete it and you'll find a key password.", true);
     }
 
     private void initialiseLevel2(){
@@ -79,6 +81,8 @@ public class Map {
         generalInitialiser();
         addToGrid ();
         addEnemy (3);
+        addHelper(0,9,"ARGH! An evil HacKing is trying to steal your key!\n" +
+                "You need to defeat him to get to the next level.", true);
     }
 
     private void generalInitialiser(){
