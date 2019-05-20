@@ -451,6 +451,9 @@ public class Main extends Application {
             person.setAlive(false);
             enemy1dieSound.play();
             person.died();
+            if (person instanceof HacKing) {
+                map.hideEntity (map.getKing ());
+            }
         }
     }
 
@@ -466,7 +469,6 @@ public class Main extends Application {
                 // if player shooting, his bullets wont hurt himself
                 else {
                     waitsSomeoneHitBullet(bullet, enemy);
-                 //   waitsSomeoneHitBullet (bullet, map.getKing ());
                 }
             }
 
@@ -477,11 +479,10 @@ public class Main extends Application {
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack() {
         HacKing king = map.getKing();
-        if (king == null) {
+        if (king == null || !king.isAlive ()) {
             return;
         }
-        System.out.println ("king lives " + king.getLives ());
-        king.listenerRegenerate ();
+        king.listenerDefense ();
         king.move (map, player.getX (), player.getY ());
 
         if (king.isCanAttack ()) {
