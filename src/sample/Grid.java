@@ -89,10 +89,10 @@ public class Grid {
   private String[] map2 = new String[]{
           "4                            4",
           "3                   H        4",
-          "2.H.. D            OOO   .H.B2",
+          "2.H..              OOO   .H.B2",
           "256!8   MV   DD          [@@]1",
-          "1                MV          4",
-          "2     o   1#   H             7",
+          "1H     D         MV          4",
+          "287   o   1#   H             7",
           "5     13      13      56  . W5",
           "4 W      ....             4#6£",
           "3111     1223         RR     3",

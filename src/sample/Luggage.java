@@ -13,7 +13,6 @@ class Luggage {
 
     void take(Collectable item) {
         // check if its a block
-        System.out.println("taking item: " + item.getItemType());
         if (item.getItemType() == Type.BLOCK && this.block == null) {
             item.setAlive(false);
             this.block = (Block) item;

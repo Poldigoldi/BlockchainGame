@@ -524,12 +524,12 @@ public class Main extends Application {
     private void shootOneBullet(Person shooter, boolean shootRight) {
         boolean isPlayerShooter = shooter instanceof Player;
         final int BULLET_WIDTH = 20;
-        final int OFFSET = 5;
+        final int OFFSET = 15;
         double directionX = shooter.getX() - BULLET_WIDTH - OFFSET;
         if (shootRight) {
             directionX += shooter.width + BULLET_WIDTH + 2 * OFFSET;
         }
-        Bullet bullet = new Bullet(directionX, shooter.getY() + shooter.height / 4, shootRight, isPlayerShooter);
+        Bullet bullet = new Bullet(directionX, shooter.getY() + shooter.height / 2, shootRight, isPlayerShooter);
         map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
         bulletsFired.add(bullet);
     }
