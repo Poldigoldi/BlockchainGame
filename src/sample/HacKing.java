@@ -19,37 +19,51 @@ import java.util.Random;
 public class HacKing extends Person {
 
 
-    // Motion variables
+    /* Motion variables */
     private int counter_moves;
     private int directionIndex; // 1 (up), 2 (down), 3 (right), 4 (left)
 
     private final int LIMIT_MOVES = 300;
     private final int SPEED_MOVE = 1;
 
-    // Attack variables
+    /* Defense variables */
+    private int counter_heal;
+    private final int TIME_HEALING = 90;
+
+    /* Attack variables */
     private final int ATTACK_BULLETS_AMOUNT = 4;
-    private final int TIME_BETWEEN_ATTACK = 60 * 4;
+    private final int TIME_BETWEEN_ATTACK = 60 * 2;
     private final int TIME_BETWEEN_BULLETS = 10;
     private int counter;
     private int attack_mode; // 1 for enemy wave - 2 for missiles
     private int attack_bullet_count;
 
-    // Constructor
+    /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 6);
+        super (Type.KING, 10);
         this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
         sprite.loadDefaultImages (new Frame("/graphics/enemy1.png"));
         this.attack_mode = 2;
+        this.directionIndex = 1;
+
+        // initialize counters
         this.counter = 0;
         this.attack_bullet_count = 0;
+        this.counter_heal = 0;
         this.counter_moves = 0;
-        this.directionIndex = 1;
 
     }
 
     /* ------------------------- MOTION ------------------------- */
 
-    public void move (Map map) {
+    public void move (Map map, double playerX, double playerY) {
+
+        // TODO: check if Hacking too far from center, move back toward center
+        //  - enhance his attack method to make it hard to beat
+        //  - needs a special attack
+        //  - allow him to regenerate life
+        //
+
         /** This method allow the king to moves automatically around
          *
          * @logic:
@@ -58,11 +72,10 @@ public class HacKing extends Person {
          *  *
          *
          */
-        System.out.println (counter_moves);
         if (isGoingOutOfBound (map.getLevel ().height(), map.getLevel ().width)) {
-            System.out.println ("Stopped from going outbound direction " + directionIndex );
             directionIndex = newRandom (directionIndex);
         }
+        listenerTooFarFromPlayer (playerX, playerY);
 
         switch (directionIndex) {
             case 1: // Up
@@ -85,12 +98,11 @@ public class HacKing extends Person {
         counter_moves++;
         if (counter_moves >= randomNumber (LIMIT_MOVES) + 100 ) {
             counter_moves = 0;
-            System.out.println ("> old direction! " + directionIndex );
             directionIndex = newRandom (directionIndex);
-            System.out.println ("new direction! " + directionIndex );
         }
     }
 
+    // generate a new random number different from the current given
     private int newRandom (int current) {
         int next;
         do {
@@ -100,10 +112,11 @@ public class HacKing extends Person {
     }
 
     private int randomNumber (int limit) {
-        // between 1 and 4
+        // between 1 and limit
         return new Random ().nextInt(limit) + 1;
     }
 
+    // Returns true, if player gets too close from map bounds
     private boolean isGoingOutOfBound (int mapHeight, int mapWidth) {
         int OFFSET = 150;
         if (   (directionIndex == 1 && getY () <= OFFSET)
@@ -115,6 +128,37 @@ public class HacKing extends Person {
         return false;
     }
 
+    // If player too far from King, force king to move closer
+    private void listenerTooFarFromPlayer(double x, double y) {
+        if (Math.abs (getX () - x) > 500) {
+            if (getX () > x) { directionIndex = 4; }
+            else { directionIndex = 3; }
+        }
+        if (Math.abs (getY () - y) > 500) {
+            if (getY () > y) { directionIndex = 1; }
+            else { directionIndex = 2; }
+        }
+    }
+
+    /* ------------------------- DEFENSE ------------------------ */
+
+    private boolean isLifeLow () {
+        return this.getLives () < 10;
+    }
+
+    // If King life too low, will start a counter to heal him
+    void listenerRegenerate () {
+        if (isLifeLow ()) {
+            counter_heal++;
+        }
+        if (counter_heal == TIME_HEALING) {
+            counter_heal = 0;
+            winOneLive ();
+        }
+    }
+
+
+
     /* ------------------------- ATTACKS ------------------------ */
 
 
@@ -123,31 +167,28 @@ public class HacKing extends Person {
     }
 
     public void nextAttackMode () {
-        if (this.attack_mode == 2 && attack_bullet_count < ATTACK_BULLETS_AMOUNT) {
+        if (this.attack_mode > 1 && attack_bullet_count < ATTACK_BULLETS_AMOUNT) {
             attack_bullet_count++;
             return;
         }
         attack_bullet_count = 0;
-        this.attack_mode = this.attack_mode % 2 + 1;
+        this.attack_mode = this.attack_mode % 3 + 1;
     }
 
     public boolean isCanAttack () {
         counter++;
 
-        switch (attack_mode) {
-            case 1:
-                if (counter == TIME_BETWEEN_ATTACK) {
-                    counter = 0;
-                    return true;
-                }
-            case 2:
-                // keep shooting bullets before switching to enemy wave
-                if (counter >= TIME_BETWEEN_ATTACK && (counter-TIME_BETWEEN_ATTACK) % TIME_BETWEEN_BULLETS == 0) {
-                    if (counter == TIME_BETWEEN_ATTACK + (ATTACK_BULLETS_AMOUNT) * TIME_BETWEEN_BULLETS) {
-                        counter = 0;
-                    }
-                    return true;
-                }
+        if (attack_mode == 1 && counter == TIME_BETWEEN_ATTACK) {
+            counter = 0;
+            return true;
+        }
+        if (attack_mode > 1
+                && counter >= TIME_BETWEEN_ATTACK
+                && (counter-TIME_BETWEEN_ATTACK) % TIME_BETWEEN_BULLETS == 0) {
+            if (counter == TIME_BETWEEN_ATTACK + (ATTACK_BULLETS_AMOUNT) * TIME_BETWEEN_BULLETS) {
+                counter = 0;
+            }
+            return true;
         }
         return false;
     }
