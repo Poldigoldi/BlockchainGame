@@ -28,7 +28,7 @@ public class HacKing extends Person {
 
     /* Defense variables */
     private int counter_heal;
-    private final int TIME_HEALING = 60;
+    private final int TIME_HEALING = 90;
 
     /* Attack variables */
     private final int ATTACK_BULLETS_AMOUNT = 4;
@@ -143,7 +143,7 @@ public class HacKing extends Person {
     /* ------------------------- DEFENSE ------------------------ */
 
     private boolean isLifeLow () {
-        return this.getLives () < 4;
+        return this.getLives () < 10;
     }
 
     // If King life too low, will start a counter to heal him
@@ -152,9 +152,7 @@ public class HacKing extends Person {
             counter_heal++;
         }
         if (counter_heal == TIME_HEALING) {
-            System.out.println ("KING GAINES 2 LIVES");
             counter_heal = 0;
-            winOneLive ();
             winOneLive ();
         }
     }
