@@ -132,6 +132,7 @@ public class Grid {
   Grid(int level) {
     map = map1;
     if (level == 2) map = map2;
+    else if (level == 3) map = map3;
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {

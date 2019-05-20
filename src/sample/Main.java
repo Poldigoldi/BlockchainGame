@@ -30,9 +30,9 @@ public class Main extends Application {
     private javafx.scene.media.Media menuMedia = new javafx.scene.media.Media(new File(menuSong).toURI().toString());
     private MediaPlayer menuMediaPlayer = new MediaPlayer(menuMedia);
 
-    private String gameSong = "src/sound/Ninja-Game-Intro.mp3";
-    private javafx.scene.media.Media gameMedia = new javafx.scene.media.Media(new File(gameSong).toURI().toString());
-    private MediaPlayer gameMediaPlayer = new MediaPlayer(gameMedia);
+    private String Level1Song = "src/sound/Level1.mp3";
+    private javafx.scene.media.Media level1Media = new javafx.scene.media.Media(new File(Level1Song).toURI().toString());
+    private MediaPlayer level1MediaPlayer = new MediaPlayer(level1Media);
 
     private String bossSong = "src/sound/bossSong.mp3";
     private javafx.scene.media.Media bossMedia = new javafx.scene.media.Media(new File(bossSong).toURI().toString());
@@ -168,7 +168,6 @@ public class Main extends Application {
         map.addPlayer(player, 70, map.level().height() - 135);
         map.mapRoot().setTranslateX(0);
         map.mapRoot().setTranslateY(-map.level().height() + HEIGHT);
-
     }
 
 
@@ -203,17 +202,15 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
-        System.out.println(doorunlocked);
         updateCount++;
         stage.setTitle(player.getLives() + "");
         if (keyPad.isCodeCorrect()) {
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
-            doorOpenSound.play();
             keyPad.setCodeCorrect(false);
-        }
-        if (doorunlocked && map.bigdoor() != null) {
+            doorOpenSound.play();
             map.bigdoor().sprite.setanimation(true);
+
         }
         if (mode == Mode.GAMEOVER) gameOver();
         if (mode == Mode.KEYPAD) handleKeyPad();
@@ -464,6 +461,8 @@ public class Main extends Application {
             if (person instanceof HacKing) {
                 map.hideEntity (map.getKing ());
                 doorunlocked = true;
+                doorOpenSound.play();
+                map.bigdoor().sprite.setanimation(true);
             }
         }
     }
@@ -776,7 +775,7 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void musicStop() {
-        gameMediaPlayer.stop();
+        level1MediaPlayer.stop();
         menuMediaPlayer.stop();
         bossMediaPlayer.stop();
     }
@@ -787,9 +786,9 @@ public class Main extends Application {
             menuMediaPlayer.play();
         }
         else if (music == Music.LEVEL1) {
-            gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            gameMediaPlayer.setVolume(0.5);
-            gameMediaPlayer.play();
+            level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            level1MediaPlayer.setVolume(0.5);
+            level1MediaPlayer.play();
         }
         else if (music == Music.BOSS) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
