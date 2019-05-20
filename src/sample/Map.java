@@ -66,7 +66,8 @@ public class Map {
         generalInitialiser();
         addToGrid();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
-        addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.", true);
+        addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
+                "Use 'A','W',D' to move", true);
         addHelper(20, 7, "Press E to interact with the terminal!", false);
     }
 

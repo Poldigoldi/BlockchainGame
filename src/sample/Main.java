@@ -26,13 +26,13 @@ import java.util.HashMap;
 
 public class Main extends Application {
     //music
-    private String gameSong = "src/sound/song1.mp3";
-    private javafx.scene.media.Media gameMedia = new javafx.scene.media.Media(new File(gameSong).toURI().toString());
-    private MediaPlayer gameMediaPlayer = new MediaPlayer(gameMedia);
-
     private String menuSong = "src/sound/menuSong.mp3";
     private javafx.scene.media.Media menuMedia = new javafx.scene.media.Media(new File(menuSong).toURI().toString());
     private MediaPlayer menuMediaPlayer = new MediaPlayer(menuMedia);
+
+    private String gameSong = "src/sound/Ninja-Game-Intro.mp3";
+    private javafx.scene.media.Media gameMedia = new javafx.scene.media.Media(new File(gameSong).toURI().toString());
+    private MediaPlayer gameMediaPlayer = new MediaPlayer(gameMedia);
 
     //sounds
     private AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
@@ -105,7 +105,7 @@ public class Main extends Application {
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
-        initContent(2);
+        initContent(1);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
         for(Object object: map.level().bringtofront()){
@@ -155,8 +155,6 @@ public class Main extends Application {
 
     private void initContent(int level) {
         player = new Player("Hero", WIDTH / 2, HEIGHT / 2, PLAYER_START_LIVES);
-        if (gameMediaPlayer.getStatus() != MediaPlayer.Status.PLAYING && mode == Mode.PLATFORMGAME)
-            gameMediaPlayer.play();
         appRoot.getChildren().clear();
         //initialise background
         Image back1 = new Image("/graphics/background1.png", true);
@@ -167,6 +165,7 @@ public class Main extends Application {
         map.addPlayer(player, 70, map.level().height() - 135);
         map.mapRoot().setTranslateX(0);
         map.mapRoot().setTranslateY(-map.level().height() + HEIGHT);
+
     }
 
 
@@ -608,6 +607,7 @@ public class Main extends Application {
             return;
         }
         if (mode != mode.GAMEOVER) { //This get called when you're playing and then you DIE!
+            gameMediaPlayer.stop();
             defeatSound.play();
             mode = Mode.GAMEOVER;
             player.setLives(4);
@@ -618,6 +618,8 @@ public class Main extends Application {
 
   private void gameOver() {
     if (isPressed(KeyCode.SPACE)) {
+        gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        gameMediaPlayer.play();
       player.getLuggage().removeWeapon();
       infobar.updateWeapon(false);
       mainScene.setRoot(appRoot);
@@ -638,6 +640,7 @@ public class Main extends Application {
             mode = Mode.PLATFORMGAME;
             mainScene.setRoot(appRoot);
             menuMediaPlayer.stop();
+            gameMediaPlayer.play();
             timeCounter = 0;
         }
     };

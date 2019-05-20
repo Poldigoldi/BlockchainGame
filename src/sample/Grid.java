@@ -49,11 +49,6 @@ public class Grid {
       # -> attackbot + solid block
       H -> LIFE collectible
 
-
-
-
-
-
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
 
