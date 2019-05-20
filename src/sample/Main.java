@@ -95,7 +95,7 @@ public class Main extends Application {
         gameMenu = new GameMenu(WIDTH, HEIGHT);
         instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
         //SET THE SCENE
-        musicStart(MUSIC.MENU);
+        musicStart(Music.MENU);
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
@@ -174,6 +174,7 @@ public class Main extends Application {
 
     /*Changes the level based on level number. New levels can be created in Grid class*/
     private void changeLevel(int level) {
+        doorunlocked = false;
         map.removePlayer(player);
         for (Object barcontents : infobar.infoBarList()) {
             map.mapRoot().getChildren().remove(barcontents.box);
@@ -202,15 +203,17 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
+        System.out.println(doorunlocked);
         updateCount++;
         stage.setTitle(player.getLives() + "");
-
         if (keyPad.isCodeCorrect()) {
-            map.bigdoor().sprite.setanimation(true);
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
             doorOpenSound.play();
             keyPad.setCodeCorrect(false);
+        }
+        if (doorunlocked && map.bigdoor() != null) {
+            map.bigdoor().sprite.setanimation(true);
         }
         if (mode == Mode.GAMEOVER) gameOver();
         if (mode == Mode.KEYPAD) handleKeyPad();
@@ -327,10 +330,16 @@ public class Main extends Application {
         if (map.getCurrentLevel() == 1 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
             openKeyPad();
         }
-        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY())) {
+        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 1) {
             level = 2;
             musicStop();
-            musicStart(MUSIC.BOSS);
+            musicStart(Music.BOSS);
+            changeLevel(level);
+        }
+        else if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
+            level = 3;
+            musicStop();
+            musicStart(Music.BOSS);
             changeLevel(level);
         }
     }
@@ -454,6 +463,7 @@ public class Main extends Application {
             person.died();
             if (person instanceof HacKing) {
                 map.hideEntity (map.getKing ());
+                doorunlocked = true;
             }
         }
     }
@@ -625,9 +635,9 @@ public class Main extends Application {
   private void gameOver() {
     if (isPressed(KeyCode.SPACE)) {
         if (level == 2) { //Play song for boss level!
-            musicStart(MUSIC.BOSS);
+            musicStart(Music.BOSS);
         } else {
-            musicStart(MUSIC.LEVEL1);
+            musicStart(Music.LEVEL1);
         }
       player.getLuggage().removeWeapon();
       infobar.updateWeapon(false);
@@ -649,7 +659,7 @@ public class Main extends Application {
             mode = Mode.PLATFORMGAME;
             mainScene.setRoot(appRoot);
             musicStop();
-            musicStart(MUSIC.LEVEL1);
+            musicStart(Music.LEVEL1);
             timeCounter = 0;
         }
     };
@@ -762,7 +772,7 @@ public class Main extends Application {
 
 
     /***************************************************************************
-     *                            MUSIC
+     *                            Music
      * **********************************************************************/
 
     private void musicStop() {
@@ -771,17 +781,17 @@ public class Main extends Application {
         bossMediaPlayer.stop();
     }
 
-    private void musicStart(MUSIC music) {
-        if (music == MUSIC.MENU) {
+    private void musicStart(Music music) {
+        if (music == Music.MENU) {
             menuMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             menuMediaPlayer.play();
         }
-        else if (music == MUSIC.LEVEL1) {
+        else if (music == Music.LEVEL1) {
             gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             gameMediaPlayer.setVolume(0.5);
             gameMediaPlayer.play();
         }
-        else if (music == MUSIC.BOSS) {
+        else if (music == Music.BOSS) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             bossMediaPlayer.setVolume(0.5);
             bossMediaPlayer.play();

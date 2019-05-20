@@ -1,5 +1,5 @@
 package sample;
 
-public enum MUSIC {
+public enum Music {
     MENU, LEVEL1, BOSS
 }

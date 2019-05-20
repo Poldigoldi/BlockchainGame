@@ -101,7 +101,6 @@ public class AttackBot extends Object {
 
         double angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
         //angle = angle + Math.ceil( -angle / 360 ) * 360;
-        System.out.println(angle);
         return angle;
     }
 

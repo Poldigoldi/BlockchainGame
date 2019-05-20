@@ -31,6 +31,9 @@ public class Map {
         if(level==2){
             initialiseLevel2();
         }
+        if (level==3) {
+            initialiseLevel3();
+        }
     }
 
     private void addToGrid(){
@@ -66,7 +69,7 @@ public class Map {
         generalInitialiser();
         addToGrid();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
-        addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
+        addHelper(1, 16, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
                 "Use 'A','W',D' to move", true);
         addHelper(22, 4, "Press E to interact with the terminal!\nHave you found the password yet?", false);
         addHelper(0,4, "Walk into the block to start the Mini Game. \n" +
@@ -83,6 +86,15 @@ public class Map {
         addEnemy (3);
         addHelper(0,9,"ARGH! An evil HacKing is trying to steal your key!\n" +
                 "You need to defeat him to get to the next level.", true);
+    }
+
+    private void initialiseLevel3() {
+        level = new Grid(3);
+        currentLevel = 3;
+        createLayer3Clouds();
+        addAnimatedPlatforms();
+        generalInitialiser();
+        addToGrid ();
     }
 
     private void generalInitialiser(){
