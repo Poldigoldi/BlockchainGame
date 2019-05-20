@@ -42,7 +42,7 @@ public class HacKing extends Person {
 
     /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 10);
+        super (Type.KING, 1);
         this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
         sprite.loadDefaultImages (new Frame("/graphics/enemy1.png"));
         this.attack_mode = 2;
