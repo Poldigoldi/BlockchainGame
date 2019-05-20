@@ -67,6 +67,8 @@ public class KeyGameController implements Initializable {
     @FXML
     private ImageView keyImage1;
 
+    boolean isDone = true;
+
 
     @FXML
         private Button pPublicKey;
@@ -212,25 +214,28 @@ public class KeyGameController implements Initializable {
        messages.add("Ahoy Chaps! You have entered the mysterious Block!\n Let's take a look...");
        messages.add("A block in a blockchain, is simply a piece of information or message.");
        messages.add("These messages are safe and secure to send and receive.");
-       messages.add("Before blockchain, sending secret messages meant you both needed to know the same secret key.");
-       messages.add("This meant the secret key would have to be exchanged if people wanted to send secret messages, which isn't very safe.");
-       messages.add("In blockchain, each person has 1 secret key, and 1 public key.");
-       messages.add("This allows for a message to be locked using a private key, and unlocked using a public key!");
-       messages.add("That means that you don't need to tell anyone your secret key, so information cannot be leaked.");
+       messages.add("Before blockchain, sending secret messages meant using the same key to lock and unlock the message.");
+       messages.add("This meant the secret key would have to be exchanged if people wanted to send secret messages...");
+       messages.add("NOT SAFE. NOT SECURE. OH NO!");
+       messages.add("Blockchain solves this problem by using 2 keys!\n Each person has a public key and private key");
+       messages.add("The message is locked using a private key, and unlocked using a public key!");
+       messages.add("That means that you don't need to tell anyone your secret key, so information cannot be leaked!");
        messages.add("Clueso wants to send you a message.");
-       messages.add("He will lock or encrypt the message using his private key.");
-       messages.add("You must decrypt the message with your public key!");
+       messages.add("He has locked the message using his private key.");
+       messages.add("You must unlock the message with your public key!");
        messages.add("The message will be the code for you to get to the next level!");
        messages.add("Use left and right to move, and space to select the letter");
 
-       textAnimation(messages.get(0));
        BlockAnimation ba = new BlockAnimation();
-       ba.start(b, new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/bridge1.png")), 0, 0);
+       ba.start(b, new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/bridge1.png")), 1, 1);
+
+       textAnimation(messages.get(0));
+
 
 
        root.addEventHandler(KeyEvent.KEY_PRESSED, e ->
        {
-         if (e.getCode()==KeyCode.ENTER) {
+         if (e.getCode()==KeyCode.ENTER && isDone) {
 
 
              pressEnter.setVisible(false);
@@ -264,32 +269,116 @@ public class KeyGameController implements Initializable {
        ArrayList<String> message = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message1.png",
                "graphics/minigameimages/animation/message2.png", "graphics/minigameimages/animation/message3.png",
                "graphics/minigameimages/animation/message4.png","graphics/minigameimages/animation/message5.png",
-               "graphics/minigameimages/animation/message6.png","graphics/minigameimages/animation/message7.png"
+               "graphics/minigameimages/animation/message8.png"
        ));
-       ArrayList<String> message2 = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message6.png","graphics/minigameimages/animation/message7.png"
+       ArrayList<String> message2 = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message6.png",
+               "graphics/minigameimages/animation/message7.png"
+       ));
+
+       ArrayList<String> hello = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/hello1.png",
+               "graphics/minigameimages/animation/hello2.png", "graphics/minigameimages/animation/hello3.png",
+               "graphics/minigameimages/animation/hello4.png","graphics/minigameimages/animation/hello5.png",
+               "graphics/minigameimages/animation/hello6.png","graphics/minigameimages/animation/hello7.png",
+               "graphics/minigameimages/animation/hello8.png","graphics/minigameimages/animation/hello9.png",
+               "graphics/minigameimages/animation/hello10.png","graphics/minigameimages/animation/hello11.png",
+               "graphics/minigameimages/animation/hello12.png","graphics/minigameimages/animation/hello13.png",
+               "graphics/minigameimages/animation/hello14.png","graphics/minigameimages/animation/hello15.png",
+               "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png",
+               "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png",
+               "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png",
+               "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png",
+               "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png"
+
+       ));
+
+       ArrayList<String> spy = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/spy1.png",
+               "graphics/minigameimages/animation/spy2.png", "graphics/minigameimages/animation/spy3.png",
+               "graphics/minigameimages/animation/spy4.png","graphics/minigameimages/animation/spy5.png",
+               "graphics/minigameimages/animation/spy6.png","graphics/minigameimages/animation/spy7.png",
+               "graphics/minigameimages/animation/spy8.png","graphics/minigameimages/animation/spy9.png",
+               "graphics/minigameimages/animation/spy10.png","graphics/minigameimages/animation/spy11.png",
+               "graphics/minigameimages/animation/spy12.png","graphics/minigameimages/animation/spy13.png",
+               "graphics/minigameimages/animation/spy14.png","graphics/minigameimages/animation/spy15.png",
+               "graphics/minigameimages/animation/spy16.png","graphics/minigameimages/animation/spy17.png",
+               "graphics/minigameimages/animation/spy18.png","graphics/minigameimages/animation/spy19.png",
+               "graphics/minigameimages/animation/spy20.png", "graphics/minigameimages/animation/spy21.png"
+       ));
+
+       ArrayList<String> spy2 = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/spy22.png",
+               "graphics/minigameimages/animation/spy23.png"
+       ));
+       ArrayList<String> keypair = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/keypair1.png",
+               "graphics/minigameimages/animation/keypair2.png", "graphics/minigameimages/animation/keypair3.png"
+       ));
+       ArrayList<String> pairlock = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/pair1.png",
+               "graphics/minigameimages/animation/pair2.png", "graphics/minigameimages/animation/pair3.png"
+       ));
+       ArrayList<String> lock = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/keyu1.png",
+               "graphics/minigameimages/animation/keyu2.png", "graphics/minigameimages/animation/keyu3.png",
+               "graphics/minigameimages/animation/keyu4.png","graphics/minigameimages/animation/keyu5.png",
+               "graphics/minigameimages/animation/keyu6.png","graphics/minigameimages/animation/keyu7.png",
+               "graphics/minigameimages/animation/keyu8.png","graphics/minigameimages/animation/keyu9.png"
        ));
         switch (instructionString) {
 
             case 1: {
                 BlockAnimation bridgeAnimation = new BlockAnimation();
-                bridgeAnimation.start(b, bridge, 400, 400);
+                bridgeAnimation.start(b, bridge, 400, 10);
                 break;
             }
             case 2: {
                BlockAnimation messageAnimation2 = new BlockAnimation();
-                messageAnimation2.start(b, message, 400, 800);
+                messageAnimation2.start(b, message, 400, 10);
                 break;
             }
             case 3: {
                 BlockAnimation messageAnimation2 = new BlockAnimation();
-                messageAnimation2.start(b, message2, 400, 200);
+                messageAnimation2.start(b, message2, 1000, 10);
+                break;
+            }
+            case 4: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, hello, 400, 10);
+                break;
+            }
+            case 5: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, spy, 100, 1);
+                break;
+            }
+            case 6: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, spy2, 1000, 500);
+                break;
+            }
+            case 7: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, keypair, 400, 200);
+                break;
+
+            }
+            case 8: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, pairlock, 400, 200);
+                break;
+
+            }
+            case 9: {
+
+                break;
+            }
+            case 11: {
+                BlockAnimation messageAnimation2 = new BlockAnimation();
+                messageAnimation2.start(b, lock, 400, 200);
                 break;
 
             }
 
 
+
             default: return;
         }
+       pressEnter.setVisible(true);
    }
 
    boolean textAnimation(String s) {
@@ -299,14 +388,15 @@ public class KeyGameController implements Initializable {
 
        IntegerProperty count = new SimpleIntegerProperty(0);
        Timeline timeline = new Timeline();
+       isDone = false;
 
        KeyFrame kf = new KeyFrame(
                Duration.seconds(0.05), e -> {
            if (count.get() > s.length()) {
-
-               timeline.stop();
                animation();
-               pressEnter.setVisible(true);
+               timeline.stop();
+               isDone = true;
+
 
            } else {
                instructions.setText(s.substring(0, count.get()));
