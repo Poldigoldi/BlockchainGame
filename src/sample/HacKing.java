@@ -157,11 +157,11 @@ public class HacKing extends Person {
 
     // If player too far from King, force king to move closer
     private void listenerTooFarFromPlayer(double x, double y) {
-        if (Math.abs (getY () - y) > 100) {
+        if (Math.abs (getY () - y) > 200) {
             if (getY () > y) { directionIndex = 1; }
             else { directionIndex = 2; }
         }
-        if (Math.abs (getX () - x) > 100) {
+        if (Math.abs (getX () - x) > 200) {
             if (getX () > x) { directionIndex = 4; }
             else { directionIndex = 3; }
         }

@@ -75,7 +75,7 @@ public class Weapon extends Collectable {
 
     void looseOneBullet() {
         bullets--;
-        bulletshot += 8;
+        bulletshot += 15;
     }
 
     int getBullets() {
