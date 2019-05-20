@@ -43,8 +43,8 @@ public class Map {
                 if(level.map()[y].charAt(x) == 'o') addButton(x, y, level.map()[y].charAt(x));
                 if(level.map()[y].charAt(x) == 'r') addButton(x, y, level.map()[y].charAt(x));
                 if(level.map()[y].charAt(x) == 'H') addLife(x, y);
-                if(level.map()[y].charAt(x) == '#') addAttackBot(x, y);
                 if(level.map()[y].charAt(x) == '.') addGrass(x, y);
+                if(level.map()[y].charAt(x) == '#') addAttackBot(x, y);
             }
         }
     }

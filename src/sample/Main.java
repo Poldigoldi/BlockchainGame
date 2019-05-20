@@ -298,7 +298,7 @@ public class Main extends Application {
     private void ListenerAttackBots(){
         //for attackbots
             for(AttackBot attackBot: map.attackbots()) {
-                    if(attackBot.moveLaser(player.getX(), player.getY())==true && player.isCanDie()) {
+                    if(attackBot.moveLaser(player.getX(), player.getY())==true && player.isCanDie() && !player.getSpin()) {
                         player.looseOneLife();
                         player.setCanDie(false);
                         playerhurtSound.play();
@@ -315,6 +315,7 @@ public class Main extends Application {
                         attackBot.setFacingRight(false);
                     }
                 }
+                attackBot.laser().toFront();
 
             }
 
