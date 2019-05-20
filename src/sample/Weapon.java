@@ -15,7 +15,6 @@ public class Weapon extends Collectable {
     private int waitCount;
 
     private final int MAX_BULLET_SHOT = 30;
-    private final int TIME_WAIT = 50;
 
     Weapon (String name, int bullets) {
         super(new Frame("/graphics/weapon.png"));
