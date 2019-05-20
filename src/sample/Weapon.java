@@ -52,15 +52,12 @@ public class Weapon extends Collectable {
         if (canShoot) {
             mustWait = true;
         }
-        System.out.println (bulletshot);
         if (mustWait) {
             mustWait = false;
             if (! isMaxShootReached ()) {
-                System.out.println ("---------");
                 maxReached = false;
                 return true;
             }
-            System.out.println ("MAX REACHED");
             this.maxReached = true;
             if (maxReached) {
                 waitCount++;
