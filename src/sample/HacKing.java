@@ -27,17 +27,19 @@ public class HacKing extends Person {
     private final int SPEED_MOVE = 1;
 
     /* Defense variables */
-    private int counter_shield;
+    private int max_lives;
     private boolean shieldState;
+    private int counter_shield;
     private int counter_heal;
+    private final int MAX_LIFE_DECREMENT = 2;
     private final int TIME_HEALING = 90;
 
     /* Attack variables */
-    private final int ATTACK_BULLETS_AMOUNT = 4;
+    private final int ATTACK_BULLETS_AMOUNT = 0;
     private final int TIME_BETWEEN_ATTACK = 60 * 2;
     private final int TIME_BETWEEN_BULLETS = 10;
     private int counter;
-    private int attack_mode; // 1 for enemy wave - 2 for missiles
+    private int attack_mode; // 1 for enemy wave - 2/3 for missiles
     private int attack_bullet_count;
 
     /* Constructor */
@@ -48,6 +50,7 @@ public class HacKing extends Person {
         this.attack_mode = 2;
         this.directionIndex = 1;
         this.shieldState = true;
+        this.max_lives = 10;
 
         // initialize counters
         this.counter = 0;
@@ -61,20 +64,18 @@ public class HacKing extends Person {
     /* ------------------------- MOTION ------------------------- */
 
     public void move (Map map, double playerX, double playerY) {
-
         // TODO: check if Hacking too far from center, move back toward center
-        //  - enhance his attack method to make it hard to beat
         //  - needs a special attack
-        //  - allow him to regenerate life
-        //
 
         /** This method allow the king to moves automatically around
          *
          * @logic:
          *
-         *  *  Follow a cyclic pattern, goes up/down/left/right
-         *  *
-         *
+         *  *  Follow a random motion pattern
+         *  *  Moves for a random amount in a same direction,
+         *  *  Can either go: up/down/left/right
+         *  *  If player too far, he will prioritise to get closer
+         *  *  If gets too close from bounds, changes direction
          */
         if (isGoingOutOfBound (map.getLevel ().height(), map.getLevel ().width)) {
             directionIndex = newRandom (directionIndex);
@@ -134,7 +135,7 @@ public class HacKing extends Person {
 
     // If player too far from King, force king to move closer
     private void listenerTooFarFromPlayer(double x, double y) {
-        if (Math.abs (getX () - x) > 500) {
+        if (Math.abs (getX () - x) > 300) {
             if (getX () > x) { directionIndex = 4; }
             else { directionIndex = 3; }
         }
@@ -147,27 +148,26 @@ public class HacKing extends Person {
     /* ------------------------- DEFENSE ------------------------ */
 
     void listenerDefense () {
-        System.out.println (getLives ());
         heal ();
         shield ();
     }
 
-
     // If King life not full, will start a counter to gain one life
     private void heal () {
+        System.out.println (getLives ());
         if (! isLifeMax ()) {
             counter_heal++;
         }
         if (counter_heal == TIME_HEALING) {
             counter_heal = 0;
             winOneLive ();
+            if (getLives () == max_lives && max_lives >= 2 * MAX_LIFE_DECREMENT) {
+                max_lives -= MAX_LIFE_DECREMENT;
+            }
         }
     }
 
     // If life very low, create a temporary shield around him
-    // condition:
-    // - can use the shield: life related but also time! otherwise impossible to kill him
-    //
     private void shield() {
         if (! isLifeLow ()) {
             return;
@@ -182,24 +182,22 @@ public class HacKing extends Person {
         counter_shield++;
         // shield is ON
         if (shieldState && counter_shield == 120) {
-            System.out.println ("> deactivating shield");
             shieldState = false;
             counter_shield = 0;
         }
         // shield is OFF
         if (!shieldState && counter_shield == 200) {
-            System.out.println ("> activating shield");
             shieldState = true;
             counter_shield = 0;
         }
     }
 
     private boolean isLifeMax () {
-        return this.getLives () == 10;
+        return this.getLives () >= max_lives;
     }
 
     private boolean isLifeLow () {
-        return this.getLives () < 3;
+        return this.getLives () <= MAX_LIFE_DECREMENT;
     }
 
 
