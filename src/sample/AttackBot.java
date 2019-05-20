@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
 public class AttackBot extends Object {
@@ -38,19 +39,32 @@ public class AttackBot extends Object {
         if(counter>400){
             counter = 0;
         }
-        if(distance < 300) {
+        if(distance < 300 || counter> 300) {
             laser.setVisible(true);
                 //move if not attacking
 
                 if(counter<300) {
-                    if (facingRight) laserXOffset = 50;
+                    if (facingRight) laserXOffset = 55;
                     else laserXOffset = 20;
+                    double angle1 = getAngle(getX() + laserXOffset, getY() + 28,playerx-10, playery+25);
+                    double xstep1 = Math.cos(Math.toRadians(-angle1));
+                    double ystep1 = Math.sin(Math.toRadians(-angle1+180));
+                    double pointX1 = (getX() + laserXOffset)  + (2000 * xstep1 );
+                    double pointY1 = getY() + 28 + (2000 * ystep1);
+                    double angle2 = getAngle(getX() + laserXOffset, getY() + 28,playerx+15, playery+35);
+                    double xstep2 = Math.cos(Math.toRadians(-angle2));
+                    double ystep2 = Math.sin(Math.toRadians(-angle2+180));
+                    double pointX2 = (getX() + laserXOffset)  + (2000 * xstep2 );
+                    double pointY2 = getY() + 28 + (2000 * ystep2);
                     laser.getPoints().clear();
-                    laser.getPoints().addAll(new Double[]{
-                            getX() + laserXOffset + 12, getY() + 26,
-                            getX() + laserXOffset , getY() + 28,
-                            playerx - 20.0, playery + 64,
-                            playerx + 20.0,playery + 64});
+                   laser.getPoints().addAll(new Double[]{
+                          getX() + laserXOffset + 12, getY() + 26,
+                           getX() + laserXOffset, getY() + 28,
+                           pointX1, pointY1,
+                            pointX2, pointY2});
+
+
+
                 }
                 //before locking
                 if(counter<200){
@@ -64,10 +78,7 @@ public class AttackBot extends Object {
                 //firing
                 if(counter>300 && counter<320){
                     laser.setFill(new Color(1, 0.9, 0.9, 1));
-                    if(distance<350){
-                        counter = 0;
-                        return true;
-                    }
+                    return true;
                 }
                 if(counter>320){
                     laser.setVisible(false);
@@ -86,8 +97,11 @@ public class AttackBot extends Object {
 
     public static double getAngle(double x1, double y1, double x2, double y2)
     {
-        double angle = (Math.atan2(x2 - x1, y2 - y1));
+
+
+        double angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
         //angle = angle + Math.ceil( -angle / 360 ) * 360;
+        System.out.println(angle);
         return angle;
     }
 
