@@ -203,6 +203,7 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
+        System.out.println(doorunlocked);
         updateCount++;
         stage.setTitle(player.getLives() + "");
         if (keyPad.isCodeCorrect()) {

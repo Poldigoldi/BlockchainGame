@@ -31,6 +31,9 @@ public class Map {
         if(level==2){
             initialiseLevel2();
         }
+        if (level==3) {
+            initialiseLevel3();
+        }
     }
 
     private void addToGrid(){
@@ -83,6 +86,15 @@ public class Map {
         addEnemy (3);
         addHelper(0,9,"ARGH! An evil HacKing is trying to steal your key!\n" +
                 "You need to defeat him to get to the next level.", true);
+    }
+
+    private void initialiseLevel3() {
+        level = new Grid(3);
+        currentLevel = 3;
+        createLayer3Clouds();
+        addAnimatedPlatforms();
+        generalInitialiser();
+        addToGrid ();
     }
 
     private void generalInitialiser(){
