@@ -31,11 +31,11 @@ public class HacKing extends Person {
     private boolean shieldState;
     private int counter_shield;
     private int counter_heal;
-    private final int MAX_LIFE_DECREMENT = 2;
-    private final int TIME_HEALING = 90;
+    private final int MAX_LIFE_DECREMENT = 3;
+    private final int TIME_HEALING = 120;
 
     /* Attack variables */
-    private final int ATTACK_BULLETS_AMOUNT = 3;
+    private final int ATTACK_BULLETS_AMOUNT = 2;
     private final int TIME_BETWEEN_ATTACK = 60 * 2;
     private final int TIME_BETWEEN_BULLETS = 10;
     private int shooting_frequency = 2;
@@ -170,7 +170,7 @@ public class HacKing extends Person {
     /* ------------------------- DEFENSE ------------------------ */
 
     void listenerDefense () {
-        heal ();
+       // heal ();
         shield ();
     }
 
