@@ -1,11 +1,12 @@
 package sample;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
 public class AttackBot extends Object {
     int counter;
-    private Polygon laser = new Polygon();
+    private Line laser = new Line();
     int laserXOffset;
     private boolean laserActive;
     int laserdistance = 2000;
@@ -43,14 +44,33 @@ public class AttackBot extends Object {
                 //move if not attacking
 
                 if(counter<300) {
-                    if (facingRight) laserXOffset = 50;
+                    if (facingRight) laserXOffset = 55;
                     else laserXOffset = 20;
-                    laser.getPoints().clear();
-                    laser.getPoints().addAll(new Double[]{
-                            getX() + laserXOffset + 12, getY() + 26,
-                            getX() + laserXOffset , getY() + 28,
-                            playerx - 20.0, playery + 64,
-                            playerx + 20.0,playery + 64});
+                    laser.setStartX(getX() + laserXOffset);
+                    laser.setStartY(getY() + 28);
+
+                    laser.setStrokeWidth(5);
+                    laser.setFill(Color.RED);
+                    double angle = getAngle(getX() + laserXOffset, getY() + 28,playerx, playery);
+                    double pointX = (getX() + laserXOffset)  + (500 * Math.cos(angle));
+                    double pointY = getY() + 28 + (500 * Math.sin(angle));
+                    laser.setEndX(pointX);
+                    laser.setEndY(pointY);
+//                    double angle1 = getAngle( getX() + laserXOffset, getY() + 28, playerx - 20.0,playery + 64);
+
+//                        double pointX1 = (getX() + laserXOffset) - (500 * Math.cos(angle1));
+//                        double pointY1 = getY() + 28 - (500 * Math.sin(angle1));
+//                    double angle2 = getAngle(getX() + laserXOffset +12 , getY() + 26, playerx + 20.0,playery + 64);
+//                         double pointX2 = getX() + laserXOffset + 12 - 500 * Math.cos(angle2);
+//                         double pointY2 = getY() + 26 + 500 * Math.sin(angle2);
+//
+//                    laser.getPoints().addAll(new Double[]{
+//                            getX() + laserXOffset + 12, getY() + 26,
+//                            getX() + laserXOffset, getY() + 28,
+//                            pointX1, pointY1});
+
+//                    System.out.println(pointX2 + " " + pointY2);
+
                 }
                 //before locking
                 if(counter<200){
@@ -86,11 +106,12 @@ public class AttackBot extends Object {
 
     public static double getAngle(double x1, double y1, double x2, double y2)
     {
-        double angle = (Math.atan2(x2 - x1, y2 - y1));
+
+           double angle = (Math.atan2(x1 - x2, y1 - y2));
         //angle = angle + Math.ceil( -angle / 360 ) * 360;
         return angle;
     }
 
 
-    public Polygon laser(){ return laser;}
+    public Line laser(){ return laser;}
 }
