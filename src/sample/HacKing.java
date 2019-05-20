@@ -31,7 +31,7 @@ public class HacKing extends Person {
     private boolean shieldState;
     private int counter_shield;
     private int counter_heal;
-    private final int MAX_LIFE_DECREMENT = 3;
+    private final int MAX_LIFE_DECREMENT = 4;
     private final int TIME_HEALING = 120;
 
     /* Attack variables */
@@ -45,7 +45,7 @@ public class HacKing extends Person {
 
     /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 8);
+        super (Type.KING, 9);
         this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
         sprite.loadDefaultRightImages(
                 new Frame("/graphics/hackkingright1.png"));
@@ -176,14 +176,16 @@ public class HacKing extends Person {
 
     // If King life not full, will start a counter to gain one life
     private void heal () {
-       // System.out.println (getLives ());
+        System.out.println (max_lives);
         if (! isLifeMax ()) {
             counter_heal++;
         }
         if (counter_heal == TIME_HEALING) {
             counter_heal = 0;
-            winOneLive ();
-            if (getLives () == max_lives && max_lives >= 2 * MAX_LIFE_DECREMENT) {
+            if (getLives () < max_lives) {
+                winOneLive ();
+            }
+            if (getLives () >= max_lives) {
                 max_lives -= MAX_LIFE_DECREMENT;
             }
         }
