@@ -73,8 +73,9 @@ public class Map {
         addToGrid();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(1, 16, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
-                "Use 'A','W',D' to move", true);
-        addHelper(20, 7, "Press E to interact with the terminal!\nHave you found the password yet?", false);
+                "Use 'A','W',D' to move and 'Space' to shoot (collect gun first!)", true);
+        addHelper(20, 7, "Press E to interact with the terminal when you're close to it!\n" +
+                "Have you found the password yet?", false);
         addHelper(0, 4, "Walk into the block to start the Mini Game. \n" +
                 "Complete it and you'll find a key password.", true);
     }
@@ -185,7 +186,7 @@ public class Map {
                 enemy = new Enemy(600, 500, true, 800, 10);
                 break;
             case 3:
-                enemy = new HacKing (700, 350);
+                enemy = new HacKing(700, 350);
                 level.bringtofront().add(enemy);
                 this.king = (HacKing) enemy;
                 break;
