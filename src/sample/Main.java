@@ -34,6 +34,10 @@ public class Main extends Application {
     private javafx.scene.media.Media level1Media = new javafx.scene.media.Media(new File(Level1Song).toURI().toString());
     private MediaPlayer level1MediaPlayer = new MediaPlayer(level1Media);
 
+    private String Level3Song = "src/sound/Level3.mp3";
+    private javafx.scene.media.Media level3Media = new javafx.scene.media.Media(new File(Level3Song).toURI().toString());
+    private MediaPlayer level3MediaPlayer = new MediaPlayer(level3Media);
+
     private String bossSong = "src/sound/bossSong.mp3";
     private javafx.scene.media.Media bossMedia = new javafx.scene.media.Media(new File(bossSong).toURI().toString());
     private MediaPlayer bossMediaPlayer = new MediaPlayer(bossMedia);
@@ -336,7 +340,7 @@ public class Main extends Application {
         else if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
             level = 3;
             musicStop();
-            musicStart(Music.BOSS);
+            musicStart(Music.LEVEL3);
             changeLevel(level);
         }
     }
@@ -789,6 +793,11 @@ public class Main extends Application {
             level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             level1MediaPlayer.setVolume(0.5);
             level1MediaPlayer.play();
+        }
+        else if (music == Music.LEVEL3) {
+            level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            level3MediaPlayer.setVolume(0.5);
+            level3MediaPlayer.play();
         }
         else if (music == Music.BOSS) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
