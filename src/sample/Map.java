@@ -351,6 +351,12 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
+    /** CHANGE THIS IF BOSS IS IN LEVEL*/
+    public boolean levelHasBoss(int level){
+        if(level==2) return true;
+        return false;
+    }
+
     Group mapRoot() {
         return mapRoot;
     }

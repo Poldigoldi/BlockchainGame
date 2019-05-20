@@ -58,6 +58,7 @@ public class Main extends Application {
     private int level = 1;
     private Mode mode = Mode.STARTMENU;
 
+    private Stage stage;
     private int timeCounter = 0;
     private TextArea popUp = new TextArea("");
     private boolean doorunlocked = false;
@@ -70,6 +71,7 @@ public class Main extends Application {
     private KeyPad keyPad;
     private GameOver gameOver;
     private GameMenu gameMenu;
+    private BossHealthBar bossHealthBar;
     private InstructionScreen instructionScreen;
     private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private Player player;
@@ -83,6 +85,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        this.stage = primaryStage;
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         initialiseFonts();
         //set Stage boundaries to visible bounds of the main screen, reinitialise everything
@@ -156,6 +159,10 @@ public class Main extends Application {
         speaker.sprite.setOpacity(0);
         map.addAnimatedObjects(speaker, warning);
         map.mapRoot().getChildren().addAll(popUp, infobar.infoBarGroup());
+        if(map.levelHasBoss(level)){
+            bossHealthBar = new BossHealthBar(map.getKing().getLives());
+            map.mapRoot().getChildren().add(bossHealthBar.group());
+        }
     }
 
     private void initContent(int level) {
@@ -206,7 +213,6 @@ public class Main extends Application {
 
     private void update(Stage stage) {
         updateCount++;
-        stage.setTitle(player.getLives() + "");
         if (keyPad.isCodeCorrect()) {
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
@@ -284,6 +290,14 @@ public class Main extends Application {
         warning.setY(-map.mapRoot().getTranslateY() + HEIGHT - 100);
         warning.box.setVisible(false);
         warning.sprite.toFront();
+        if(map.levelHasBoss(level)){
+            bossHealthBar.group().setTranslateX(-map.mapRoot().getTranslateX() + WIDTH - 155);
+            bossHealthBar.group().setTranslateY(-map.mapRoot().getTranslateY() + 106);
+            bossHealthBar.group().toFront();
+            bossHealthBar.updatePosition(0, 0);
+            bossHealthBar.updateAppearance(map.getKing().getLives());
+            stage.setTitle(map.getKing().getLives()+"");
+        }
     }
 
     private void MovePlatforms() {
