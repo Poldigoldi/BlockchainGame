@@ -35,7 +35,7 @@ public class HacKing extends Person {
     private final int TIME_HEALING = 90;
 
     /* Attack variables */
-    private final int ATTACK_BULLETS_AMOUNT = 0;
+    private final int ATTACK_BULLETS_AMOUNT = 4;
     private final int TIME_BETWEEN_ATTACK = 60 * 2;
     private final int TIME_BETWEEN_BULLETS = 10;
     private int counter;
