@@ -27,6 +27,8 @@ public class HacKing extends Person {
     private final int SPEED_MOVE = 1;
 
     /* Defense variables */
+    private int counter_shield;
+    private boolean shieldState;
     private int counter_heal;
     private final int TIME_HEALING = 90;
 
@@ -45,12 +47,14 @@ public class HacKing extends Person {
         sprite.loadDefaultImages (new Frame("/graphics/enemy1.png"));
         this.attack_mode = 2;
         this.directionIndex = 1;
+        this.shieldState = true;
 
         // initialize counters
         this.counter = 0;
         this.attack_bullet_count = 0;
         this.counter_heal = 0;
         this.counter_moves = 0;
+        this.counter_shield = 0;
 
     }
 
@@ -142,13 +146,16 @@ public class HacKing extends Person {
 
     /* ------------------------- DEFENSE ------------------------ */
 
-    private boolean isLifeLow () {
-        return this.getLives () < 10;
+    void listenerDefense () {
+        System.out.println (getLives ());
+        heal ();
+        shield ();
     }
 
-    // If King life too low, will start a counter to heal him
-    void listenerRegenerate () {
-        if (isLifeLow ()) {
+
+    // If King life not full, will start a counter to gain one life
+    private void heal () {
+        if (! isLifeMax ()) {
             counter_heal++;
         }
         if (counter_heal == TIME_HEALING) {
@@ -157,6 +164,43 @@ public class HacKing extends Person {
         }
     }
 
+    // If life very low, create a temporary shield around him
+    // condition:
+    // - can use the shield: life related but also time! otherwise impossible to kill him
+    //
+    private void shield() {
+        if (! isLifeLow ()) {
+            return;
+        }
+        if (shieldState) {
+            // do something
+        }
+        nextShieldState ();
+    }
+
+    private void nextShieldState () {
+        counter_shield++;
+        // shield is ON
+        if (shieldState && counter_shield == 120) {
+            System.out.println ("> deactivating shield");
+            shieldState = false;
+            counter_shield = 0;
+        }
+        // shield is OFF
+        if (!shieldState && counter_shield == 200) {
+            System.out.println ("> activating shield");
+            shieldState = true;
+            counter_shield = 0;
+        }
+    }
+
+    private boolean isLifeMax () {
+        return this.getLives () == 10;
+    }
+
+    private boolean isLifeLow () {
+        return this.getLives () < 3;
+    }
 
 
     /* ------------------------- ATTACKS ------------------------ */
