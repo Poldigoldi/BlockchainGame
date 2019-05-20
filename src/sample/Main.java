@@ -34,6 +34,10 @@ public class Main extends Application {
     private javafx.scene.media.Media gameMedia = new javafx.scene.media.Media(new File(gameSong).toURI().toString());
     private MediaPlayer gameMediaPlayer = new MediaPlayer(gameMedia);
 
+    private String bossSong = "src/sound/bossSong.mp3";
+    private javafx.scene.media.Media bossMedia = new javafx.scene.media.Media(new File(bossSong).toURI().toString());
+    private MediaPlayer bossMediaPlayer = new MediaPlayer(bossMedia);
+
     //sounds
     private AudioClip defeatSound = new AudioClip(Paths.get("src/sound/defeat.wav").toUri().toString());
     private AudioClip shootSound = new AudioClip(Paths.get("src/sound/shoot.wav").toUri().toString());
@@ -91,9 +95,7 @@ public class Main extends Application {
         gameMenu = new GameMenu(WIDTH, HEIGHT);
         instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
         //SET THE SCENE
-        menuMediaPlayer.play();
-        menuMediaPlayer.setVolume(1);
-        gameMediaPlayer.setVolume(0.5);
+        musicStart(MUSIC.MENU);
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
@@ -608,7 +610,7 @@ public class Main extends Application {
             return;
         }
         if (mode != mode.GAMEOVER) { //This get called when you're playing and then you DIE!
-            gameMediaPlayer.stop();
+            musicStop();
             defeatSound.play();
             mode = Mode.GAMEOVER;
             player.setLives(4);
@@ -619,8 +621,11 @@ public class Main extends Application {
 
   private void gameOver() {
     if (isPressed(KeyCode.SPACE)) {
-        gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        gameMediaPlayer.play();
+        if (level == 2) { //Play song for boss level!
+            musicStart(MUSIC.BOSS);
+        } else {
+            musicStart(MUSIC.LEVEL1);
+        }
       player.getLuggage().removeWeapon();
       infobar.updateWeapon(false);
       mainScene.setRoot(appRoot);
@@ -640,8 +645,8 @@ public class Main extends Application {
         public void handle(ActionEvent event) {
             mode = Mode.PLATFORMGAME;
             mainScene.setRoot(appRoot);
-            menuMediaPlayer.stop();
-            gameMediaPlayer.play();
+            musicStop();
+            musicStart(MUSIC.LEVEL1);
             timeCounter = 0;
         }
     };
@@ -752,5 +757,30 @@ public class Main extends Application {
         }
     }
 
+
+    /***************************************************************************
+     *                            MUSIC
+     * **********************************************************************/
+
+    private void musicStop() {
+        gameMediaPlayer.stop();
+        menuMediaPlayer.stop();
+        bossMediaPlayer.stop();
+    }
+
+    private void musicStart(MUSIC music) {
+        if (music == MUSIC.MENU) {
+            menuMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            menuMediaPlayer.play();
+        }
+        else if (music == MUSIC.LEVEL1) {
+            gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            gameMediaPlayer.play();
+        }
+        else if (music == MUSIC.BOSS) {
+            bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            bossMediaPlayer.play();
+        }
+    }
 }
 
