@@ -75,6 +75,7 @@ public class Map {
         currentLevel = 2;
         createLayer3Clouds();
         generalInitialiser();
+        addToGrid ();
         addEnemy (3);
     }
 

@@ -19,14 +19,18 @@ import java.util.Random;
 public class HacKing extends Person {
 
 
-    // Motion variables
+    /* Motion variables */
     private int counter_moves;
     private int directionIndex; // 1 (up), 2 (down), 3 (right), 4 (left)
 
     private final int LIMIT_MOVES = 300;
     private final int SPEED_MOVE = 1;
 
-    // Attack variables
+    /* Defense variables */
+    private int counter_heal;
+    private final int TIME_HEALING = 60;
+
+    /* Attack variables */
     private final int ATTACK_BULLETS_AMOUNT = 4;
     private final int TIME_BETWEEN_ATTACK = 60 * 2;
     private final int TIME_BETWEEN_BULLETS = 10;
@@ -34,16 +38,19 @@ public class HacKing extends Person {
     private int attack_mode; // 1 for enemy wave - 2 for missiles
     private int attack_bullet_count;
 
-    // Constructor
+    /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 6);
+        super (Type.KING, 10);
         this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
         sprite.loadDefaultImages (new Frame("/graphics/enemy1.png"));
         this.attack_mode = 2;
+        this.directionIndex = 1;
+
+        // initialize counters
         this.counter = 0;
         this.attack_bullet_count = 0;
+        this.counter_heal = 0;
         this.counter_moves = 0;
-        this.directionIndex = 1;
 
     }
 
@@ -65,8 +72,6 @@ public class HacKing extends Person {
          *  *
          *
          */
-        int speedX = 0 , speedY = 0;
-
         if (isGoingOutOfBound (map.getLevel ().height(), map.getLevel ().width)) {
             directionIndex = newRandom (directionIndex);
         }
@@ -125,7 +130,7 @@ public class HacKing extends Person {
 
     // If player too far from King, force king to move closer
     private void listenerTooFarFromPlayer(double x, double y) {
-        if (Math.abs (getX () - x) > 400) {
+        if (Math.abs (getX () - x) > 500) {
             if (getX () > x) { directionIndex = 4; }
             else { directionIndex = 3; }
         }
@@ -134,6 +139,27 @@ public class HacKing extends Person {
             else { directionIndex = 2; }
         }
     }
+
+    /* ------------------------- DEFENSE ------------------------ */
+
+    private boolean isLifeLow () {
+        return this.getLives () < 4;
+    }
+
+    // If King life too low, will start a counter to heal him
+    void listenerRegenerate () {
+        if (isLifeLow ()) {
+            counter_heal++;
+        }
+        if (counter_heal == TIME_HEALING) {
+            System.out.println ("KING GAINES 2 LIVES");
+            counter_heal = 0;
+            winOneLive ();
+            winOneLive ();
+        }
+    }
+
+
 
     /* ------------------------- ATTACKS ------------------------ */
 

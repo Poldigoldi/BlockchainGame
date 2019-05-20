@@ -26,7 +26,7 @@ public class Person extends Object {
     }
 
     void looseOneLife() {
-        if(this.type==type.ENEMY) {
+        if(this.type==type.ENEMY || this.type == Type.KING) {
             this.setspin(true);
             this.lives--;
         }

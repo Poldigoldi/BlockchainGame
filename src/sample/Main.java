@@ -463,6 +463,7 @@ public class Main extends Application {
                 // if player shooting, his bullets wont hurt himself
                 else {
                     waitsSomeoneHitBullet(bullet, enemy);
+                 //   waitsSomeoneHitBullet (bullet, map.getKing ());
                 }
             }
 
@@ -476,7 +477,8 @@ public class Main extends Application {
         if (king == null) {
             return;
         }
-
+        System.out.println ("king lives " + king.getLives ());
+        king.listenerRegenerate ();
         king.move (map, player.getX (), player.getY ());
 
         if (king.isCanAttack ()) {
