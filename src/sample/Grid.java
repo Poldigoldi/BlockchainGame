@@ -111,20 +111,32 @@ public class Grid {
   };
 
   private String[] map3 = new String[]{
+          "4         4          4",
+          "4         4          4",
+          "4         4          4",
+          "4         4          4",
+          "#         4          4",
+          "4         4          4",
+          "4         4          4",
+          "4         4          4",
+          "4         4          #",
           "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4                    4",
-          "4444444444444444444444"
+          "4...............     4",
+          "4444444444444444     4",
+          "4                DD  #",
+          "#          DDDDD     4",
+          "4  D  D  D DDDDD    o4",
+          "4D                  -4",
+          "4  D      #          #",
+          "4D                R  4",
+          "#               R    4",
+          "4   OO  D         R r4",
+          "4          OO       -4",
+          "4             MV     4",
+          "#                MV  4",
+          "4             MV     4",
+          "4  DDDDDDDDDD        #",
+          "4444                 4"
   };
 
 
@@ -132,6 +144,7 @@ public class Grid {
   Grid(int level) {
     map = map1;
     if (level == 2) map = map2;
+    if (level == 3) map = map3;
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {
