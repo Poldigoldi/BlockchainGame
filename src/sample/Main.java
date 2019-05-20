@@ -637,10 +637,13 @@ public class Main extends Application {
 
   private void gameOver() {
     if (isPressed(KeyCode.SPACE)) {
-        if (level == 2) { //Play song for boss level!
-            musicStart(Music.BOSS);
-        } else {
+        if (level == 1) {
             musicStart(Music.LEVEL1);
+        }
+        else if (level == 2) { //Play song for boss level!
+            musicStart(Music.BOSS);
+        } else if (level == 3) {
+            musicStart(Music.LEVEL3);
         }
       player.getLuggage().removeWeapon();
       infobar.updateWeapon(false);
