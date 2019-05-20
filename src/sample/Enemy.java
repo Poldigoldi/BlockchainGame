@@ -2,7 +2,6 @@ package sample;
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,15 +10,10 @@ class Enemy extends Person {
     private int countMoveLeft;
     private int countMoveRight;
     private int limitMoves = 400;
-    private boolean print = false;
 
     // Global variables
     private final int OFFSET = 5;
-    private final int MOVE_SPEED = 1;
-    private final double JUMP_SPEED_Y = 29;
-    private final double JUMP_SPEED_X = 2.8;
     private final int JUMP_PROBA_RANGE;
-    private final int MIN_MOVE = 200;
     private final int MAX_MOVES_AMPLITUDE;
 
     Enemy(int startx, int starty, boolean canMove, int moveAmplitude, int jumpProbRange) {
@@ -86,6 +80,8 @@ class Enemy extends Person {
             this.Velocity = new Point2D (0, this.Velocity.getY ());
         }
         // Enemy goes RIGHT if he is allowed
+        int MOVE_SPEED = 1;
+        double JUMP_SPEED_X = 2.8;
         if (countMoveRight < limitMoves) {
             if (isGapRightTooBig (map)) {
                 countMoveRight = limitMoves;
@@ -117,6 +113,7 @@ class Enemy extends Person {
         if (countMoveLeft == limitMoves && countMoveRight == limitMoves) {
             countMoveRight=0;
             countMoveLeft=0;
+            int MIN_MOVE = 200;
             limitMoves = MIN_MOVE + new Random ().nextInt(MAX_MOVES_AMPLITUDE);
         }
     }
@@ -125,6 +122,7 @@ class Enemy extends Person {
 
     private void jump (double value) {
         if (canJump) {
+            double JUMP_SPEED_Y = 29;
             this.Velocity = this.Velocity.add (value, -JUMP_SPEED_Y);
             canJump =false;
         }
@@ -276,8 +274,8 @@ class Enemy extends Person {
             for (Platform p : map.getLevel ().platforms ()) {
                 // only jump if there is a platform so he doesn't die
                 if (p.getY () > getY () + height) {
-                    if (   (side == "RIGHT" && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
-                        || (side == "LEFT" && getX () > p.getX () + p.width - width && (getX () < p.getX () + p.width + width))   ){
+                    if (   (side.equals("RIGHT") && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
+                        || (side.equals("LEFT") && getX () > p.getX () + p.width - width && (getX () < p.getX () + p.width + width))   ){
                         print ("SAFE TO ABORT JUMP " + side);
                         return false;
                     }
@@ -298,6 +296,7 @@ class Enemy extends Person {
     /* PRINTING */
 
     private void print(String string){
+        boolean print = false;
         if(print) System.out.println(string);
     }
 }

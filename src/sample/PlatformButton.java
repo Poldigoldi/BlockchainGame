@@ -9,45 +9,40 @@ package sample;
      implements attributes previously described in the object class
   */
 
-class PlatformButton extends Object{
-  private String colour;
-  private boolean pressed = false;
-  private Frame buttonUp;
-  private Frame buttonDown;
+class PlatformButton extends Object {
+    private String colour;
+    private boolean pressed = false;
+    private Frame buttonUp;
+    private Frame buttonDown;
 
 
-
-  PlatformButton(Type type, String colour, Frame up, Frame down) {
-    super(type);
-    buttonUp = up;
-    buttonDown = down;
-    this.colour = colour;
-    sprite.setImage(buttonUp);
-    sprite().offset(-11, -40);
-  }
-
+    PlatformButton(Type type, String colour, Frame up, Frame down) {
+        super(type);
+        buttonUp = up;
+        buttonDown = down;
+        this.colour = colour;
+        sprite.setImage(buttonUp);
+        sprite().offset(-11, -40);
+    }
 
 
+    void setPressed(boolean pressed) {
+        this.pressed = pressed;
+    }
 
+    void buttonDown() {
+        sprite.setImage(buttonDown);
+    }
 
-  void setPressed(boolean pressed) {
-    this.pressed = pressed;
-  }
+    void buttonUp() {
+        sprite.setImage(buttonUp);
+    }
 
-  void buttonDown() {
-    sprite.setImage(buttonDown);
-  }
+    boolean isPressed() {
+        return this.pressed;
+    }
 
-  void buttonUp() {
-    sprite.setImage(buttonUp);
-  }
-
-  boolean isPressed(){
-    return this.pressed;
-  }
-
-  public String getColour() {
-    return this.colour;
-  }
-
+    String getColour() {
+        return this.colour;
+    }
 }

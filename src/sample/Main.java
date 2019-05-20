@@ -17,12 +17,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static sample.Mode.GAMEOVER;
 
 public class Main extends Application {
     //music
@@ -53,8 +56,6 @@ public class Main extends Application {
     //global variables
     private int WIDTH, HEIGHT;
     private int level = 1;
-    private final int PLAYERSTARTX = 450, PLAYERSTARTY = 300, PLAYER_START_LIVES = 4;
-    private final int TIME_LIMIT = 60 * 20 * 1; // 20 seconds
     private Mode mode = Mode.STARTMENU;
 
     private int timeCounter = 0;
@@ -63,7 +64,6 @@ public class Main extends Application {
     private InfoBar infobar;
     private Object speaker;
     private Object warning;
-    private Stage stage;
     private AnchorPane appRoot = new AnchorPane();
     private Map map;
     private Scene mainScene;
@@ -84,15 +84,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage = primaryStage;
         initialiseFonts();
         //set Stage boundaries to visible bounds of the main screen, reinitialise everything
         this.WIDTH = (int) primaryScreenBounds.getWidth();
         this.HEIGHT = (int) primaryScreenBounds.getHeight();
-        stage.setX(primaryScreenBounds.getMinX());
-        stage.setY(primaryScreenBounds.getMinY());
-        stage.setWidth(WIDTH);
-        stage.setHeight(HEIGHT);
+        primaryStage.setX(primaryScreenBounds.getMinX());
+        primaryStage.setY(primaryScreenBounds.getMinY());
+        primaryStage.setWidth(WIDTH);
+        primaryStage.setHeight(HEIGHT);
         //PREPARE ROOT NODES FROM DIFFERENT CLASSES
         keyPad = new KeyPad(WIDTH, HEIGHT);
         gameOver = new GameOver(WIDTH, HEIGHT);
@@ -115,10 +114,9 @@ public class Main extends Application {
         initContent(1);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
-        for(Object object: map.level().bringtofront()){
+        for (Object object : map.level().bringtofront()) {
             object.sprite.toFront();
         }
-
     }
 
     private void initialiseLabels() {
@@ -161,14 +159,15 @@ public class Main extends Application {
     }
 
     private void initContent(int level) {
-        player = new Player("Hero", WIDTH / 2, HEIGHT / 2, PLAYER_START_LIVES);
+        int PLAYER_START_LIVES = 4;
+        player = new Player(WIDTH / 2, HEIGHT / 2, PLAYER_START_LIVES);
         appRoot.getChildren().clear();
         //initialise background
         Image back1 = new Image("/graphics/background1.png", true);
         BackgroundImage background = new BackgroundImage(back1, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         appRoot.setBackground(new Background(background));
-        map = new Map(level, WIDTH, HEIGHT); //initialises level based on level number input
+        map = new Map(level, WIDTH); //initialises level based on level number input
         map.addPlayer(player, 70, map.level().height() - 135);
         map.mapRoot().setTranslateX(0);
         map.mapRoot().setTranslateY(-map.level().height() + HEIGHT);
@@ -216,7 +215,7 @@ public class Main extends Application {
             map.bigdoor().sprite.setanimation(true);
 
         }
-        if (mode == Mode.GAMEOVER) gameOver();
+        if (mode == GAMEOVER) gameOver();
         if (mode == Mode.KEYPAD) handleKeyPad();
         if (mode == Mode.MINIGAME) {
             if (isPressed(KeyCode.ESCAPE)) {
@@ -246,16 +245,16 @@ public class Main extends Application {
             ListenerItemsEvent();
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
-            ListenerHackingAttack ();
+            ListenerHackingAttack();
             ListenerAttackBots();
-            ListenerBullets ();
+            ListenerBullets();
             ListenerButtons();
             UpdateAnimatedObjects();
             ListenerTimeBeforeNewEnemyWave();
             ListenerDoodads();
             ListenerHelpPopUp();
         }
-        if (mode == Mode.PLATFORMGAME || mode == Mode.GAMEOVER) {
+        if (mode == Mode.PLATFORMGAME || mode == GAMEOVER) {
             ListenerGameOver();
         }
     }
@@ -269,8 +268,8 @@ public class Main extends Application {
         speaker.setY(-map.mapRoot().getTranslateY() + 25);
         speaker.box.setVisible(false);
         speaker.sprite.toFront();
-        warning.setX(-map.mapRoot().getTranslateX() + 0.5*WIDTH-200);
-        warning.setY(-map.mapRoot().getTranslateY() + HEIGHT-100);
+        warning.setX(-map.mapRoot().getTranslateX() + 0.5 * WIDTH - 200);
+        warning.setY(-map.mapRoot().getTranslateY() + HEIGHT - 100);
         warning.box.setVisible(false);
         warning.sprite.toFront();
     }
@@ -300,29 +299,29 @@ public class Main extends Application {
      *                              LISTENERS FOR EVENTS
      * **********************************************************************/
 
-    private void ListenerAttackBots(){
+    private void ListenerAttackBots() {
         //for attackbots
-            for(AttackBot attackBot: map.attackbots()) {
-                    if(attackBot.moveLaser(player.getX(), player.getY())==true && player.isCanDie() && !player.getSpin()) {
-                        player.looseOneLife();
-                        player.setCanDie(false);
-                        playerhurtSound.play();
-                        infobar.updateHealthEmpty(player.getLives());
-                    }
-                if (attackBot.counter() < 300) {
-                    if (attackBot.getX() < player.getX()) {
-                        attackBot.sprite.offset(15, 0);
-                        attackBot.sprite.setdefaultanimationchoice(2);
-                        attackBot.setFacingRight(true);
-                    } else {
-                        attackBot.sprite.offset(0, 0);
-                        attackBot.sprite.setdefaultanimationchoice(1);
-                        attackBot.setFacingRight(false);
-                    }
-                }
-                attackBot.laser().toFront();
-
+        for (AttackBot attackBot : map.attackbots()) {
+            if (attackBot.moveLaser(player.getX(), player.getY()) && player.isCanDie() && !player.getSpin()) {
+                player.looseOneLife();
+                player.setCanDie(false);
+                playerhurtSound.play();
+                infobar.updateHealthEmpty(player.getLives());
             }
+            if (attackBot.counter() < 300) {
+                if (attackBot.getX() < player.getX()) {
+                    attackBot.sprite.offset(15, 0);
+                    attackBot.sprite.setdefaultanimationchoice(2);
+                    attackBot.setFacingRight(true);
+                } else {
+                    attackBot.sprite.offset(0, 0);
+                    attackBot.sprite.setdefaultanimationchoice(1);
+                    attackBot.setFacingRight(false);
+                }
+            }
+            attackBot.laser().toFront();
+
+        }
 
 
     }
@@ -336,8 +335,7 @@ public class Main extends Application {
             musicStop();
             musicStart(Music.BOSS);
             changeLevel(level);
-        }
-        else if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
+        } else if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
             level = 3;
             musicStop();
             musicStart(Music.LEVEL3);
@@ -360,7 +358,7 @@ public class Main extends Application {
             if (popUp.getOpacity() > 0) popUp.setOpacity(popUp.getOpacity() - 0.05);
             if (speaker.sprite.getOpacity() > 0) speaker.sprite.setOpacity(popUp.getOpacity());
         }
-        if (player.getLives()<2) {
+        if (player.getLives() < 2) {
             if (warning.sprite.getOpacity() < 1) warning.sprite.setOpacity(warning.sprite.getOpacity() + 0.05);
         } else {
             if (warning.sprite.getOpacity() > 0) warning.sprite.setOpacity(warning.sprite.getOpacity() - 0.05);
@@ -374,21 +372,20 @@ public class Main extends Application {
         for (Collectable item : map.getItems()) {
             if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
-                if (item.isAlive() && item.getItemType() != Type.HEART ) {
+                if (item.isAlive() && item.getItemType() != Type.HEART) {
                     player.getLuggage().take(item);
                     map.hideEntity(item);
                     infobar.updateWeapon(true);
                     if (item.getItemType() == Type.BLOCK) {
                         miniGameKey();
                     }
-                }
-               else if (item.isAlive() && item.getItemType() == Type.HEART ) {
-                   if(player.getLives() < 4) {
-                       map.hideEntity(item);
-                       item.setAlive(false);
-                       player.addLife();
-                       infobar.updateHealthFill(player.getLives());
-                   }
+                } else if (item.isAlive() && item.getItemType() == Type.HEART) {
+                    if (player.getLives() < 4) {
+                        map.hideEntity(item);
+                        item.setAlive(false);
+                        player.addLife();
+                        infobar.updateHealthFill(player.getLives());
+                    }
                 }
             }
         }
@@ -428,10 +425,6 @@ public class Main extends Application {
         }
     }
 
-    private void ListenerGainLife() {
-
-    }
-
     private void ListenerPlayerUseWeapon() {
         if (player.hasWeapon()) {
             // If player allowed to use weapon and has bullets left
@@ -463,7 +456,7 @@ public class Main extends Application {
             enemy1dieSound.play();
             person.died();
             if (person instanceof HacKing) {
-                map.hideEntity (map.getKing ());
+                map.hideEntity(map.getKing());
                 doorunlocked = true;
                 doorOpenSound.play();
                 map.bigdoor().sprite.setanimation(true);
@@ -475,7 +468,7 @@ public class Main extends Application {
         // moves existing bullets
         for (Bullet bullet : bulletsFired) {
             bullet.move(map);
-            for (Person enemy : map.getEnemies ()) {
+            for (Person enemy : map.getEnemies()) {
                 // if Hacking shooting, his bullets won't hurt the enemies
                 if (!bullet.isPlayerShooting()) {
                     waitsSomeoneHitBullet(bullet, player);
@@ -493,28 +486,28 @@ public class Main extends Application {
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack() {
         HacKing king = map.getKing();
-        if (king == null || !king.isAlive ()) {
+        if (king == null || !king.isAlive()) {
             return;
         }
-        king.listenerDefense ();
-        king.move (map, player.getX (), player.getY ());
+        king.listenerDefense();
+        king.move(map, player.getX(), player.getY());
 
-        if (king.isCanAttack ()) {
+        if (king.isCanAttack()) {
             // send new enemies
-            if (king.getAttackMode () == 1 && map.getEnemies ().size () < 10) {
-                map.addRandomEnemy ();
-                map.addRandomEnemy ();
+            if (king.getAttackMode() == 1 && map.getEnemies().size() < 10) {
+                map.addRandomEnemy();
+                map.addRandomEnemy();
             }
             // send missiles in both directions
-            if (king.getAttackMode () > 1) {
-                shootOneBullet (king, true);
-                shootOneBullet (king, false);
+            if (king.getAttackMode() > 1) {
+                shootOneBullet(king, true);
+                shootOneBullet(king, false);
             }
-            king.nextAttackMode ();
+            king.nextAttackMode();
         }
     }
 
-    private void shootOneBullet (Person  shooter, boolean shootRight) {
+    private void shootOneBullet(Person shooter, boolean shootRight) {
         boolean isPlayerShooter = shooter instanceof Player;
         final int BULLET_WIDTH = 20;
         final int OFFSET = 5;
@@ -534,8 +527,8 @@ public class Main extends Application {
                 if (isObjectOutOfBounds(enemy)) {
                     enemy.setAlive(false);
                 }
-                if (enemy instanceof Enemy && ((Enemy)enemy).getCanMove()) {
-                    ((Enemy)enemy).giveMotion(map);
+                if (enemy instanceof Enemy && ((Enemy) enemy).getCanMove()) {
+                    ((Enemy) enemy).giveMotion(map);
                 }
             }
             if (enemy.sprite.dead()) {
@@ -553,6 +546,8 @@ public class Main extends Application {
             timeCounter++;
             int WAVE_SIZE = 3;
             if (map.getEnemies().size() < 10) {
+                // 20 seconds
+                int TIME_LIMIT = 60 * 20;
                 if (timeCounter >= TIME_LIMIT && timeCounter % 60 == 0) map.addRandomEnemy();
                 if (timeCounter > TIME_LIMIT + WAVE_SIZE * 60) timeCounter = 0;
             }
@@ -585,7 +580,7 @@ public class Main extends Application {
     /* ----------- PLATFORMS ------------ */
     private void ListenerPlatforms() {
         for (Platform platform : map.getLevel().platforms()) {
-            if (platform.isTimed() == true) {
+            if (platform.isTimed()) {
                 if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && !platform.disappearing()) {
                     platform.setDisappear(true);
                     platform.sprite.setImage(new Image("/graphics/disappear2.png"));
@@ -598,7 +593,7 @@ public class Main extends Application {
                     platform.setCollisionBox(0, 0, 0, 0, Color.RED);
                     platform.calculateUpdate(updateCount);
                 }
-                if (platform.isAlive() == false && platform.matchUpdate(updateCount)) {
+                if (!platform.isAlive() && platform.matchUpdate(updateCount)) {
                     platform.setAlive(true);
                     platform.sprite.setImage(new Image("/graphics/disappear1.png"));
                     platform.restoreCollisionBox();
@@ -625,33 +620,32 @@ public class Main extends Application {
         if (player.getLives() > 0 && !isObjectOutOfBounds(player)) {
             return;
         }
-        if (mode != mode.GAMEOVER) { //This get called when you're playing and then you DIE!
+        if (mode != GAMEOVER) { //This get called when you're playing and then you DIE!
             musicStop();
             defeatSound.play();
-            mode = Mode.GAMEOVER;
+            mode = GAMEOVER;
             player.setLives(4);
             changeLevel(level);
             mainScene.setRoot(gameOver.returnRoot());
         }
     }
 
-  private void gameOver() {
-    if (isPressed(KeyCode.SPACE)) {
-        if (level == 1) {
-            musicStart(Music.LEVEL1);
+    private void gameOver() {
+        if (isPressed(KeyCode.SPACE)) {
+            if (level == 1) {
+                musicStart(Music.LEVEL1);
+            } else if (level == 2) { //Play song for boss level!
+                musicStart(Music.BOSS);
+            } else if (level == 3) {
+                musicStart(Music.LEVEL3);
+            }
+            player.getLuggage().removeWeapon();
+            infobar.updateWeapon(false);
+            mainScene.setRoot(appRoot);
+            keys.clear(); /**added to prevent input from previous game being called on reset**/
+            mode = Mode.PLATFORMGAME;
         }
-        else if (level == 2) { //Play song for boss level!
-            musicStart(Music.BOSS);
-        } else if (level == 3) {
-            musicStart(Music.LEVEL3);
-        }
-      player.getLuggage().removeWeapon();
-      infobar.updateWeapon(false);
-      mainScene.setRoot(appRoot);
-      keys.clear(); /**added to prevent input from previous game being called on reset**/
-      mode = Mode.PLATFORMGAME;
     }
-  }
 
 
     /***************************************************************************
@@ -659,7 +653,7 @@ public class Main extends Application {
      * **********************************************************************/
 
 
-    EventHandler<ActionEvent> startButtonHandler = new EventHandler<ActionEvent>() {
+    private EventHandler<ActionEvent> startButtonHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             mode = Mode.PLATFORMGAME;
@@ -670,14 +664,14 @@ public class Main extends Application {
         }
     };
 
-    EventHandler<ActionEvent> instructionButtonHandler = new EventHandler<ActionEvent>() {
+    private EventHandler<ActionEvent> instructionButtonHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             mainScene.setRoot(instructionScreen.returnRoot());
         }
     };
 
-    EventHandler<ActionEvent> returnButtonHandler = new EventHandler<ActionEvent>() {
+    private EventHandler<ActionEvent> returnButtonHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             mainScene.setRoot(gameMenu.returnRoot());
@@ -791,18 +785,15 @@ public class Main extends Application {
         if (music == Music.MENU) {
             menuMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             menuMediaPlayer.play();
-        }
-        else if (music == Music.LEVEL1) {
+        } else if (music == Music.LEVEL1) {
             level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             level1MediaPlayer.setVolume(0.5);
             level1MediaPlayer.play();
-        }
-        else if (music == Music.LEVEL3) {
+        } else if (music == Music.LEVEL3) {
             level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             level3MediaPlayer.setVolume(0.5);
             level3MediaPlayer.play();
-        }
-        else if (music == Music.BOSS) {
+        } else if (music == Music.BOSS) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             bossMediaPlayer.setVolume(0.5);
             bossMediaPlayer.play();

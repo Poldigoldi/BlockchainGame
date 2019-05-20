@@ -1,20 +1,20 @@
 package sample;
 
 public enum Type {
-    SOLID, PLAYER, PLATFORM, PLATFORMBUTTON, ITEM, HEART,  WEAPON, BULLET, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY, DOODAD, ABSTRACT, KING, ATTACKBOT;
+    SOLID, PLAYER, PLATFORM, PLATFORMBUTTON, ITEM, HEART, WEAPON, BULLET, BLOCK, LAYER1, LAYER2, LAYER3, LAYER4, ENEMY, DOODAD, ABSTRACT, KING, ATTACKBOT;
 
     //used in update to see whether to apply falling
-    public boolean hasGravity(){
-        if(this== PLAYER) return true;
-        if(this== ITEM) return true;
-        if(this== ENEMY) return true;
+    public boolean hasGravity() {
+        if (this == PLAYER) return true;
+        if (this == ITEM) return true;
+        if (this == ENEMY) return true;
         return false;
     }
 
     //used in update to see whether to look for the last movement for animations (e.g. left or right?)
-    public boolean hasMovementAnimation(){
-        if(this==PLAYER) return true;
-        if(this== ENEMY) return true;
+    public boolean hasMovementAnimation() {
+        if (this == PLAYER) return true;
+        if (this == ENEMY) return true;
         return false;
     }
 

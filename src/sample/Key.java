@@ -13,7 +13,7 @@ class Key {
 
     Key(String value) {
         this.value = value;
-        button.setMinSize(50,50);
+        button.setMinSize(50, 50);
         button.setText(value);
         try {
             button.setFont(Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16));

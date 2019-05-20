@@ -1,14 +1,12 @@
 package sample;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.File;
@@ -17,14 +15,13 @@ import java.io.FileNotFoundException;
 
 public class KeyPad {
     private GridPane keyPad = new GridPane();
-    private Key q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;
+    private Key q, w, e, r, t, y, u, i, o, p, a, s, d, f, g, h, j, k, l, z, x, c, v, b, n, m;
     private Button enter, clear, exit;
     private TextField display;
     private Group root = new Group();
     private boolean isCodeCorrect = false;
     private int WIDTH, HEIGHT;
     private Font font;
-    private String style = "-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;";
 
     {
         try {
@@ -43,10 +40,10 @@ public class KeyPad {
     void initialise() {
         Image background = new Image("/graphics/neo.png");
         ImageView backgroundView = new ImageView(background);
-        backgroundView.setFitWidth(WIDTH/4);
-        backgroundView.setFitHeight(HEIGHT/4);
-        backgroundView.setTranslateX(WIDTH/2);
-        backgroundView.setTranslateY(HEIGHT/2-100);
+        backgroundView.setFitWidth(WIDTH / 4);
+        backgroundView.setFitHeight(HEIGHT / 4);
+        backgroundView.setTranslateX(WIDTH / 2);
+        backgroundView.setTranslateY(HEIGHT / 2 - 100);
 
         /*Selection keys*/
         q = new Key("q");
@@ -77,17 +74,18 @@ public class KeyPad {
         m = new Key("m");
 
         display = new TextField("");
-        display.setMinSize(200,50);
+        display.setMinSize(200, 50);
         display.setFont(font);
+        String style = "-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;";
         display.setStyle(style);
 
         /*Buttons*/
         enter = new Button("ENTER");
-        enter.setMinSize(50,50);
+        enter.setMinSize(50, 50);
         clear = new Button("C");
-        clear.setMinSize(50,50);
+        clear.setMinSize(50, 50);
         exit = new Button("EXIT");
-        exit.setMinSize(50,50);
+        exit.setMinSize(50, 50);
         enter.setFont(font);
         enter.setStyle(style);
         clear.setFont(font);
@@ -97,18 +95,18 @@ public class KeyPad {
 
 
         /*Add buttons to keyPad*/
-        keyPad.add(display, 0,0,10,1);
+        keyPad.add(display, 0, 0, 10, 1);
 
-        keyPad.add(q.getButton(),0,1);
-        keyPad.add(w.getButton(),1,1);
-        keyPad.add(e.getButton(),2,1);
-        keyPad.add(r.getButton(),3,1);
-        keyPad.add(t.getButton(),4,1);
-        keyPad.add(y.getButton(),5,1);
-        keyPad.add(u.getButton(),6,1);
-        keyPad.add(i.getButton(),7,1);
-        keyPad.add(o.getButton(), 8,1);
-        keyPad.add(p.getButton(),9,1);
+        keyPad.add(q.getButton(), 0, 1);
+        keyPad.add(w.getButton(), 1, 1);
+        keyPad.add(e.getButton(), 2, 1);
+        keyPad.add(r.getButton(), 3, 1);
+        keyPad.add(t.getButton(), 4, 1);
+        keyPad.add(y.getButton(), 5, 1);
+        keyPad.add(u.getButton(), 6, 1);
+        keyPad.add(i.getButton(), 7, 1);
+        keyPad.add(o.getButton(), 8, 1);
+        keyPad.add(p.getButton(), 9, 1);
 
         keyPad.add(a.getButton(), 0, 2);
         keyPad.add(s.getButton(), 1, 2);
@@ -128,9 +126,9 @@ public class KeyPad {
         keyPad.add(n.getButton(), 6, 3);
         keyPad.add(m.getButton(), 7, 3);
 
-        keyPad.add(clear, 0,4,3,1);
-        keyPad.add(enter, 4,4,3,1);
-        keyPad.add(exit,7,4,3,1);
+        keyPad.add(clear, 0, 4, 3, 1);
+        keyPad.add(enter, 4, 4, 3, 1);
+        keyPad.add(exit, 7, 4, 3, 1);
 
         keyPad.setPadding(new Insets(10));
         keyPad.setHgap(10);
@@ -143,9 +141,11 @@ public class KeyPad {
     Group getRoot() {
         return root;
     }
+
     String getDisplayText() {
         return display.getText();
     }
+
     void setDisplayText(String displayText) {
         this.display.setText(displayText);
     }
@@ -257,6 +257,7 @@ public class KeyPad {
     Button getEnter() {
         return enter;
     }
+
     Button getClear() {
         return clear;
     }
@@ -264,9 +265,11 @@ public class KeyPad {
     Button getExit() {
         return exit;
     }
+
     boolean isCodeCorrect() {
         return isCodeCorrect;
     }
+
     void setCodeCorrect(boolean codeCorrect) {
         isCodeCorrect = codeCorrect;
     }

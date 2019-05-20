@@ -1,6 +1,5 @@
 package sample;
 
-
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 
@@ -9,42 +8,39 @@ import java.nio.file.Paths;
 /*Nick made major changes to this class. A player is an Object that can JUMP and hold items */
 public class Player extends Person {
     //sounds
-    AudioClip jumpSound = new AudioClip(Paths.get("src/sound/jump.wav").toUri().toString());
+    private AudioClip jumpSound = new AudioClip(Paths.get("src/sound/jump.wav").toUri().toString());
 
-    //variables
-    private int WIDTH = 30, HEIGHT = 60;
-    private boolean canDie;
-    private String name;
     private Luggage luggage;
     private String facing;
 
-    Player(String name, int STARTX, int STARTY, int START_LIVES) {
+    Player(int STARTX, int STARTY, int START_LIVES) {
         super(Type.PLAYER, START_LIVES);
-        setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
-        this.canDie = true;
-        this.name = name;
+        //variables
+        int WIDTH = 30;
+        int HEIGHT = 60;
+        setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT, Color.BLUE);
         this.luggage = new Luggage();
         this.facing = "RIGHT";
         initialise();
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
-        sprite().offset(-(64-WIDTH)/2, -(64- HEIGHT));
+        sprite().offset(-(64 - WIDTH) / 2, -(64 - HEIGHT));
     }
 
 
     void jump() {
         if (canJump) {
             jumpSound.play();
-            this.Velocity = this.Velocity.add (0, -30);
-            canJump =false;
+            this.Velocity = this.Velocity.add(0, -30);
+            canJump = false;
         }
     }
 
     boolean hasWeapon() {
-        return luggage.getWeapon () != null;
+        return luggage.getWeapon() != null;
     }
 
     boolean canUseWeapon() {
-        if (luggage.getWeapon ().isCanShoot () && luggage.getWeapon ().getBullets () > 0) {
+        if (luggage.getWeapon().isCanShoot() && luggage.getWeapon().getBullets() > 0) {
             return true;
         }
         return false;
@@ -86,15 +82,8 @@ public class Player extends Person {
     /* ------------ GETTERS & SETTERS -------------- */
 
 
-    Luggage getLuggage () {
+    Luggage getLuggage() {
         return this.luggage;
     }
 
-    public String getFacing() {
-        return facing;
-    }
-
-    public void setFacing(String facing) {
-        this.facing = facing;
-    }
 }

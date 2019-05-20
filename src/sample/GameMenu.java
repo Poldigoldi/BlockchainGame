@@ -15,15 +15,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 class GameMenu {
-    private int WIDTH, HEIGHT;
-    private Font teenytinyFont, tinyFont, smallFont, mediumFont;
-    Group root = new Group();
+    private Font teenytinyFont;
+    private Font tinyFont;
+    private Font smallFont;
+    private Group root = new Group();
     private Button startGame = new Button("START");
     private Button instructions = new Button("INSTRUCTIONS");
 
     GameMenu(int WIDTH, int HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
         initialiseFonts();
 
         //Labels
@@ -95,12 +94,10 @@ class GameMenu {
             teenytinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 8);
             tinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 15);
             smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);
-            mediumFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 54);
         } catch (FileNotFoundException e) {
             teenytinyFont = Font.font("Verdana", 15);
             tinyFont = Font.font("Verdana", 15);
             smallFont = Font.font("Verdana", 28);
-            mediumFont = Font.font("Verdana", 54);
         }
     }
 }

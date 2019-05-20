@@ -1,17 +1,13 @@
 package sample;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 
-public class AttackBot extends Object {
-    int counter;
+class AttackBot extends Object {
+    private int counter;
     private Polygon laser = new Polygon();
-    int laserXOffset;
-    private boolean laserActive;
-    int laserdistance = 2000;
 
-    public AttackBot(Type type, Frame ... frame) {
+    AttackBot(Type type, Frame... frame) {
         super(type);
         sprite.loadDefaultImages(new Frame("graphics/attackbot1.png", 8),
                 new Frame("/graphics/attackbot2.png", 9),
@@ -32,7 +28,7 @@ public class AttackBot extends Object {
     }
 
 
-    public boolean moveLaser(double playerx, double playery){
+    boolean moveLaser(double playerx, double playery){
         double distance = Math.sqrt(Math.pow((playerx - box.getTranslateX()), 2) + Math.pow((playery - box.getTranslateY()), 2));
         counter++;
         //reset
@@ -44,6 +40,7 @@ public class AttackBot extends Object {
                 //move if not attacking
 
                 if(counter<300) {
+                    int laserXOffset;
                     if (facingRight) laserXOffset = 55;
                     else laserXOffset = 20;
                     double angle1 = getAngle(getX() + laserXOffset, getY() + 28,playerx-10, playery+25);
@@ -57,11 +54,10 @@ public class AttackBot extends Object {
                     double pointX2 = (getX() + laserXOffset)  + (2000 * xstep2 );
                     double pointY2 = getY() + 28 + (2000 * ystep2);
                     laser.getPoints().clear();
-                   laser.getPoints().addAll(new Double[]{
-                          getX() + laserXOffset + 12, getY() + 26,
+                   laser.getPoints().addAll(getX() + laserXOffset + 12, getY() + 26,
                            getX() + laserXOffset, getY() + 28,
                            pointX1, pointY1,
-                            pointX2, pointY2});
+                           pointX2, pointY2);
 
 
 
@@ -93,17 +89,14 @@ public class AttackBot extends Object {
 
 
 
-    public int counter(){ return counter;}
+    int counter(){ return counter;}
 
-    public static double getAngle(double x1, double y1, double x2, double y2)
+    private static double getAngle(double x1, double y1, double x2, double y2)
     {
-
-
-        double angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
         //angle = angle + Math.ceil( -angle / 360 ) * 360;
-        return angle;
+        return Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
     }
 
 
-    public Polygon laser(){ return laser;}
+    Polygon laser(){ return laser;}
 }
