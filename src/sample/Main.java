@@ -242,6 +242,12 @@ public class Main extends Application {
                 musicStart(Music.BOSS);
                 changeLevel(level);
             }
+            if (isPressed(KeyCode.O)) {
+                level = 3;
+                musicStop();
+                musicStart(Music.LEVEL3);
+                changeLevel(3);
+            }
 
             moveScreenY();
             positionLabels();
