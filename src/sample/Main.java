@@ -486,7 +486,7 @@ public class Main extends Application {
     }
 
     private void waitsSomeoneHitBullet(Bullet bullet, Person person) {
-
+        if(!bullet.isAlive()) return;
         if (person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent()) && person.isAlive()) {
             map.removeBullet(bullet);
             person.looseOneLife();
@@ -497,11 +497,11 @@ public class Main extends Application {
             person.setCanDie(true);
         }
         if (person.getLives() == 0 && person.isAlive()) {
+            map.removeBullet(bullet);
             person.setAlive(false);
             enemy1dieSound.play();
             person.died();
             if (person instanceof HacKing) {
-                map.hideEntity(map.getKing());
                 doorunlocked = true;
                 doorOpenSound.play();
                 map.bigdoor().sprite.setanimation(true);
@@ -530,7 +530,9 @@ public class Main extends Application {
 
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack() {
+        if(!map.levelHasBoss(level)) return;
         HacKing king = map.getKing();
+        if (king.sprite().dead()) map.hideEntity(king);
         if (king == null || !king.isAlive()) {
             return;
         }
@@ -564,6 +566,8 @@ public class Main extends Application {
         map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
         bulletsFired.add(bullet);
     }
+
+
 
     private void ListenerEnemies() {
         for (Person enemy : map.getEnemies()) {

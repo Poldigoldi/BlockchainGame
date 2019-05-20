@@ -45,7 +45,7 @@ public class HacKing extends Person {
 
     /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 9);
+        super (Type.KING, 8);
         this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
         sprite.loadDefaultRightImages(
                 new Frame("/graphics/hackkingright1.png"));
@@ -63,6 +63,25 @@ public class HacKing extends Person {
                 new Frame("/graphics/hackkingleft3.png"),
                 new Frame("/graphics/hackkingleft4.png"),
                 new Frame("/graphics/hackkingleft5.png"));
+        sprite.loadDeathImages(
+                new Frame("/graphics/hackkingdie1.png", 15),
+                new Frame("/graphics/hackkingdie2.png", 10),
+                new Frame("/graphics/hackkingdie3.png", 12),
+                new Frame("/graphics/hackkingdie4.png", 10),
+                new Frame("/graphics/hackkingdie5.png", 12),
+                new Frame("/graphics/hackkingdie6.png", 10),
+                new Frame("/graphics/hackkingdie7.png", 10),
+                new Frame("/graphics/hackkingdie8.png", 10),
+                new Frame("/graphics/hackkingdie9.png", 10),
+                new Frame("/graphics/hackkingdie10.png", 10),
+                new Frame("/graphics/hackkingdie11.png", 10),
+                new Frame("/graphics/hackkingdie12.png", 10),
+                new Frame("/graphics/hackkingdie13.png", 12),
+                new Frame("/graphics/hackkingdie14.png", 13),
+                new Frame("/graphics/hackkingdie15.png", 15),
+                new Frame("/graphics/hackkingdie16.png", 16),
+                new Frame("/graphics/hackkingdie17.png", 14),
+                new Frame("/graphics/hackkingdie18.png", 12));
         sprite.offset(-60, -80);
         this.attack_mode = 2;
         this.directionIndex = 1;

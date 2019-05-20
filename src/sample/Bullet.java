@@ -31,11 +31,14 @@ public class Bullet extends Object {
     public Label label(){ return label; }
 
     void move(Map map) {
-        label.setTranslateX(box.getTranslateX());
-        label.setTranslateY(box.getTranslateY()-5);
-        int speed = (playerFacingRight ? 1 : -1) * SPEED_MAGNITUDE;
-        if (! move_X (speed, map)) {
-           map.removeBullet(this);
+        if(isAlive()) {
+            label.setTranslateX(box.getTranslateX());
+            label.setTranslateY(box.getTranslateY() - 5);
+            int speed = (playerFacingRight ? 1 : -1) * SPEED_MAGNITUDE;
+            if (!move_X(speed, map)) {
+                setAlive(false);
+                map.removeBullet(this);
+            }
         }
     }
 

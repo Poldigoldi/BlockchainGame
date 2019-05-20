@@ -41,7 +41,7 @@ public class Object {
     boolean isLanded;
     private boolean spin;
     private int spincounter;
-    private boolean onplatform;
+    private boolean facingRightOnPlatform;
 
     //sounds
     private AudioClip landSound = new AudioClip(Paths.get("src/sound/land.wav").toUri().toString());
@@ -101,6 +101,7 @@ public class Object {
         if (spin) spin();
         sprite.update(facingRight, isMoving, isLanded, movingDown, box.getTranslateX(), box.getTranslateY());
         //for Clouds
+        if( type == Type.SPRAY) if(sprite.dead()) map.hideEntity(this);
         if (type == Type.LAYER3) {
             circumnavigate(0.05, map);
         }
@@ -146,7 +147,7 @@ public class Object {
     //returns true if the move is not blocked
     boolean move_X(int value, Map map) {
         isMoving = true;
-        if(!onplatform) facingRight = value > 0;
+        facingRight = value > 0;
         for (Object object : map.level().platforms()) {
             //checks if player at same height as object and its solid first, then block left/right movements
             if (type == Type.BULLET && box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
@@ -177,16 +178,15 @@ public class Object {
                                 landSound.play();
                             canJump = true;
                             isLanded = true;
-                            onplatform = false;
+                            facingRightOnPlatform = facingRight;
                             if (object.isMoving && object.isMovingRight()) {
-                                onplatform = true;
                                 move_X(2, map);
                                 if (this.type == Type.PLAYER) map.moveScreenX(2, this);
                             } else if (object.isMoving && !object.isMovingRight()) {
-                                onplatform = true;
                                 move_X(-2, map);
                                 if (this.type == Type.PLAYER) map.moveScreenX(-2, this);
                             }
+                            facingRight = facingRightOnPlatform;
                             return;
                         }
                     } else { // Moving up

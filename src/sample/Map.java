@@ -144,6 +144,8 @@ public class Map {
 
     void removeBullet(Bullet bullet) {
         bullet.setAlive(false);
+        bulletDeath(bullet.getX(), bullet.getY());
+        animatedObjects.remove(bullet);
         mapRoot.getChildren().remove(bullet.label());
         hideEntity(bullet);
     }
@@ -357,6 +359,20 @@ public class Map {
         addAnimatedObjects(mountain, mountain2, mountain3);
     }
 
+    private void bulletDeath(double x, double y){
+        System.out.println("did");
+        Object bulletdeath = new Object(Type.SPRAY);
+        bulletdeath.setCollisionBox(x-10, y-20, 0,0,Color.RED);
+        bulletdeath.sprite().loadDeathImages(
+                new Frame("/graphics/bulletdie1.png", 2),
+                new Frame("/graphics/bulletdie2.png", 2),
+                new Frame("/graphics/bulletdie3.png", 2),
+                new Frame("/graphics/bulletdie4.png", 2),
+                new Frame("/graphics/bulletdie5.png", 2),
+                new Frame("/graphics/bulletdie6.png", 2));
+        addAnimatedObjects(bulletdeath);
+        bulletdeath.died();
+    }
 
     public static double random(double min, double max) {
         return (Math.random() * ((max - min) + 1)) + min;
