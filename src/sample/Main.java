@@ -453,7 +453,7 @@ public class Main extends Application {
                 if (player.box.getBoundsInParent().intersects(enemy.box.getBoundsInParent())) {
                     collision++;
                     // Waits that player moves out from the enemy to loose another life
-                    if (player.isCanDie()) {
+                    if (player.isCanDie() && !player.getSpin()) {
                         player.looseOneLife();
                         player.setCanDie(false);
                         playerhurtSound.play();

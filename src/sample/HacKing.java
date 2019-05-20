@@ -45,7 +45,7 @@ public class HacKing extends Person {
 
     /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 10);
+        super (Type.KING, 8);
         this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
         sprite.loadDefaultRightImages(
                 new Frame("/graphics/hackkingright1.png"));
@@ -67,7 +67,7 @@ public class HacKing extends Person {
         this.attack_mode = 2;
         this.directionIndex = 1;
         this.shieldState = true;
-        this.max_lives = 10;
+        this.max_lives = 8;
 
         // initialize counters
         this.counter = 0;
@@ -170,7 +170,7 @@ public class HacKing extends Person {
     /* ------------------------- DEFENSE ------------------------ */
 
     void listenerDefense () {
-       // heal ();
+        heal ();
         shield ();
     }
 

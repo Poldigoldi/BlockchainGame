@@ -41,6 +41,7 @@ public class Object {
     boolean isLanded;
     private boolean spin;
     private int spincounter;
+    private boolean onplatform;
 
     //sounds
     private AudioClip landSound = new AudioClip(Paths.get("src/sound/land.wav").toUri().toString());
@@ -145,7 +146,7 @@ public class Object {
     //returns true if the move is not blocked
     boolean move_X(int value, Map map) {
         isMoving = true;
-        facingRight = value > 0;
+        if(!onplatform) facingRight = value > 0;
         for (Object object : map.level().platforms()) {
             //checks if player at same height as object and its solid first, then block left/right movements
             if (type == Type.BULLET && box.getBoundsInParent().intersects(object.box.getBoundsInParent())) {
@@ -176,10 +177,13 @@ public class Object {
                                 landSound.play();
                             canJump = true;
                             isLanded = true;
+                            onplatform = false;
                             if (object.isMoving && object.isMovingRight()) {
+                                onplatform = true;
                                 move_X(2, map);
                                 if (this.type == Type.PLAYER) map.moveScreenX(2, this);
                             } else if (object.isMoving && !object.isMovingRight()) {
+                                onplatform = true;
                                 move_X(-2, map);
                                 if (this.type == Type.PLAYER) map.moveScreenX(-2, this);
                             }

@@ -9,20 +9,20 @@ public class BossHealthBar {
     private Group group = new Group();
     private ArrayList<Object> healthpointList = new ArrayList<>();
     private Object bossframe;
-    private int health;
+    private int bosshealth;
     Frame tophealth =  new Frame("/graphics/bosshealth1.png");
     Frame middlehealth =  new Frame("/graphics/bosshealth2.png");
     Frame bottomhealth =  new Frame("/graphics/bosshealth3.png");
 
     public BossHealthBar(int bosshealth) {
-        health = bosshealth;
+        this.bosshealth = bosshealth;
         bossframe = new Object(Type.ABSTRACT, new Frame("/graphics/hackkingframe.png"));
-        for(int i = 0; i < health; i++) {
+        for(int i = 0; i < this.bosshealth; i++) {
             Frame frame = middlehealth;
             if(i == 0 ) frame = tophealth;
-            if(i == health-1) frame = bottomhealth;
+            if(i == this.bosshealth -1) frame = bottomhealth;
             Object healthpoint = new Object(Type.ABSTRACT, frame);
-            healthpoint.setCollisionBox(60, 100+i*28, 0, 0, Color.RED);
+            healthpoint.setCollisionBox(52, 101+i*33, 0, 0, Color.RED);
             healthpointList.add(healthpoint);
             healthpoint.sprite.offset(100, 200);
             healthpoint.add(group);
@@ -31,16 +31,19 @@ public class BossHealthBar {
     }
 
     public void updatePosition(double x, double y){
-        for(int i = 0; i < health; i++) {
+        for(int i = 0; i < bosshealth; i++) {
             healthpointList.get(i).box.setTranslateX(healthpointList.get(i).box.getTranslateX()+20);
             healthpointList.get(i).box.setTranslateY(healthpointList.get(i).box.getTranslateX()+i*20);
         }
     }
 
     public void updateAppearance(int bosshealth){
-        for(int i = 0; i < health; i++) {
-            if(i<bosshealth-1) healthpointList.get(bosshealth-1).sprite.setOpacity(1);
-            else healthpointList.get(bosshealth-1).sprite.setOpacity(0.1);
+        for(int i = 1; i < this.bosshealth; i++) {
+            if(i<bosshealth) healthpointList.get(i).sprite.setOpacity(1);
+            else healthpointList.get(i).sprite.setOpacity(0.1);
+        }
+        if(bosshealth<1){
+            group.setVisible(false);
         }
     }
 
