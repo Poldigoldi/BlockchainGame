@@ -38,7 +38,7 @@ public class AttackBot extends Object {
         if(counter>400){
             counter = 0;
         }
-        if(distance < 400) {
+        if(distance < 300) {
             laser.setVisible(true);
                 //move if not attacking
 

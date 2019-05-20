@@ -13,24 +13,61 @@ public class Grid {
       A Grid object will be created when we initialise the game Map
 
       # Elements #
-      " " -> nothing
-      1,2,3 -> platform
-      4 -> Block
-      5 -> dynamic platform RED
-      6 -> dynamic platform ORANGE
-      7 -> interactive button ORANGE
-      8 -> interactive button RED
+      " "     == nothing
+
+      <    -    >   == platform left, middle, right
+
+      .       == grass
+
+
+      0       == Dirt/grass
+      1       == dirt/Grass meeting Block
+      2       == Viny block
+      3       == mildly viny block
+      4       == Block
+      5       == Block variant, panel fall off and small tree
+      6       == Block variant, flower
+      7       == Block variant, panel and vines
+      8       == Block variant, heavily cracked
+      !, £ -> tree variants of Block
+
+      [   @   ]       == left / middle /right mixed grass and metal blocks
+
+
+      R -> dynamic platform RED
+      r -> interactive button RED
+      O -> dynamic platform ORANGE
+      o -> interactive button ORANGE
+
       MV -> Moving Platform
+
       W -> Weapon
       I -> MiniGame Block
       B -> Big Door
       T -> Terminal
       D -> disappearing Platform
-      R -> attackbot + solid block
+      # -> attackbot + solid block
+      H -> LIFE collectible
+
+
+
+
+
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
 
+
+
+                if(level.map()[y].charAt(x) == 'T') addTerminal(x, y);
+                if(level.map()[y].charAt(x) == 'B') addBigDoor(x, y);
+                if(level.map()[y].charAt(x) == 'I') addBlock(x, y);
+                if(level.map()[y].charAt(x) == 'W') addWeapon(x, y);
+                if(level.map()[y].charAt(x) == '7') addButton(x, y, '7');
+                if(level.map()[y].charAt(x) == '8') addButton(x, y, '8');
+                if(level.map()[y].charAt(x) == 'H') addLife(x, y);
+                if(level.map()[y].charAt(x) == 'R') addAttackBot(x, y);
+                if(level.map()[y].charAt(x) == '.') addGrass(x, y);
   */
 
   private Frame platformleft = new Frame("/graphics/platformleft.png");
@@ -38,6 +75,7 @@ public class Grid {
   private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
   private Frame block = new Frame("/graphics/block.png");
 
+  private ArrayList<Object> bringtofront = new ArrayList<> ();
   private ArrayList<Platform> platforms = new ArrayList<> ();
   private ArrayList<Shape> outlines = new ArrayList<>();
   private final int OBJ_WIDTH = 64;
@@ -49,24 +87,24 @@ public class Grid {
             "4                     4",
             "4                     4",
             "4                    B4",
-            "4          MV      4444",
-            "4    123              4",
-            "4 I    MV             4",
+            "8          MV      4464",
+            "4    <->              3",
+            "4 I    MV             2",
             "44444           DDD  T4",
-            "4                  4444",
-            "44     44444          4",
-            "4    44          55   4",
-            "4  66                 4",
-            "4  4      7 8   4444444",
-            "4       123123  R     4",
-            "44              4    84",
-            "4  W  66        4   744",
-            "4               4555444",
-            "4  DDD                4",
-            "4            MV       4",
-            "4   123  MV           4",
-            "4            H        4",
-            "44444444444444444444444",
+            "6      .....       444£",
+            "44     [@@@]          3",
+            "4    £!         DDD   2",
+            "4  RR                 1",
+            "5               [@@@@@@",
+            "4       <---->  8     4",
+            "£               #    r7",
+            "4  W4 RR        4   o45",
+            "3               3OOO33£",
+            "!4 DDD                3",
+            "2   ...      MV       2",
+            "2   <->  MV           7",
+            "1.....     H   ......11",
+            "00000000000000000000000",
     };
 
   private String[] map2 = new String[]{
@@ -111,19 +149,104 @@ public class Grid {
     for (int y = 0; y < height; y++) {
       int x = 0;
       for (char value : map[y].toCharArray()) {
-        if (value == '4' || value == 'R') {
+        //SOLID BLOCKS AND VARIANTS
+        if (value == '4' || value == '#') {
           Platform platform = new Platform(Type.SOLID, block);
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
           platforms.add(platform);
         }
-        if (value == '1' || value == '2' || value == '3') {
-          Platform platform = new Platform(Type.PLATFORM, platformleft);
-          if (value == '2') platform = new Platform(Type.PLATFORM, platformmiddle);
-          if (value == '3') platform = new Platform(Type.PLATFORM, platformright);
-          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+        if (value == '0') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/dirt1.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platforms.add(platform);
+        }
+        if (value == '1') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block2.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateX(platform.getX()-3);
+          bringtofront.add(platform);
+          platforms.add(platform);
+        }
+        if (value == '2') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block3.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateY(platform.getY()-4);
+          platforms.add(platform);
+        }
+        if (value == '3') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block4.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
           platforms.add(platform);
         }
         if (value == '5') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block5.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platforms.add(platform);
+        }
+        if (value == '6') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block6.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platforms.add(platform);
+        }
+        if (value == '7') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block7.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platforms.add(platform);
+        }
+        if (value == '8') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/block8.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platforms.add(platform);
+        }
+        //left Grass/Block
+        if (value == '[') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/grassblock2.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateY(platform.getY()-11);
+          platform.sprite.setTranslateX(platform.getX()-2);
+          platforms.add(platform);
+        }
+        //middle Grass/Block
+        if (value == '@') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/grassblock1.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateY(platform.getY()-12);
+          platforms.add(platform);
+        }
+        //right Grass/Block
+        if (value == ']') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/grassblock3.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateY(platform.getY()-11);
+          platforms.add(platform);
+        }
+        if (value == '!') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/solidtree1.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateY(platform.getY()-20);
+          platforms.add(platform);
+          bringtofront.add(platform);
+        }
+        if (value == '£') {
+          Platform platform = new Platform(Type.SOLID, new Frame("/graphics/solidtree2.png"));
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
+          platform.sprite.setTranslateY(platform.getY()-58);
+          platforms.add(platform);
+          bringtofront.add(platform);
+        }
+
+
+
+
+        //NON SOLID BLOCKS
+        if (value == '<' || value == '-' || value == '>') {
+          Platform platform = new Platform(Type.PLATFORM, platformleft);
+          if (value == '-') platform = new Platform(Type.PLATFORM, platformmiddle);
+          if (value == '>') platform = new Platform(Type.PLATFORM, platformright);
+          platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);
+          platforms.add(platform);
+        }
+        if (value == 'O') {
           Platform platform = new Platform(Type.PLATFORM, "orange");
           platform.setDisappear(true);
           platform.setAlive(false);
@@ -136,7 +259,7 @@ public class Grid {
           outlines.add(outline);
           platforms.add(platform);
         }
-        if (value == '6') {
+        if (value == 'R') {
           Platform platform = new Platform(Type.PLATFORM, "red");
           platform.setDisappear(true);
           platform.setAlive(false);
@@ -195,6 +318,10 @@ public class Grid {
 
   ArrayList<Shape> outlines() {
     return this.outlines;
+  }
+
+  ArrayList<Object> bringtofront() {
+    return bringtofront;
   }
 
 

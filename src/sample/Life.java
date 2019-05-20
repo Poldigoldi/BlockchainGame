@@ -11,7 +11,7 @@ public class Life extends Collectable {
     setItemType (Type.HEART);
     this.name = name;
     sprite.setImage(heart);
-    sprite().offset(-7, -40);
+    sprite().offset(-20, -40);
     sprite.setRotationAxis(Rotate.Y_AXIS);
     new AnimationTimer() {
       int i;

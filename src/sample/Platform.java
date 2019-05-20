@@ -24,7 +24,7 @@ public class Platform extends Object {
   Platform (Type type, boolean timed) {
       super(type);
       this.timed = timed;
-      Frame frame = new Frame("/graphics/orangePlatform1.png");
+      Frame frame = new Frame("/graphics/disappear1.png");
       sprite.setImage(frame);
   }
 

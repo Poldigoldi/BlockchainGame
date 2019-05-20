@@ -27,7 +27,7 @@ public class Sprite extends ImageView {
     private int xoffset, yoffset;
     private Type type;
 
-    void moveTo(double x, double y){
+    public void moveTo(double x, double y){
         if(!dying) {
             setTranslateX(x + xoffset);
             setTranslateY(y + yoffset);

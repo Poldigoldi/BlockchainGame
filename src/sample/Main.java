@@ -54,6 +54,7 @@ public class Main extends Application {
     private boolean doorunlocked = false;
     private InfoBar infobar;
     private Object speaker;
+    private Object warning;
     private Stage stage;
     private AnchorPane appRoot = new AnchorPane();
     private Map map;
@@ -107,11 +108,26 @@ public class Main extends Application {
         initContent(1);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
+        for(Object object: map.level().bringtofront()){
+            object.sprite.toFront();
+        }
 
     }
 
     private void initialiseLabels() {
         infobar = new InfoBar();
+        warning = new Object(Type.ABSTRACT, new Frame("/graphics/warn1.png"));
+        warning.sprite.loadDefaultImages(new Frame("/graphics/warn1.png", 8),
+                new Frame("/graphics/warn2.png", 8),
+                new Frame("/graphics/warn3.png", 8),
+                new Frame("/graphics/warn4.png", 8),
+                new Frame("/graphics/warn5.png", 8),
+                new Frame("/graphics/warn6.png", 15),
+                new Frame("/graphics/warn7.png", 30),
+                new Frame("/graphics/warn6.png", 15),
+                new Frame("/graphics/warn5.png", 8),
+                new Frame("/graphics/warn4.png", 8),
+                new Frame("/graphics/warn3.png", 8));
         speaker = new Object(Type.ABSTRACT, new Frame("/graphics/helpspeaker1.png"));
         speaker.sprite.loadDefaultImages(new Frame("/graphics/helpspeaker1.png", 30),
                 new Frame("/graphics/helpspeaker2.png", 8),
@@ -132,7 +148,8 @@ public class Main extends Application {
         for (Object barcontents : infobar.infoBarList()) {
             map.addAnimatedObjects(barcontents);
         }
-        map.addAnimatedObjects(speaker);
+        speaker.sprite.setOpacity(0);
+        map.addAnimatedObjects(speaker, warning);
         map.mapRoot().getChildren().addAll(popUp, infobar.infoBarGroup());
     }
 
@@ -245,7 +262,12 @@ public class Main extends Application {
         popUp.toFront();
         speaker.setX(-map.mapRoot().getTranslateX() + 330);
         speaker.setY(-map.mapRoot().getTranslateY() + 25);
+        speaker.box.setVisible(false);
         speaker.sprite.toFront();
+        warning.setX(-map.mapRoot().getTranslateX() + 0.5*WIDTH-200);
+        warning.setY(-map.mapRoot().getTranslateY() + HEIGHT-100);
+        warning.box.setVisible(false);
+        warning.sprite.toFront();
     }
 
     private void MovePlatforms() {
@@ -323,6 +345,11 @@ public class Main extends Application {
         } else {
             if (popUp.getOpacity() > 0) popUp.setOpacity(popUp.getOpacity() - 0.05);
             if (speaker.sprite.getOpacity() > 0) speaker.sprite.setOpacity(popUp.getOpacity());
+        }
+        if (player.getLives()<2) {
+            if (warning.sprite.getOpacity() < 1) warning.sprite.setOpacity(warning.sprite.getOpacity() + 0.05);
+        } else {
+            if (warning.sprite.getOpacity() > 0) warning.sprite.setOpacity(warning.sprite.getOpacity() - 0.05);
         }
     }
 
@@ -409,7 +436,7 @@ public class Main extends Application {
 
     private void waitsSomeoneHitBullet(Bullet bullet, Person person) {
 
-        if (person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
+        if (person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent()) && person.isAlive()) {
             map.removeBullet(bullet);
             person.looseOneLife();
             enemy1hurtSound.play();
@@ -543,7 +570,7 @@ public class Main extends Application {
             if (platform.isTimed() == true) {
                 if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && !platform.disappearing()) {
                     platform.setDisappear(true);
-                    platform.sprite.setImage(new Image("/graphics/orangePlatform4.png"));
+                    platform.sprite.setImage(new Image("/graphics/disappear2.png"));
                     platform.calculateUpdate(updateCount);
                 }
 
@@ -555,7 +582,7 @@ public class Main extends Application {
                 }
                 if (platform.isAlive() == false && platform.matchUpdate(updateCount)) {
                     platform.setAlive(true);
-                    platform.sprite.setImage(new Image("/graphics/orangePlatform1.png"));
+                    platform.sprite.setImage(new Image("/graphics/disappear1.png"));
                     platform.restoreCollisionBox();
                 }
             }

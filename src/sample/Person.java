@@ -26,8 +26,16 @@ public class Person extends Object {
     }
 
     void looseOneLife() {
-        if(this.type==type.ENEMY) this.setspin(true);
-        this.lives--;
+        if(this.type==type.ENEMY) {
+            this.setspin(true);
+            this.lives--;
+        }
+        if(this.type==type.PLAYER) {
+            if (getSpin() == false) {
+                this.lives--;
+                this.setspin(true);
+            }
+        }
     }
     void addLife() {
         this.lives ++;

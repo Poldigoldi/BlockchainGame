@@ -40,10 +40,11 @@ public class Map {
                 if(level.map()[y].charAt(x) == 'B') addBigDoor(x, y);
                 if(level.map()[y].charAt(x) == 'I') addBlock(x, y);
                 if(level.map()[y].charAt(x) == 'W') addWeapon(x, y);
-                if(level.map()[y].charAt(x) == '7') addButton(x, y, '7');
-                if(level.map()[y].charAt(x) == '8') addButton(x, y, '8');
+                if(level.map()[y].charAt(x) == 'o') addButton(x, y, level.map()[y].charAt(x));
+                if(level.map()[y].charAt(x) == 'r') addButton(x, y, level.map()[y].charAt(x));
                 if(level.map()[y].charAt(x) == 'H') addLife(x, y);
-                if(level.map()[y].charAt(x) == 'R') addAttackBot(x, y);
+                if(level.map()[y].charAt(x) == '#') addAttackBot(x, y);
+                if(level.map()[y].charAt(x) == '.') addGrass(x, y);
             }
         }
     }
@@ -52,11 +53,13 @@ public class Map {
     private void initialiseLevel1() {
         level = new Grid(1);
         currentLevel = 1;
+        createLayer3Clouds();
+        createLayer1Clouds();
         /*
         createLayer4Mountains();
-        createLayer3Clouds();
+
         createLayer2Mountains();
-        createLayer1Clouds();
+
         */
         createEnemies();
         addAnimatedPlatforms();
@@ -83,7 +86,15 @@ public class Map {
         for (Platform platform : level.platforms()) {
             showEntity(platform);
         }
+
     }
+
+    void addGrass(int x, int y){
+            Object grass = new Object(Type.ABSTRACT, new Frame("/graphics/grass1.png"));
+            grass.setCollisionBox(x * 64, y * 64, 0, 0, Color.TRANSPARENT);
+            showEntity(grass);
+            level.bringtofront().add(grass);
+        }
 
     void addItem(Collectable item) {
         /* add Block to Map */
@@ -187,7 +198,7 @@ public class Map {
     private void addBigDoor(int x, int y){
         Object bigdoor = new Object(Type.DOODAD, new Frame("/graphics/bigdoor1.png"));
         bigdoor.setCollisionBox(x*64, y*64, 50, 50, Color.YELLOW);
-        bigdoor.sprite.offset(-40, -80);
+        bigdoor.sprite.offset(-45, -85);
         bigdoor.sprite.loadDefaultImages(new Frame("/graphics/bigdoor1.png", 100),
                 new Frame("/graphics/bigdoor2.png"),
                 new Frame("/graphics/bigdoor3.png"),
@@ -217,13 +228,13 @@ public class Map {
     }
 
     private void addButton (int x, int y, char value) {
-        if (value == '7') {
+        if (value == 'o') {
             PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", new Frame("/graphics/buttonUp.png"), new Frame("/graphics/buttonDown.png"));
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.ORANGE);
             buttons.add(button);
             showEntity(button);
         }
-        if (value == '8') {
+        if (value == 'r') {
             PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", new Frame("/graphics/buttonUpRed.png"), new Frame("/graphics/buttonDownRed.png"));
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
             buttons.add(button);
@@ -278,11 +289,11 @@ public class Map {
 
     private void createLayer3Clouds(){
         Object cloud = new Object(Type.LAYER3, new Frame("/graphics/clouds1.png"));
-        cloud.setCollisionBox(0,0, 5, 5, Color.CORAL);
+        cloud.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.CORAL);
         Object cloud2 = new Object(Type.LAYER3, new Frame("/graphics/clouds2.png"));
-        cloud2.setCollisionBox(400,200, 5, 5, Color.CORAL);
+        cloud2.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.CORAL);
         Object cloud3 = new Object(Type.LAYER3, new Frame("/graphics/clouds3.png"));
-        cloud3.setCollisionBox(-300,250, 5, 5, Color.CORAL);
+        cloud3.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.CORAL);
         addAnimatedObjects(cloud, cloud2, cloud3);
     }
 
@@ -294,10 +305,11 @@ public class Map {
                 new Frame("/graphics/smallcloud5.png"),    new Frame("/graphics/smallcloud6.png"),
                 new Frame("/graphics/smallcloud7.png"),    new Frame("/graphics/smallcloud8.png"),
                 new Frame("/graphics/smallcloud9.png"),    new Frame("/graphics/smallcloud10.png"),
+                new Frame("/graphics/smallcloud3.png"),    new Frame("/graphics/smallcloud4.png"),
                 new Frame("/graphics/smallcloud11.png")};
         for(Frame cloudImage: L2Clouds){
             Object cloud = new Object(Type.LAYER1, cloudImage);
-            cloud.setCollisionBox(random(0 ,level.width()),random(0, (level.height()/2)), 5, 5, Color.YELLOWGREEN);
+            cloud.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.YELLOWGREEN);
             addAnimatedObjects(cloud);
         }
     }

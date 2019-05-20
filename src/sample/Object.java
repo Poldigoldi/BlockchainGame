@@ -24,7 +24,7 @@ the update function to include new behaviours for that type of object.
  */
 public class Object  {
     //**NOTE** you can change SHOWCOLLISIONBOXES to true to see collision boxes if you want.
-    private boolean SHOWCOLLISIONBOXES = true;
+    private boolean SHOWCOLLISIONBOXES = false;
 
     //Object components
     public Shape box;
@@ -114,8 +114,8 @@ public class Object  {
 
     private void spin() {
         spincounter++;
-        sprite.setRotate(sprite.getRotate()+0.4*(60-spincounter));
-        if(spincounter==65){
+        sprite.setRotate(sprite.getRotate()+0.4*(50-spincounter));
+        if(spincounter==50){
             spin = false;
             sprite.setRotate(0);
             spincounter = 0;
@@ -217,6 +217,8 @@ public class Object  {
         spincounter = 0;
         this.spin = spin;
     }
+
+    public boolean getSpin() { return spin;}
 
     public double getX(){ return box.getTranslateX();}
 
