@@ -105,7 +105,7 @@ public class Main extends Application {
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
-        initContent(1);
+        initContent(2);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
         for(Object object: map.level().bringtofront()){
@@ -477,20 +477,18 @@ public class Main extends Application {
             return;
         }
 
-        king.move (map);
+        king.move (map, player.getX (), player.getY ());
 
         if (king.isCanAttack ()) {
-            switch (king.getAttackMode ()) {
-                case 1:
-                    // new wave of enemy
-                    map.addRandomEnemy ();
-                    map.addRandomEnemy ();
-                    break;
-                case 2:
-                    // send missiles in both directions
-                    shootOneBullet (king, true);
-                    shootOneBullet (king, false);
-                    break;
+            // send new enemies
+            if (king.getAttackMode () == 1 && map.getEnemies ().size () < 10) {
+                map.addRandomEnemy ();
+                map.addRandomEnemy ();
+            }
+            // send missiles in both directions
+            if (king.getAttackMode () > 1) {
+                shootOneBullet (king, true);
+                shootOneBullet (king, false);
             }
             king.nextAttackMode ();
         }
