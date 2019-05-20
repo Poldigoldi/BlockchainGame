@@ -128,12 +128,12 @@ public class Sprite extends ImageView {
         //for moving animations
         //jumping
         if (type.hasMovementAnimation()) {
-            if(!movingDown) {
+            if(!movingDown && type.hasJumpingAnimation()) {
                 if (movingRight) animate(jumpRightAnimation);
                 else animate(jumpLeftAnimation);
             }
             //falling
-            else if(!isLanded) {
+            else if(!isLanded && type.hasFallingAnimation()) {
                 if (movingRight) animate(fallRightAnimation);
                 else animate(fallLeftAnimation);
             }

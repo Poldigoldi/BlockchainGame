@@ -45,8 +45,24 @@ public class HacKing extends Person {
     /* Constructor */
     public HacKing (int startx, int starty) {
         super (Type.KING, 10);
-        this.setCollisionBox(startx, starty , 60, 60, Color.INDIANRED);
-        sprite.loadDefaultImages (new Frame("/graphics/enemy1.png"));
+        this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
+        sprite.loadDefaultRightImages(
+                new Frame("/graphics/hackkingright1.png"));
+        sprite.loadDefaultLeftImages(
+                new Frame("/graphics/hackkingleft1.png"));
+                sprite.loadRightMotionImages(
+                new Frame("/graphics/hackkingright1.png"),
+                new Frame("/graphics/hackkingright2.png"),
+                new Frame("/graphics/hackkingright3.png"),
+                new Frame("/graphics/hackkingright4.png"),
+                new Frame("/graphics/hackkingright5.png"));
+        sprite.loadLeftMotionImages(
+                new Frame("/graphics/hackkingleft1.png"),
+                new Frame("/graphics/hackkingleft2.png"),
+                new Frame("/graphics/hackkingleft3.png"),
+                new Frame("/graphics/hackkingleft4.png"),
+                new Frame("/graphics/hackkingleft5.png"));
+        sprite.offset(-60, -80);
         this.attack_mode = 2;
         this.directionIndex = 1;
         this.shieldState = true;
@@ -154,7 +170,7 @@ public class HacKing extends Person {
 
     // If King life not full, will start a counter to gain one life
     private void heal () {
-        System.out.println (getLives ());
+       // System.out.println (getLives ());
         if (! isLifeMax ()) {
             counter_heal++;
         }

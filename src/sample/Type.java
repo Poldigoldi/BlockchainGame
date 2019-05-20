@@ -15,6 +15,20 @@ public enum Type {
     public boolean hasMovementAnimation(){
         if(this==PLAYER) return true;
         if(this== ENEMY) return true;
+        if(this== KING) return true;
+        return false;
+    }
+
+    public boolean hasFallingAnimation(){
+        if(this==PLAYER) return true;
+        if(this== ENEMY) return true;
+        return false;
+    }
+
+
+    public boolean hasJumpingAnimation(){
+        if(this==PLAYER) return true;
+        if(this== ENEMY) return true;
         return false;
     }
 

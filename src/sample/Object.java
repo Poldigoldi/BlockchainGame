@@ -24,7 +24,7 @@ the update function to include new behaviours for that type of object.
  */
 public class Object  {
     //**NOTE** you can change SHOWCOLLISIONBOXES to true to see collision boxes if you want.
-    private boolean SHOWCOLLISIONBOXES = false;
+    private boolean SHOWCOLLISIONBOXES = true;
 
     //Object components
     public Shape box;

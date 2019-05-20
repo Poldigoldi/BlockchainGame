@@ -173,6 +173,7 @@ public class Map {
                 break;
             case 3:
                 enemy = new HacKing (700, 350);
+                level.bringtofront().add(enemy);
                 this.king = (HacKing) enemy;
                 break;
             default: // Enemy will be between bottom and middle - anywhere

@@ -237,6 +237,12 @@ public class Main extends Application {
             if (isPressed(KeyCode.W) || (isPressed(KeyCode.UP))) {
                 player.jump();
             }
+            if (isPressed(KeyCode.P)) {
+                level = 2;
+                musicStop();
+                musicStart(Music.BOSS);
+                changeLevel(level);
+            }
 
             moveScreenY();
             positionLabels();
