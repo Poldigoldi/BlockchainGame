@@ -222,7 +222,6 @@ public class Main extends Application {
         }
 
         if (mode == Mode.PLATFORMGAME) {
-
             /*  Handles all the game events, including player motion and interaction with items  */
             if (isPressed(KeyCode.LEFT) || (isPressed(KeyCode.A))) {
                 player.setFacingRight(false);
@@ -329,6 +328,8 @@ public class Main extends Application {
         }
         if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY())) {
             level = 2;
+            musicStop();
+            musicStart(MUSIC.BOSS);
             changeLevel(level);
         }
     }
@@ -775,10 +776,12 @@ public class Main extends Application {
         }
         else if (music == MUSIC.LEVEL1) {
             gameMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            gameMediaPlayer.setVolume(0.5);
             gameMediaPlayer.play();
         }
         else if (music == MUSIC.BOSS) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            bossMediaPlayer.setVolume(0.5);
             bossMediaPlayer.play();
         }
     }
