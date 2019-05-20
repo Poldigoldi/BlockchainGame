@@ -13,18 +13,11 @@ public class BlockAnimation  {
         Timeline tl = new Timeline();
         tl.setCycleCount(1);
 
-        final ImageView bridge0 = new ImageView(stillFrames.get(0));
-        bridge0.setFitWidth(400);
-        bridge0.setPreserveRatio(true);
-        bridge0.setSmooth(true);
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(100),  e -> {
-            bridge.getChildren().setAll(bridge0);
-        }
-        ));
+
 
         for (String s : stillFrames) {
             final ImageView bridge1 = new ImageView(s);
-            bridge1.setFitWidth(400);
+            bridge1.setFitWidth(500);
             bridge1.setPreserveRatio(true);
             bridge1.setSmooth(true);
             tl.getKeyFrames().add(new KeyFrame(Duration.millis(start),  e -> {
