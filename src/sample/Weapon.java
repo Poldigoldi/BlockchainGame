@@ -8,7 +8,14 @@ public class Weapon extends Collectable {
 
     private final String name;
     private boolean canShoot;
+    private boolean maxReached;
     private int bullets;
+    private boolean mustWait;
+    private int bulletshot;
+    private int waitCount;
+
+    private final int MAX_BULLET_SHOT = 30;
+    private final int TIME_WAIT = 50;
 
     Weapon (String name, int bullets) {
         super(new Frame("/graphics/weapon.png"));
@@ -26,14 +33,37 @@ public class Weapon extends Collectable {
                 sprite.setRotate(i);
             }
         }.start();
+        this.waitCount = 0;
+        this.bulletshot = 0;
+        this.mustWait = false;
+        this.maxReached = false;
     }
 
-    public String getName() {
+
+    String getName() {
         return name;
     }
 
+    private boolean isMaxShootReached () {
+        return bulletshot >= MAX_BULLET_SHOT;
+    }
+
     boolean isCanShoot() {
-        return canShoot;
+        if (canShoot) {
+            mustWait = true;
+        }
+        if (mustWait) {
+            mustWait = false;
+            if (! isMaxShootReached ()) {
+                maxReached = false;
+                return true;
+            }
+            this.maxReached = true;
+            if (maxReached) {
+                waitCount++;
+            }
+        }
+        return false;
     }
 
     void setCanShoot(boolean canShoot) {
@@ -46,9 +76,16 @@ public class Weapon extends Collectable {
 
     void looseOneBullet() {
         bullets--;
+        bulletshot += 8;
     }
 
     int getBullets() {
         return bullets;
+    }
+
+    void doesntShoot (){
+        if (bulletshot > 0) {
+            bulletshot--;
+        }
     }
 }

@@ -118,7 +118,6 @@ public class Main extends Application {
         for(Object object: map.level().bringtofront()){
             object.sprite.toFront();
         }
-
     }
 
     private void initialiseLabels() {
@@ -450,6 +449,7 @@ public class Main extends Application {
             // User can only shoot 1 bullet when press key (un-press & press again to shoot)
             if (!isPressed(KeyCode.SPACE)) {
                 player.getLuggage().getWeapon().setCanShoot(true);
+                player.getLuggage ().getWeapon ().doesntShoot ();
             }
         }
     }
