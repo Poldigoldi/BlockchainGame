@@ -13,11 +13,11 @@ public class Person extends Object {
     }
 
 
-    public int getLives () {
+    int getLives() {
         return this.lives;
     }
 
-    public void setLives (int lives) {
+    void setLives(int lives) {
         this.lives = lives;
     }
 
@@ -25,16 +25,27 @@ public class Person extends Object {
         this.lives++;
     }
 
-    public void looseOneLife () {
-        if(this.type==type.ENEMY) this.setspin(true);
-        this.lives--;
+    void looseOneLife() {
+        if(this.type==type.ENEMY) {
+            this.setspin(true);
+            this.lives--;
+        }
+        if(this.type==type.PLAYER) {
+            if (getSpin() == false) {
+                this.lives--;
+                this.setspin(true);
+            }
+        }
+    }
+    void addLife() {
+        this.lives ++;
     }
 
-    public boolean isCanDie() {
+    boolean isCanDie() {
         return canDie;
     }
 
-    public void setCanDie(boolean canDie) {
+    void setCanDie(boolean canDie) {
         this.canDie = canDie;
     }
 }

@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -8,7 +7,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
-
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -26,23 +24,23 @@ the update function to include new behaviours for that type of object.
  */
 public class Object  {
     //**NOTE** you can change SHOWCOLLISIONBOXES to true to see collision boxes if you want.
-    private boolean SHOWCOLLISIONBOXES = true;
+    private boolean SHOWCOLLISIONBOXES = false;
 
     //Object components
     public Shape box;
     public Sprite sprite;
 
     //Object variables
-    public boolean alive;
+    boolean alive;
     public Type type;
     public int width;
     public int height;
-    public boolean canJump = true;
-    public Point2D Velocity = new Point2D(0,0);
+    boolean canJump = true;
+    Point2D Velocity = new Point2D(0,0);
     public boolean facingRight;
-    public boolean movingDown;
-    public boolean isMoving;
-    public boolean isLanded;
+    boolean movingDown;
+    boolean isMoving;
+    boolean isLanded;
     private boolean spin;
     private int spincounter;
 
@@ -100,6 +98,8 @@ public class Object  {
             if(type.hasGravity()) {
                 //for Everything else that has gravity
                 applyGravity();
+            }
+            if (type.hasGravity () ||type == Type.KING) {
                 updateY(map);
                 updateX(map);
                 isMoving = false;
@@ -114,8 +114,8 @@ public class Object  {
 
     private void spin() {
         spincounter++;
-        sprite.setRotate(sprite.getRotate()+0.4*(60-spincounter));
-        if(spincounter==65){
+        sprite.setRotate(sprite.getRotate()+0.4*(50-spincounter));
+        if(spincounter==50){
             spin = false;
             sprite.setRotate(0);
             spincounter = 0;
@@ -132,7 +132,7 @@ public class Object  {
 
 
     //returns true if the move is not blocked
-    public boolean move_X(int value, Map map) {
+    boolean move_X(int value, Map map) {
         isMoving = true;
         facingRight = value > 0;
         for (Object object : map.level().platforms()) {
@@ -152,7 +152,8 @@ public class Object  {
         return true;
     }
 
-    public void move_Y(int value, Map map) {
+
+     void move_Y(int value, Map map) {
         movingDown = value > 0; // (Y=0) at the top of the frame
         for (int i=0; i<Math.abs(value); i++) {
             /* Check for collisions between player and platforms */
@@ -195,7 +196,7 @@ public class Object  {
         return false;
     }
 
-    public void died(){
+    void died(){
         sprite.activateDeathAnimation();
         box.setVisible(false);
     }
@@ -209,9 +210,15 @@ public class Object  {
     public static double random(double min, double max){ return (Math.random()*((max-min)+1))+min; }
 
 
+
     //getters, setters
 
-    public void setspin(boolean spin){this.spin = spin;}
+    public void setspin(boolean spin){
+        spincounter = 0;
+        this.spin = spin;
+    }
+
+    public boolean getSpin() { return spin;}
 
     public double getX(){ return box.getTranslateX();}
 
@@ -221,17 +228,17 @@ public class Object  {
 
     public void setY(double y){ box.setTranslateY(y);}
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
-    public void setAlive(boolean alive) {
+    void setAlive(boolean alive) {
         this.alive = alive;
     }
 
-    public void setFacingRight (boolean facingRight){ this.facingRight = facingRight;}
+    void setFacingRight(boolean facingRight){ this.facingRight = facingRight;}
 
-    public boolean isFacingRight() {
+    boolean isFacingRight() {
         return facingRight;
     }
 }

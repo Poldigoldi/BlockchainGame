@@ -11,7 +11,8 @@ public class Map {
 
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<Collectable> items = new ArrayList<>();
-    private ArrayList<Enemy> enemies = new ArrayList<> ();
+    private ArrayList<AttackBot> attackbots = new ArrayList<> ();
+    private ArrayList<Person> enemies = new ArrayList<> ();
     private HacKing king;
     private Group mapRoot = new Group();
     private Grid level;
@@ -32,7 +33,6 @@ public class Map {
         }
     }
 
-
     private void addToGrid(){
         for(int y = 0; y< level.height; y++){
             for(int x = 0; x < level.width; x++){
@@ -40,32 +40,37 @@ public class Map {
                 if(level.map()[y].charAt(x) == 'B') addBigDoor(x, y);
                 if(level.map()[y].charAt(x) == 'I') addBlock(x, y);
                 if(level.map()[y].charAt(x) == 'W') addWeapon(x, y);
-                if(level.map()[y].charAt(x) == '7') addButton(x, y, '7');
-                if(level.map()[y].charAt(x) == '8') addButton(x, y, '8');
+                if(level.map()[y].charAt(x) == 'o') addButton(x, y, level.map()[y].charAt(x));
+                if(level.map()[y].charAt(x) == 'r') addButton(x, y, level.map()[y].charAt(x));
+                if(level.map()[y].charAt(x) == 'H') addLife(x, y);
+                if(level.map()[y].charAt(x) == '#') addAttackBot(x, y);
+                if(level.map()[y].charAt(x) == '.') addGrass(x, y);
             }
         }
     }
 
     //ORDERING IS IMPORTANT!
-    public void initialiseLevel1() {
+    private void initialiseLevel1() {
         level = new Grid(1);
         currentLevel = 1;
+        createLayer3Clouds();
+        createLayer1Clouds();
         /*
         createLayer4Mountains();
-        createLayer3Clouds();
+
         createLayer2Mountains();
-        createLayer1Clouds();
+
         */
-        addToGrid();
         createEnemies();
         addAnimatedPlatforms();
         generalInitialiser();
+        addToGrid();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(0, 15, "Welcome to our world! Come find me dotted around the map for hints and tips.", true);
         addHelper(20, 7, "Press E to interact with the terminal!", false);
     }
 
-    public void initialiseLevel2(){
+    private void initialiseLevel2(){
         level = new Grid(2);
         currentLevel = 2;
         createLayer3Clouds();
@@ -73,7 +78,7 @@ public class Map {
         addEnemy (3);
     }
 
-    public void generalInitialiser(){
+    private void generalInitialiser(){
         for(Shape outline : level.outlines()) {
             mapRoot.getChildren().add(outline);
         }
@@ -81,37 +86,45 @@ public class Map {
         for (Platform platform : level.platforms()) {
             showEntity(platform);
         }
+
     }
 
-    public void addItem (Collectable item) {
+    void addGrass(int x, int y){
+            Object grass = new Object(Type.ABSTRACT, new Frame("/graphics/grass1.png"));
+            grass.setCollisionBox(x * 64, y * 64, 0, 0, Color.TRANSPARENT);
+            showEntity(grass);
+            level.bringtofront().add(grass);
+        }
+
+    void addItem(Collectable item) {
         /* add Block to Map */
         items.add (item);
         animatedObjects.add(item);
         showEntity(item);
     }
 
-    public void addPlayer(Object player, int startx, int starty){
+    void addPlayer(Object player, int startx, int starty){
         showEntity(player);
         player.setX(startx);
         player.setY(starty);
         animatedObjects.add(player);
     }
 
-    public void removeBullet(Bullet bullet){
+    void removeBullet(Bullet bullet){
         bullet.setAlive(false);
         mapRoot.getChildren ().remove (bullet.label());
         hideEntity(bullet);
     }
 
-    public void removePlayer(Object player){
+    void removePlayer(Object player){
         hideEntity(player);
     }
 
-    public void showEntity(Object object) {
+    private void showEntity(Object object) {
         object.add(mapRoot);
     }
 
-    public void hideEntity(Object object) {
+    void hideEntity(Object object) {
         mapRoot.getChildren ().remove (object.sprite);
         mapRoot.getChildren ().remove (object.box);
     }
@@ -131,7 +144,7 @@ public class Map {
         addEnemy (2);
     }
     public void addEnemy (int typeId){
-        Enemy enemy;
+        Person enemy;
         switch (typeId){
             case 1:  // Enemy stay more at bottom of map - on left side
                 enemy = new Enemy (200, 100, true, 800, 100);
@@ -140,8 +153,8 @@ public class Map {
                 enemy = new Enemy (600, 500, true, 800, 10);
                 break;
             case 3:
-                enemy = new HacKing (300, 500);
-                king = (HacKing)enemy;
+                enemy = new HacKing (700, 450);
+                this.king = (HacKing) enemy;
                 break;
             default: // Enemy will be between bottom and middle - anywhere
                 enemy = new Enemy (1300, 500, true, 800, 50);
@@ -151,10 +164,19 @@ public class Map {
         enemies.add (enemy);
     }
 
-    public void addRandomEnemy() {
+    void addRandomEnemy() {
         // randomise position and behaviour of enemy created
         int rand = new Random ().nextInt(3);
         addEnemy (rand);
+    }
+
+    public void addAttackBot(int x, int y){
+        AttackBot attackBot = new AttackBot(Type.ATTACKBOT, new Frame("/graphics/attackbot1.png"));
+        attackBot.setCollisionBox(x*64, y*64, 50, 50, Color.PURPLE);
+        attackBot.sprite.toFront();
+        addAnimatedObjects(attackBot);
+        mapRoot.getChildren().add(attackBot.laser());
+        attackbots.add(attackBot);
     }
 
     private void addHelper(int x, int y, String string, Boolean faceRight){
@@ -176,7 +198,7 @@ public class Map {
     private void addBigDoor(int x, int y){
         Object bigdoor = new Object(Type.DOODAD, new Frame("/graphics/bigdoor1.png"));
         bigdoor.setCollisionBox(x*64, y*64, 50, 50, Color.YELLOW);
-        bigdoor.sprite.offset(-40, -80);
+        bigdoor.sprite.offset(-45, -85);
         bigdoor.sprite.loadDefaultImages(new Frame("/graphics/bigdoor1.png", 100),
                 new Frame("/graphics/bigdoor2.png"),
                 new Frame("/graphics/bigdoor3.png"),
@@ -193,32 +215,38 @@ public class Map {
         this.bigdoor = bigdoor;
     }
 
-    public void addBlock(int x, int y){
+    private void addBlock(int x, int y){
         Block block = new Block ("block");
         block.setCollisionBox(x*64, y*64 , 16, 16, Color.DARKRED);
         addItem(block);
     }
 
     private void addWeapon (int x, int y) {
-        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 100);
+        Weapon weapon1 = new Weapon ("CyberGun XS-4678", 10000000);
         weapon1.setCollisionBox (x*64, y*64, 25, 25, Color.BLUEVIOLET);
         addItem (weapon1);
     }
 
     private void addButton (int x, int y, char value) {
-        if (value == '7') {
+        if (value == 'o') {
             PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "orange", new Frame("/graphics/buttonUp.png"), new Frame("/graphics/buttonDown.png"));
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.ORANGE);
             buttons.add(button);
             showEntity(button);
         }
-        if (value == '8') {
+        if (value == 'r') {
             PlatformButton button = new PlatformButton(Type.PLATFORMBUTTON, "red", new Frame("/graphics/buttonUpRed.png"), new Frame("/graphics/buttonDownRed.png"));
             button.setCollisionBox(x * 64 + 11, y * 64 + 40, 40, 5, Color.RED);
             buttons.add(button);
             showEntity(button);
         }
     }
+    private void addLife (int x, int y) {
+        Life life = new Life ("life");
+        life.setCollisionBox(x*64, y*64 , 16, 16, Color.DARKRED);
+        addItem(life);
+    }
+
 
 
 
@@ -234,14 +262,14 @@ public class Map {
 
     //RANGE
 
-    public boolean inRangeOfTerminal(double playerx, double playery){
+    boolean inRangeOfTerminal(double playerx, double playery){
         if(terminal == null) return false;
         double distance = Math.sqrt(Math.pow((playerx - terminal.box.getTranslateX()), 2) + Math.pow((playery - terminal.box.getTranslateY()), 2));
         if(distance < 60) return true;
         return false;
     }
 
-    public boolean inRangeOfBigDoor(double playerx, double playery){
+    boolean inRangeOfBigDoor(double playerx, double playery){
         if(bigdoor == null) return false;
         double distance = Math.sqrt(Math.pow((playerx - bigdoor.box.getTranslateX()), 2) + Math.pow((playery - bigdoor.box.getTranslateY()), 2));
         if(distance < 10) return true;
@@ -251,7 +279,7 @@ public class Map {
 
     private void addAnimatedPlatforms(){
       for(Platform platform : level.platforms()){
-        if (platform.getColour() != null || platform.isMoving){
+        if (platform.getColour() != null || platform.isMoving || platform.isTimed()){
           animatedObjects.add(platform);
         }
       }
@@ -261,11 +289,11 @@ public class Map {
 
     private void createLayer3Clouds(){
         Object cloud = new Object(Type.LAYER3, new Frame("/graphics/clouds1.png"));
-        cloud.setCollisionBox(0,0, 5, 5, Color.CORAL);
+        cloud.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.CORAL);
         Object cloud2 = new Object(Type.LAYER3, new Frame("/graphics/clouds2.png"));
-        cloud2.setCollisionBox(400,200, 5, 5, Color.CORAL);
+        cloud2.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.CORAL);
         Object cloud3 = new Object(Type.LAYER3, new Frame("/graphics/clouds3.png"));
-        cloud3.setCollisionBox(-300,250, 5, 5, Color.CORAL);
+        cloud3.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.CORAL);
         addAnimatedObjects(cloud, cloud2, cloud3);
     }
 
@@ -277,10 +305,11 @@ public class Map {
                 new Frame("/graphics/smallcloud5.png"),    new Frame("/graphics/smallcloud6.png"),
                 new Frame("/graphics/smallcloud7.png"),    new Frame("/graphics/smallcloud8.png"),
                 new Frame("/graphics/smallcloud9.png"),    new Frame("/graphics/smallcloud10.png"),
+                new Frame("/graphics/smallcloud3.png"),    new Frame("/graphics/smallcloud4.png"),
                 new Frame("/graphics/smallcloud11.png")};
         for(Frame cloudImage: L2Clouds){
             Object cloud = new Object(Type.LAYER1, cloudImage);
-            cloud.setCollisionBox(random(0 ,level.width()),random(0, (level.height()/2)), 5, 5, Color.YELLOWGREEN);
+            cloud.setCollisionBox(random(0 ,level.width()),random(0, (level.height()*0.8)), 5, 5, Color.YELLOWGREEN);
             addAnimatedObjects(cloud);
         }
     }
@@ -310,25 +339,27 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
-    public Group mapRoot() {
+    Group mapRoot() {
         return mapRoot;
     }
 
-    public Grid level() { return level; }
+    Grid level() { return level; }
 
-    public Object bigdoor(){ return bigdoor;}
+    Object bigdoor(){ return bigdoor;}
 
-    public ArrayList<HelpPopUp> helpers(){ return helpers;}
+    ArrayList<HelpPopUp> helpers(){ return helpers;}
+
+    public ArrayList<AttackBot> attackbots(){return attackbots;}
 
     public ArrayList<Object> animatedObjects() {
         return animatedObjects;
     }
 
-    public ArrayList<Enemy> getEnemies () {
+    public ArrayList<Person> getEnemies () {
         return enemies;
     }
 
-    public ArrayList<Collectable> getItems() {
+    ArrayList<Collectable> getItems() {
         return items;
     }
 
@@ -336,11 +367,11 @@ public class Map {
         return this.buttons;
     }
 
-    public Grid getLevel () {
+    Grid getLevel() {
         return this.level;
     }
 
-    public int getCurrentLevel() {
+    int getCurrentLevel() {
         return currentLevel;
     }
 
@@ -355,7 +386,7 @@ public class Map {
         }
     }
 
-    public HacKing getKing() {
+    HacKing getKing() {
         return king;
     }
 
@@ -369,7 +400,7 @@ public class Map {
 
     //updates the screen X based on player position
     private int counter;
-    public void moveScreenX(int movement, Object player) {
+    void moveScreenX(int movement, Object player) {
         if (player.getX() > WIDTH/2 + 5 && player.getX() < level().width() - WIDTH / 2) {
             mapRoot().setTranslateX(-player.getX()+0.5*WIDTH);
             counter++;

@@ -7,14 +7,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class Key {
+class Key {
     private Button button = new Button();
-    private int value;
+    private String value;
 
-    Key(int value) {
+    Key(String value) {
         this.value = value;
         button.setMinSize(50,50);
-        button.setText(Integer.toString(value));
+        button.setText(value);
         try {
             button.setFont(Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16));
         } catch (FileNotFoundException e) {
@@ -27,7 +27,7 @@ public class Key {
         return button;
     }
 
-    int getValue() {
+    String getValue() {
         return value;
     }
 }

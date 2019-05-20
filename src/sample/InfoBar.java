@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class InfoBar {
+class InfoBar {
     Group infoBarGroup = new Group();
     ArrayList<Object> infoBarList = new ArrayList<>();
     Object holder;
@@ -16,7 +16,7 @@ public class InfoBar {
     Object healthpoint4;
 
 
-    public InfoBar(){
+    InfoBar(){
         holder = new Object(Type.ABSTRACT, new Frame( "/graphics/infobar.png"));
         power1 = new Object(Type.ABSTRACT);
         healthpoint1 = new Object(Type.ABSTRACT);
@@ -68,7 +68,7 @@ public class InfoBar {
     }
 
 
-    public void positionBar(double x, double y){
+    void positionBar(double x, double y){
         for(Object object: infoBarList) {
             object.box.setTranslateX(x);
             object.box.setTranslateY(y);
@@ -76,24 +76,27 @@ public class InfoBar {
         }
     }
 
-    public void updateWeapon(boolean hasWeapon){
+    void updateWeapon(boolean hasWeapon){
         if(hasWeapon) power1.sprite.setdefaultanimationchoice(2);
+        else {
+            power1.sprite.setdefaultanimationchoice(1);
+        }
     }
 
 
-    public void updateHealthFill(int lives){
+    void updateHealthFill(int lives){
         if(lives>3) healthpoint4.sprite.setdefaultanimationchoice(1);
         if(lives>2) healthpoint3.sprite.setdefaultanimationchoice(1);
         if(lives>1)healthpoint2.sprite.setdefaultanimationchoice(1);
     }
 
-    public void updateHealthEmpty(int lives){
+    void updateHealthEmpty(int lives){
             if(lives<4) healthpoint4.sprite.setdefaultanimationchoice(2);
             if(lives<3) healthpoint3.sprite.setdefaultanimationchoice(2);
             if(lives<2)healthpoint2.sprite.setdefaultanimationchoice(2);
     }
 
-    public Group infoBarGroup(){return infoBarGroup;}
+    Group infoBarGroup(){return infoBarGroup;}
 
-    public ArrayList<Object> infoBarList(){return infoBarList;}
+    ArrayList<Object> infoBarList(){return infoBarList;}
 }

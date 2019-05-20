@@ -14,11 +14,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 
-public class GameOver {
+class GameOver {
     private Font tinyFont, smallFont, mediumFont;
     Group root = new Group();
 
-    public GameOver(int WIDTH, int HEIGHT) {
+    GameOver(int WIDTH, int HEIGHT) {
         initialiseFonts();
         //Labels
         Label gameOverLabel = new Label("GAME OVER");
@@ -53,7 +53,7 @@ public class GameOver {
         root.getChildren().addAll(brokenBoyView, gameOverLabel, insertLabel, tryagainLabel);
     }
 
-    public Group returnRoot() {
+    Group returnRoot() {
         return root;
     }
 

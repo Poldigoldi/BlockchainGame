@@ -34,16 +34,15 @@ class InstructionScreen {
 
         Label instructionsText = new Label(
                 "Controls:\n\n" +
-                        "Left and right arrow keys to move the robot.\n" +
-                "Space to jump.\n" +
-                        "Y to pick up a block.\n" +
-                        "X to drop a block.\n\n" +
+                        "'A' 'W' 'D'  to move the robot.\n" +
+                "'Space' to shoot.\n" +
+                        "'E' to interact\n\n" +
+                        "Pick up items by walking into them.\n" +
+                        "\n\n" +
                         "Goal:\n\n" +
-                        "Collect enough blocks to build a Blockchain bridge, which will \n" +
-                        "get you over the gap. Of course, there is a catch! In order to \n" +
-                        "pick up a block you need to complete a puzzle. Well, it would\n" +
-                        "defeat the purpose to give you the answer, so go ahead an pick up\n" +
-                        "a block and get puzzling.\n" +
+                        "Find a secret code to open the door to the next level.\n" +
+                        "I won't tell you where to find it. You'll have to figure that out yourself.\n" +
+                        "There are buttons you can jump on, which do things...\n" +
                         "Oh, before I forget. Beware of the vicious enemy robots...\n\n" +
                         "Let's learn some Blockchain!");
         instructionsText.setFont(tinyFont);
@@ -52,6 +51,7 @@ class InstructionScreen {
 
         //Buttons
         returnButton.setFont(tinyFont);
+        returnButton.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
         returnButton.setTranslateX(WIDTH-200);
         returnButton.setTranslateY(HEIGHT-80);
 
@@ -81,7 +81,7 @@ class InstructionScreen {
         return root;
     }
 
-    public Button returnButton(){ return returnButton;}
+    Button returnButton(){ return returnButton;}
 
     private void returnPress(ActionEvent e) {
         System.out.println("click");

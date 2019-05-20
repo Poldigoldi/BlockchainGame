@@ -18,7 +18,7 @@ public class Player extends Person {
     private Luggage luggage;
     private String facing;
 
-    public Player(String name, int STARTX, int STARTY, int START_LIVES) {
+    Player(String name, int STARTX, int STARTY, int START_LIVES) {
         super(Type.PLAYER, START_LIVES);
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT,Color.BLUE);
         this.canDie = true;
@@ -39,11 +39,11 @@ public class Player extends Person {
         }
     }
 
-    public boolean hasWeapon () {
+    boolean hasWeapon() {
         return luggage.getWeapon () != null;
     }
 
-    public boolean canUseWeapon () {
+    boolean canUseWeapon() {
         if (luggage.getWeapon ().isCanShoot () && luggage.getWeapon ().getBullets () > 0) {
             return true;
         }
@@ -51,7 +51,7 @@ public class Player extends Person {
     }
 
     //set up the images for walking etc.
-    public void initialise() {
+    private void initialise() {
         sprite.loadDefaultLeftImages(
                 new Frame("/graphics/defaultleft.png", 150),
                 new Frame("/graphics/defaultleft2.png", 10));

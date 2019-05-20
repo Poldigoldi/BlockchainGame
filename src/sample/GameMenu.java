@@ -14,15 +14,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class GameMenu {
+class GameMenu {
     private int WIDTH, HEIGHT;
     private Font teenytinyFont, tinyFont, smallFont, mediumFont;
     Group root = new Group();
     private Button startGame = new Button("START");
     private Button instructions = new Button("INSTRUCTIONS");
 
-
-    public GameMenu(int WIDTH, int HEIGHT) {
+    GameMenu(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         initialiseFonts();
@@ -46,10 +45,12 @@ public class GameMenu {
 
         //Buttons
         startGame.setFont(tinyFont);
+        startGame.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
         startGame.setTranslateX(WIDTH/2-50);
         startGame.setTranslateY(HEIGHT/2+100);
 
         instructions.setFont(tinyFont);
+        instructions.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
         instructions.setTranslateX(WIDTH/2-80);
         instructions.setTranslateY(HEIGHT/2+150);
 
@@ -81,11 +82,11 @@ public class GameMenu {
         root.getChildren().addAll(backgroundView, adventureView, creators, gameInfo, startGame, instructions);
     }
 
-    public Button startGame(){ return startGame; }
+    Button startGame(){ return startGame; }
 
-    public Button instructions(){ return instructions; }
+    Button instructions(){ return instructions; }
 
-    public Group returnRoot() {
+    Group returnRoot() {
         return root;
     }
 

@@ -1,7 +1,7 @@
 package sample;
 
 
-public class Luggage {
+class Luggage {
     private Block block;
     private Weapon weapon;
 
@@ -41,4 +41,6 @@ public class Luggage {
     Weapon getWeapon () {
         return this.weapon;
     }
+
+    void removeWeapon () {this.weapon = null;}
 }

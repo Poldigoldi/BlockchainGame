@@ -17,14 +17,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class Main extends Application {
     //music
@@ -56,6 +54,7 @@ public class Main extends Application {
     private boolean doorunlocked = false;
     private InfoBar infobar;
     private Object speaker;
+    private Object warning;
     private Stage stage;
     private AnchorPane appRoot = new AnchorPane();
     private Map map;
@@ -68,6 +67,7 @@ public class Main extends Application {
     private Player player;
     private ArrayList<Bullet> bulletsFired = new ArrayList<>();
     private Font font;
+    private int updateCount = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -79,14 +79,13 @@ public class Main extends Application {
         stage = primaryStage;
         initialiseFonts();
         //set Stage boundaries to visible bounds of the main screen, reinitialise everything
-        this.WIDTH = (int)primaryScreenBounds.getWidth();
-        this.HEIGHT = (int)primaryScreenBounds.getHeight();
+        this.WIDTH = (int) primaryScreenBounds.getWidth();
+        this.HEIGHT = (int) primaryScreenBounds.getHeight();
         stage.setX(primaryScreenBounds.getMinX());
         stage.setY(primaryScreenBounds.getMinY());
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
         //PREPARE ROOT NODES FROM DIFFERENT CLASSES
-        player =  new Player("Hero", WIDTH/2, HEIGHT/2, PLAYER_START_LIVES);
         keyPad = new KeyPad(WIDTH, HEIGHT);
         gameOver = new GameOver(WIDTH, HEIGHT);
         gameMenu = new GameMenu(WIDTH, HEIGHT);
@@ -109,12 +108,27 @@ public class Main extends Application {
         initContent(1);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
+        for(Object object: map.level().bringtofront()){
+            object.sprite.toFront();
+        }
 
     }
 
     private void initialiseLabels() {
         infobar = new InfoBar();
-        speaker = new Object(Type.ABSTRACT, new Frame( "/graphics/helpspeaker1.png"));
+        warning = new Object(Type.ABSTRACT, new Frame("/graphics/warn1.png"));
+        warning.sprite.loadDefaultImages(new Frame("/graphics/warn1.png", 8),
+                new Frame("/graphics/warn2.png", 8),
+                new Frame("/graphics/warn3.png", 8),
+                new Frame("/graphics/warn4.png", 8),
+                new Frame("/graphics/warn5.png", 8),
+                new Frame("/graphics/warn6.png", 15),
+                new Frame("/graphics/warn7.png", 30),
+                new Frame("/graphics/warn6.png", 15),
+                new Frame("/graphics/warn5.png", 8),
+                new Frame("/graphics/warn4.png", 8),
+                new Frame("/graphics/warn3.png", 8));
+        speaker = new Object(Type.ABSTRACT, new Frame("/graphics/helpspeaker1.png"));
         speaker.sprite.loadDefaultImages(new Frame("/graphics/helpspeaker1.png", 30),
                 new Frame("/graphics/helpspeaker2.png", 8),
                 new Frame("/graphics/helpspeaker3.png", 8),
@@ -122,23 +136,25 @@ public class Main extends Application {
                 new Frame("/graphics/helpspeaker5.png", 8));
         popUp.setWrapText(true);
         popUp.setDisable(true);
-        popUp.setStyle( "-fx-background-color: black" );
+        popUp.setStyle("-fx-background-color: black");
         popUp.setFont(font);
-        popUp.setMinSize(WIDTH-490,80);
-        popUp.setMaxSize(WIDTH-490,80);
+        popUp.setMinSize(WIDTH - 490, 80);
+        popUp.setMaxSize(WIDTH - 490, 80);
         popUp.setFont(font);
         addLabels();
     }
 
-    private void addLabels(){
-        for(Object barcontents: infobar.infoBarList()){
+    private void addLabels() {
+        for (Object barcontents : infobar.infoBarList()) {
             map.addAnimatedObjects(barcontents);
         }
-        map.addAnimatedObjects(speaker);
+        speaker.sprite.setOpacity(0);
+        map.addAnimatedObjects(speaker, warning);
         map.mapRoot().getChildren().addAll(popUp, infobar.infoBarGroup());
     }
 
     private void initContent(int level) {
+        player = new Player("Hero", WIDTH / 2, HEIGHT / 2, PLAYER_START_LIVES);
         if (gameMediaPlayer.getStatus() != MediaPlayer.Status.PLAYING && mode == Mode.PLATFORMGAME)
             gameMediaPlayer.play();
         appRoot.getChildren().clear();
@@ -150,20 +166,19 @@ public class Main extends Application {
         map = new Map(level, WIDTH, HEIGHT); //initialises level based on level number input
         map.addPlayer(player, 70, map.level().height() - 135);
         map.mapRoot().setTranslateX(0);
-        map.mapRoot().setTranslateY(- map.level().height() + HEIGHT);
+        map.mapRoot().setTranslateY(-map.level().height() + HEIGHT);
     }
 
 
     /*Changes the level based on level number. New levels can be created in Grid class*/
     private void changeLevel(int level) {
         map.removePlayer(player);
-        for(Object barcontents: infobar.infoBarList()){
+        for (Object barcontents : infobar.infoBarList()) {
             map.mapRoot().getChildren().remove(barcontents.box);
             map.mapRoot().getChildren().remove(barcontents.sprite);
         }
         initContent(level);
         addLabels();
-        player.setLives(4);
         infobar.updateHealthFill(4);
         infobar.updateWeapon(player.hasWeapon());
         appRoot.getChildren().addAll(map.mapRoot());
@@ -185,7 +200,8 @@ public class Main extends Application {
      * **********************************************************************/
 
     private void update(Stage stage) {
-        stage.setTitle(player.getLives() +"");
+        updateCount++;
+        stage.setTitle(player.getLives() + "");
 
         if (keyPad.isCodeCorrect()) {
             map.bigdoor().sprite.setanimation(true);
@@ -206,14 +222,14 @@ public class Main extends Application {
         if (mode == Mode.PLATFORMGAME) {
 
             /*  Handles all the game events, including player motion and interaction with items  */
-            if (isPressed(KeyCode.LEFT)) {
+            if (isPressed(KeyCode.LEFT) || (isPressed(KeyCode.A))) {
                 player.setFacingRight(false);
                 if (player.move_X(-5, map)) map.moveScreenX(-5, player);
-            } else if (isPressed(KeyCode.RIGHT)) {
+            } else if (isPressed(KeyCode.RIGHT) || (isPressed(KeyCode.D))) {
                 player.setFacingRight(true);
                 if (player.move_X(5, map)) map.moveScreenX(5, player);
             }
-            if (isPressed(KeyCode.SPACE)) {
+            if (isPressed(KeyCode.W) || (isPressed(KeyCode.UP))) {
                 player.jump();
             }
 
@@ -221,10 +237,12 @@ public class Main extends Application {
             positionLabels();
             ListenerEnemies();
             MovePlatforms();
+            ListenerPlatforms();
             ListenerItemsEvent();
             ListenerPlayerLives();
             ListenerPlayerUseWeapon();
             ListenerHackingAttack ();
+            ListenerAttackBots();
             ListenerBullets ();
             ListenerButtons();
             UpdateAnimatedObjects();
@@ -238,25 +256,23 @@ public class Main extends Application {
     }
 
     private void positionLabels() {
-        infobar.positionBar(-map.mapRoot().getTranslateX()+25, -map.mapRoot().getTranslateY()+25);
-        popUp.setTranslateX(-map.mapRoot().getTranslateX()+435);
-        popUp.setTranslateY(-map.mapRoot().getTranslateY()+25);
+        infobar.positionBar(-map.mapRoot().getTranslateX() + 25, -map.mapRoot().getTranslateY() + 25);
+        popUp.setTranslateX(-map.mapRoot().getTranslateX() + 435);
+        popUp.setTranslateY(-map.mapRoot().getTranslateY() + 25);
         popUp.toFront();
-        speaker.setX(-map.mapRoot().getTranslateX()+330);
-        speaker.setY(-map.mapRoot().getTranslateY()+25);
+        speaker.setX(-map.mapRoot().getTranslateX() + 330);
+        speaker.setY(-map.mapRoot().getTranslateY() + 25);
+        speaker.box.setVisible(false);
         speaker.sprite.toFront();
+        warning.setX(-map.mapRoot().getTranslateX() + 0.5*WIDTH-200);
+        warning.setY(-map.mapRoot().getTranslateY() + HEIGHT-100);
+        warning.box.setVisible(false);
+        warning.sprite.toFront();
     }
 
     private void MovePlatforms() {
 
     }
-
-    /*Use this method if you want to change the content and position of the popup*/
-    private void handlePopUp(String content, double posX, double posY, int radius, boolean visible) {
-       // helpPopUp.setPopUpText(content);
-    }
-
-
 
     //updates the screen Y based on player position
     private void moveScreenY() {
@@ -279,30 +295,61 @@ public class Main extends Application {
      *                              LISTENERS FOR EVENTS
      * **********************************************************************/
 
+    private void ListenerAttackBots(){
+        //for attackbots
+            for(AttackBot attackBot: map.attackbots()) {
+                    if(attackBot.moveLaser(player.getX(), player.getY())==true && player.isCanDie()) {
+                        player.looseOneLife();
+                        player.setCanDie(false);
+                        playerhurtSound.play();
+                        infobar.updateHealthEmpty(player.getLives());
+                    }
+                if (attackBot.counter() < 300) {
+                    if (attackBot.getX() < player.getX()) {
+                        attackBot.sprite.offset(15, 0);
+                        attackBot.sprite.setdefaultanimationchoice(2);
+                        attackBot.setFacingRight(true);
+                    } else {
+                        attackBot.sprite.offset(0, 0);
+                        attackBot.sprite.setdefaultanimationchoice(1);
+                        attackBot.setFacingRight(false);
+                    }
+                }
+
+            }
+
+
+    }
+
     private void ListenerDoodads() {
         if (map.getCurrentLevel() == 1 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
             openKeyPad();
         }
         if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY())) {
-            level=2;
+            level = 2;
             changeLevel(level);
         }
     }
 
     private void ListenerHelpPopUp() {
         boolean visible = false;
-        for(HelpPopUp helper: map.helpers()) {
+        for (HelpPopUp helper : map.helpers()) {
             if (helper.inRange(player.getX(), player.getY())) {
                 popUp.setText(helper.string());
                 visible = true;
             }
         }
-        if(visible) {
+        if (visible) {
             if (popUp.getOpacity() < 1) popUp.setOpacity(popUp.getOpacity() + 0.05);
             if (speaker.sprite.getOpacity() < 1) speaker.sprite.setOpacity(popUp.getOpacity());
         } else {
             if (popUp.getOpacity() > 0) popUp.setOpacity(popUp.getOpacity() - 0.05);
             if (speaker.sprite.getOpacity() > 0) speaker.sprite.setOpacity(popUp.getOpacity());
+        }
+        if (player.getLives()<2) {
+            if (warning.sprite.getOpacity() < 1) warning.sprite.setOpacity(warning.sprite.getOpacity() + 0.05);
+        } else {
+            if (warning.sprite.getOpacity() > 0) warning.sprite.setOpacity(warning.sprite.getOpacity() - 0.05);
         }
     }
 
@@ -313,13 +360,21 @@ public class Main extends Application {
         for (Collectable item : map.getItems()) {
             if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
-                if (item.isAlive()) {
+                if (item.isAlive() && item.getItemType() != Type.HEART ) {
                     player.getLuggage().take(item);
                     map.hideEntity(item);
                     infobar.updateWeapon(true);
                     if (item.getItemType() == Type.BLOCK) {
                         miniGameKey();
                     }
+                }
+               else if (item.isAlive() && item.getItemType() == Type.HEART ) {
+                   if(player.getLives() < 4) {
+                       map.hideEntity(item);
+                       item.setAlive(false);
+                       player.addLife();
+                       infobar.updateHealthFill(player.getLives());
+                   }
                 }
             }
         }
@@ -339,7 +394,7 @@ public class Main extends Application {
 
     private void ListenerPlayerLives() {
         int collision = 0;
-        for (Enemy enemy : map.getEnemies()) {
+        for (Person enemy : map.getEnemies()) {
             if (enemy.isAlive()) {
                 if (player.box.getBoundsInParent().intersects(enemy.box.getBoundsInParent())) {
                     collision++;
@@ -359,25 +414,29 @@ public class Main extends Application {
         }
     }
 
+    private void ListenerGainLife() {
+
+    }
+
     private void ListenerPlayerUseWeapon() {
         if (player.hasWeapon()) {
             // If player allowed to use weapon and has bullets left
-            if (isPressed(KeyCode.W) && player.canUseWeapon()) {
-                shootOneBullet (player, player.isFacingRight ());
+            if (isPressed(KeyCode.SPACE) && player.canUseWeapon()) {
+                shootOneBullet(player, player.isFacingRight());
                 shootSound.play();
                 player.getLuggage().getWeapon().looseOneBullet();
                 player.getLuggage().getWeapon().setCanShoot(false);
             }
             // User can only shoot 1 bullet when press key (un-press & press again to shoot)
-            if (!isPressed(KeyCode.W)) {
+            if (!isPressed(KeyCode.SPACE)) {
                 player.getLuggage().getWeapon().setCanShoot(true);
             }
         }
     }
 
-    private void waitsSomeoneHitBullet (Bullet bullet, Person person) {
+    private void waitsSomeoneHitBullet(Bullet bullet, Person person) {
 
-        if ( person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent())) {
+        if (person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent()) && person.isAlive()) {
             map.removeBullet(bullet);
             person.looseOneLife();
             enemy1hurtSound.play();
@@ -394,32 +453,37 @@ public class Main extends Application {
 
     private void ListenerBullets() {
         // moves existing bullets
-        for (Bullet bullet: bulletsFired) {
+        for (Bullet bullet : bulletsFired) {
             bullet.move(map);
-            for (Enemy enemy : map.getEnemies ()) {
+            for (Person enemy : map.getEnemies ()) {
                 // if Hacking shooting, his bullets won't hurt the enemies
-                if (!bullet.isPlayerShooting ()) {
-                    waitsSomeoneHitBullet (bullet, player);
+                if (!bullet.isPlayerShooting()) {
+                    waitsSomeoneHitBullet(bullet, player);
                 }
                 // if player shooting, his bullets wont hurt himself
                 else {
-                    waitsSomeoneHitBullet (bullet, enemy);
+                    waitsSomeoneHitBullet(bullet, enemy);
                 }
             }
 
         }
-        bulletsFired.removeIf (bullet -> !bullet.isAlive ());
+        bulletsFired.removeIf(bullet -> !bullet.isAlive());
     }
 
     /* ----------- ENEMIES ------------ */
-    private void ListenerHackingAttack () {
-        HacKing king = map.getKing ();
-        if (king == null) { return; }
+    private void ListenerHackingAttack() {
+        HacKing king = map.getKing();
+        if (king == null) {
+            return;
+        }
+
+        king.move (map);
 
         if (king.isCanAttack ()) {
             switch (king.getAttackMode ()) {
                 case 1:
                     // new wave of enemy
+                    map.addRandomEnemy ();
                     map.addRandomEnemy ();
                     break;
                 case 2:
@@ -432,7 +496,7 @@ public class Main extends Application {
         }
     }
 
-    private void shootOneBullet (Object shooter, boolean shootRight) {
+    private void shootOneBullet (Person  shooter, boolean shootRight) {
         boolean isPlayerShooter = shooter instanceof Player;
         final int BULLET_WIDTH = 20;
         final int OFFSET = 5;
@@ -446,27 +510,28 @@ public class Main extends Application {
     }
 
     private void ListenerEnemies() {
-        for (Enemy enemy : map.getEnemies()) {
+        for (Person enemy : map.getEnemies()) {
             // check if enemy died
-            if(enemy.isAlive()){
+            if (enemy.isAlive()) {
                 if (isObjectOutOfBounds(enemy)) {
                     enemy.setAlive(false);
                 }
-                if (enemy.getCanMove()) {
-                    enemy.giveMotion(map);
+                if (enemy instanceof Enemy && ((Enemy)enemy).getCanMove()) {
+                    ((Enemy)enemy).giveMotion(map);
                 }
             }
-            if (enemy.sprite.dead()){
+            if (enemy.sprite.dead()) {
                 map.hideEntity(enemy);
             }
         }
-        map.getEnemies ().removeIf (enemy -> enemy.sprite.dead());
+        map.getEnemies().removeIf(enemy -> enemy.sprite.dead());
     }
+
     // Sends a new wave of enemy to the game every so often
     // New enemies are sent 1 by 1 (every second)
     // will keep going until there is more 10 enemies on the map
     private void ListenerTimeBeforeNewEnemyWave() {
-        if (map.getCurrentLevel () == 1) {
+        if (map.getCurrentLevel() == 1) {
             timeCounter++;
             int WAVE_SIZE = 3;
             if (map.getEnemies().size() < 10) {
@@ -499,6 +564,31 @@ public class Main extends Application {
         }
     }
 
+    /* ----------- PLATFORMS ------------ */
+    private void ListenerPlatforms() {
+        for (Platform platform : map.getLevel().platforms()) {
+            if (platform.isTimed() == true) {
+                if ((this.player.box.getBoundsInParent()).intersects(platform.box.getBoundsInParent()) && player.isLanded && !platform.disappearing()) {
+                    platform.setDisappear(true);
+                    platform.sprite.setImage(new Image("/graphics/disappear2.png"));
+                    platform.calculateUpdate(updateCount);
+                }
+
+                if (platform.disappearing() && platform.matchUpdate(updateCount)) {
+                    platform.setAlive(false);
+                    platform.setDisappear(false);
+                    platform.setCollisionBox(0, 0, 0, 0, Color.RED);
+                    platform.calculateUpdate(updateCount);
+                }
+                if (platform.isAlive() == false && platform.matchUpdate(updateCount)) {
+                    platform.setAlive(true);
+                    platform.sprite.setImage(new Image("/graphics/disappear1.png"));
+                    platform.restoreCollisionBox();
+                }
+            }
+        }
+    }
+
 
     /***************************************************************************
      *                              GAME OVER
@@ -526,13 +616,15 @@ public class Main extends Application {
         }
     }
 
-    private void gameOver() {
-        if (isPressed(KeyCode.SPACE)) {
-            mainScene.setRoot(appRoot);
-            keys.clear(); /**added to prevent input from previous game being called on reset**/
-            mode = Mode.PLATFORMGAME;
-        }
+  private void gameOver() {
+    if (isPressed(KeyCode.SPACE)) {
+      player.getLuggage().removeWeapon();
+      infobar.updateWeapon(false);
+      mainScene.setRoot(appRoot);
+      keys.clear(); /**added to prevent input from previous game being called on reset**/
+      mode = Mode.PLATFORMGAME;
     }
+  }
 
 
     /***************************************************************************
@@ -567,7 +659,6 @@ public class Main extends Application {
     private Boolean isPressed(KeyCode key) {
         return keys.getOrDefault(key, false);
     }
-
 
 
     /***************************************************************************
@@ -605,23 +696,40 @@ public class Main extends Application {
 
     /*Handles all button clicks on the keyPad*/
     private void handleKeyPad() {
-        keyPad.getOne().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getOne().getValue()))));
-        keyPad.getTwo().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getTwo().getValue()))));
-        keyPad.getThree().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getThree().getValue()))));
-        keyPad.getFour().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getFour().getValue()))));
-        keyPad.getFive().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getFive().getValue()))));
-        keyPad.getSix().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getSix().getValue()))));
-        keyPad.getSeven().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getSeven().getValue()))));
-        keyPad.getEight().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getEight().getValue()))));
-        keyPad.getNine().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getNine().getValue()))));
-        keyPad.getZero().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(Integer.toString(keyPad.getZero().getValue()))));
+        keyPad.getQ().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getQ().getValue())));
+        keyPad.getW().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getW().getValue())));
+        keyPad.getE().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getE().getValue())));
+        keyPad.getR().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getR().getValue())));
+        keyPad.getT().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getT().getValue())));
+        keyPad.getY().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getY().getValue())));
+        keyPad.getU().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getU().getValue())));
+        keyPad.getI().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getI().getValue())));
+        keyPad.getO().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getO().getValue())));
+        keyPad.getP().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getP().getValue())));
+        keyPad.getA().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getA().getValue())));
+        keyPad.getS().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getS().getValue())));
+        keyPad.getD().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getD().getValue())));
+        keyPad.getF().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getF().getValue())));
+        keyPad.getG().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getG().getValue())));
+        keyPad.getH().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getH().getValue())));
+        keyPad.getJ().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getJ().getValue())));
+        keyPad.getK().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getK().getValue())));
+        keyPad.getL().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getL().getValue())));
+        keyPad.getY().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getY().getValue())));
+        keyPad.getX().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getX().getValue())));
+        keyPad.getC().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getC().getValue())));
+        keyPad.getV().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getV().getValue())));
+        keyPad.getB().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getB().getValue())));
+        keyPad.getN().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getN().getValue())));
+        keyPad.getM().getButton().setOnAction(event -> keyPad.setDisplayText(keyPad.getDisplayText().concat(keyPad.getM().getValue())));
+
         keyPad.getClear().setOnAction(event -> keyPad.setDisplayText(""));
         keyPad.getExit().setOnAction(event -> {
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
         });
         keyPad.getEnter().setOnAction(event -> {
-            if (keyPad.getDisplayText().equals("1234")) {
+            if (keyPad.getDisplayText().equals("secret")) {
                 mainScene.setRoot(appRoot);
                 keyPad.setCodeCorrect(true);
                 doorunlocked = true;
@@ -632,7 +740,7 @@ public class Main extends Application {
         });
     }
 
-    private void initialiseFonts(){
+    private void initialiseFonts() {
         try {
             font = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16);
         } catch (FileNotFoundException e) {

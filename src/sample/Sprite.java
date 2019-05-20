@@ -1,6 +1,7 @@
 package sample;
 import javafx.scene.image.ImageView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //set framerate to 9999 for no looping
@@ -39,7 +40,7 @@ public class Sprite extends ImageView {
     }
 
     //for a non-animating sprite
-    public Sprite(Type type, Frame... defaultFrame){
+    Sprite(Type type, Frame... defaultFrame){
         this.type = type;
         if(defaultFrame.length == 0) {
             Frame noDefaultSpecified = new Frame("/graphics/noimage.png");
@@ -56,9 +57,9 @@ public class Sprite extends ImageView {
 
     //for an animated sprite
 
-    public void setanimation(boolean active){ animationactive = active;}
+    void setanimation(boolean active){ animationactive = active;}
 
-    public void setdefaultanimationchoice(int choice) {
+    void setdefaultanimationchoice(int choice) {
         if(defaultAnimationChoice != choice){
             defaultAnimationChoice = choice;
             animationCycle = 0;
@@ -66,15 +67,14 @@ public class Sprite extends ImageView {
         }
     }
 
-    public void loadDefaultImages(Frame... images){
+    void loadDefaultImages(Frame... images){
         animationCycle = 0;
         frameDelay = 0;
         if(defaultAnimation1.size()!=0) defaultAnimation1.clear();
-        for(Frame image: images)
-            defaultAnimation1.add(image);
+        Collections.addAll(defaultAnimation1, images);
     }
 
-    public void loadDefault2Images(Frame... images){
+    void loadDefault2Images(Frame... images){
         animationCycle = 0;
         frameDelay = 0;
         if(defaultAnimation2.size()!=0) defaultAnimation2.clear();
@@ -82,19 +82,19 @@ public class Sprite extends ImageView {
             defaultAnimation2.add(image);
     }
 
-    public void loadDeathImages(Frame... images){ for(Frame image: images) deathAnimation.add(image); }
+    void loadDeathImages(Frame... images){ for(Frame image: images) deathAnimation.add(image); }
 
-    public void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
-    public void loadDefaultLeftImages(Frame... images){ for(Frame image: images) defaultLeftAnimation.add(image); }
+    void loadDefaultRightImages(Frame... images){ for(Frame image: images) defaultRightAnimation.add(image); }
+    void loadDefaultLeftImages(Frame... images){ for(Frame image: images) defaultLeftAnimation.add(image); }
 
-    public void loadLeftMotionImages(Frame... images){ for(Frame image: images) motionLeftAnimation.add(image); }
-    public void loadRightMotionImages(Frame... images){ for(Frame image: images) motionRightAnimation.add(image); }
+    void loadLeftMotionImages(Frame... images){ for(Frame image: images) motionLeftAnimation.add(image); }
+    void loadRightMotionImages(Frame... images){ for(Frame image: images) motionRightAnimation.add(image); }
 
-    public void loadfallLeftImages(Frame... images){ for(Frame image: images) fallLeftAnimation.add(image); }
-    public void loadfallRightImages(Frame... images){ for(Frame image: images) fallRightAnimation.add(image); }
+    void loadfallLeftImages(Frame... images){ for(Frame image: images) fallLeftAnimation.add(image); }
+    void loadfallRightImages(Frame... images){ for(Frame image: images) fallRightAnimation.add(image); }
 
-    public void loadjumpLeftImages(Frame... images){ for(Frame image: images) jumpLeftAnimation.add(image); }
-    public void loadjumpRightImages(Frame... images){ for(Frame image: images) jumpRightAnimation.add(image); }
+    void loadjumpLeftImages(Frame... images){ for(Frame image: images) jumpLeftAnimation.add(image); }
+    void loadjumpRightImages(Frame... images){ for(Frame image: images) jumpRightAnimation.add(image); }
 
     //updates images
     private void updateFrame(){
@@ -106,7 +106,7 @@ public class Sprite extends ImageView {
         if( currentFrame.framerate()==9999) frameDelay = 0;
     }
 
-    public void activateDeathAnimation(){
+    void activateDeathAnimation(){
         if(!dying) {
             dying = true;
             animationCycle = 0;
@@ -117,7 +117,6 @@ public class Sprite extends ImageView {
     public void update(boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
         moveTo(x, y);
         if(dying){
-            System.out.println("working");
             animate(deathAnimation);
             return;
         }
@@ -162,5 +161,5 @@ public class Sprite extends ImageView {
         setImage(images.get(animationCycle));
     }
 
-    public boolean dead(){return dead;}
+    boolean dead(){return dead;}
 }

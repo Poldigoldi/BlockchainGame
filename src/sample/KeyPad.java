@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 
 public class KeyPad {
     private GridPane keyPad = new GridPane();
-    private Key one, two, three, four, five, six, seven, eight, nine, zero;
+    private Key q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m;
     private Button enter, clear, exit;
     private TextField display;
     private Group root = new Group();
@@ -49,16 +49,32 @@ public class KeyPad {
         backgroundView.setTranslateY(HEIGHT/2-100);
 
         /*Selection keys*/
-        one = new Key(1);
-        two = new Key(2);
-        three = new Key(3);
-        four = new Key(4);
-        five = new Key(5);
-        six = new Key(6);
-        seven = new Key(7);
-        eight = new Key(8);
-        nine = new Key(9);
-        zero = new Key(0);
+        q = new Key("q");
+        w = new Key("w");
+        e = new Key("e");
+        r = new Key("r");
+        t = new Key("t");
+        y = new Key("y");
+        u = new Key("u");
+        i = new Key("i");
+        o = new Key("o");
+        p = new Key("p");
+        a = new Key("a");
+        s = new Key("s");
+        d = new Key("d");
+        f = new Key("f");
+        g = new Key("g");
+        h = new Key("h");
+        j = new Key("j");
+        k = new Key("k");
+        l = new Key("l");
+        z = new Key("z");
+        x = new Key("x");
+        c = new Key("c");
+        v = new Key("v");
+        b = new Key("b");
+        n = new Key("n");
+        m = new Key("m");
 
         display = new TextField("");
         display.setMinSize(200,50);
@@ -81,20 +97,40 @@ public class KeyPad {
 
 
         /*Add buttons to keyPad*/
-        keyPad.add(display, 0,0,3,1);
-        keyPad.add(seven.getButton(),0,1);
-        keyPad.add(eight.getButton(),1,1);
-        keyPad.add(nine.getButton(),2,1);
-        keyPad.add(four.getButton(),0,2);
-        keyPad.add(five.getButton(),1,2);
-        keyPad.add(six.getButton(),2,2);
-        keyPad.add(one.getButton(),0,3);
-        keyPad.add(two.getButton(),1,3);
-        keyPad.add(three.getButton(), 2,3);
-        keyPad.add(zero.getButton(),1,4);
-        keyPad.add(enter, 2,4);
-        keyPad.add(clear, 0,4);
-        keyPad.add(exit,3,4);
+        keyPad.add(display, 0,0,10,1);
+
+        keyPad.add(q.getButton(),0,1);
+        keyPad.add(w.getButton(),1,1);
+        keyPad.add(e.getButton(),2,1);
+        keyPad.add(r.getButton(),3,1);
+        keyPad.add(t.getButton(),4,1);
+        keyPad.add(y.getButton(),5,1);
+        keyPad.add(u.getButton(),6,1);
+        keyPad.add(i.getButton(),7,1);
+        keyPad.add(o.getButton(), 8,1);
+        keyPad.add(p.getButton(),9,1);
+
+        keyPad.add(a.getButton(), 0, 2);
+        keyPad.add(s.getButton(), 1, 2);
+        keyPad.add(d.getButton(), 2, 2);
+        keyPad.add(f.getButton(), 3, 2);
+        keyPad.add(g.getButton(), 4, 2);
+        keyPad.add(h.getButton(), 5, 2);
+        keyPad.add(j.getButton(), 6, 2);
+        keyPad.add(k.getButton(), 7, 2);
+        keyPad.add(l.getButton(), 8, 2);
+
+        keyPad.add(z.getButton(), 1, 3);
+        keyPad.add(x.getButton(), 2, 3);
+        keyPad.add(c.getButton(), 3, 3);
+        keyPad.add(v.getButton(), 4, 3);
+        keyPad.add(b.getButton(), 5, 3);
+        keyPad.add(n.getButton(), 6, 3);
+        keyPad.add(m.getButton(), 7, 3);
+
+        keyPad.add(clear, 0,4,3,1);
+        keyPad.add(enter, 4,4,3,1);
+        keyPad.add(exit,7,4,3,1);
 
         keyPad.setPadding(new Insets(10));
         keyPad.setHgap(10);
@@ -114,36 +150,110 @@ public class KeyPad {
         this.display.setText(displayText);
     }
 
-    Key getOne() {
-        return one;
+    public Key getQ() {
+        return q;
     }
-    Key getTwo() {
-        return two;
+
+    public Key getW() {
+        return w;
     }
-    Key getThree() {
-        return three;
+
+    public Key getE() {
+        return e;
     }
-    Key getFour() {
-        return four;
+
+    public Key getR() {
+        return r;
     }
-    Key getFive() {
-        return five;
+
+    public Key getT() {
+        return t;
     }
-    Key getSix() {
-        return six;
+
+    public Key getY() {
+        return y;
     }
-    Key getSeven() {
-        return seven;
+
+    public Key getU() {
+        return u;
     }
-    Key getEight() {
-        return eight;
+
+    public Key getI() {
+        return i;
     }
-    Key getNine() {
-        return nine;
+
+    public Key getO() {
+        return o;
     }
-    Key getZero() {
-        return zero;
+
+    public Key getP() {
+        return p;
     }
+
+    public Key getA() {
+        return a;
+    }
+
+    public Key getS() {
+        return s;
+    }
+
+    public Key getD() {
+        return d;
+    }
+
+    public Key getF() {
+        return f;
+    }
+
+    public Key getG() {
+        return g;
+    }
+
+    public Key getH() {
+        return h;
+    }
+
+    public Key getJ() {
+        return j;
+    }
+
+    public Key getK() {
+        return k;
+    }
+
+    public Key getL() {
+        return l;
+    }
+
+    public Key getZ() {
+        return z;
+    }
+
+    public Key getX() {
+        return x;
+    }
+
+    public Key getC() {
+        return c;
+    }
+
+    public Key getV() {
+        return v;
+    }
+
+    public Key getB() {
+        return b;
+    }
+
+    public Key getN() {
+        return n;
+    }
+
+    public Key getM() {
+        return m;
+    }
+
     Button getEnter() {
         return enter;
     }

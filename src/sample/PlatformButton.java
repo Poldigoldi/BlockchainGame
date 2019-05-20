@@ -9,7 +9,7 @@ package sample;
      implements attributes previously described in the object class
   */
 
-public class PlatformButton extends Object{
+class PlatformButton extends Object{
   private String colour;
   private boolean pressed = false;
   private Frame buttonUp;

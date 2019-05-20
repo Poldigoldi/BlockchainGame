@@ -8,7 +8,7 @@ class HelpPopUp {
     private Object helper;
     private String string;
 
-    public HelpPopUp(int x, int y, String string, boolean faceRight){
+    HelpPopUp(int x, int y, String string, boolean faceRight){
         helper = new Object(Type.ABSTRACT);
         helper.setCollisionBox(x*64, y*64, 50, 50, Color.CADETBLUE);
         if(!faceRight) {
@@ -44,12 +44,12 @@ class HelpPopUp {
 
     public String string() { return string;}
 
-    public Object helper() { return helper;}
+    Object helper() { return helper;}
 
 
-    public boolean inRange(double playerx, double playery){
+    boolean inRange(double playerx, double playery){
         double distance = Math.sqrt(Math.pow((playerx - helper.box.getTranslateX()), 2) + Math.pow((playery - helper.box.getTranslateY()), 2));
-        if(distance < 200){
+        if(distance < 300){
             helper.sprite.setdefaultanimationchoice(1);
             return true;
         }

@@ -14,7 +14,6 @@ public class Bullet extends Object {
 
     private final boolean playerFacingRight;
     private final boolean isPlayerShooting;
-    private int frame = 0;
     private Label label = new Label("01010");
     private String style = "  -fx-background-color: rgba(0,0,0,0.5);  -fx-text-fill: #39ff14;";
     private Font font = Font.font("Verdana", 8);
@@ -32,7 +31,7 @@ public class Bullet extends Object {
 
     public Label label(){ return label; }
 
-    public void move (Map map) {
+    void move(Map map) {
         label.setTranslateX(box.getTranslateX());
         label.setTranslateY(box.getTranslateY()-5);
         int speed = (playerFacingRight ? 1 : -1) * SPEED_MAGNITUDE;
@@ -48,7 +47,6 @@ public class Bullet extends Object {
 
         return string;
     }
-
 
     public static String rc(){
         double x = (int)(Math.random()*((5-0)+1))+0;
@@ -66,7 +64,7 @@ public class Bullet extends Object {
         return HEIGHT;
     }
 
-    public boolean isPlayerShooting() {
+    boolean isPlayerShooting() {
         return isPlayerShooting;
     }
 }
