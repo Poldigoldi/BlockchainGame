@@ -92,7 +92,8 @@ public class Main extends Application {
         instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
         //SET THE SCENE
         menuMediaPlayer.play();
-        menuMediaPlayer.setVolume(100);
+        menuMediaPlayer.setVolume(1);
+        gameMediaPlayer.setVolume(0.5);
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
         mainScene.setFill(Color.BLACK);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
