@@ -149,7 +149,7 @@ public class Map {
         Person enemy;
         switch (typeId){
             case 1:  // Enemy stay more at bottom of map - on left side
-                enemy = new Enemy (200, 100, true, 800, 100);
+                enemy = new Enemy (200, 100, true, 800, 10);
                 break;
             case 2: // Enemy stay more at top of map - anywhere
                 enemy = new Enemy (600, 500, true, 800, 10);
