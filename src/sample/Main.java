@@ -112,7 +112,7 @@ public class Main extends Application {
         gameMenu.startGame().setOnAction(startButtonHandler);
         instructionScreen.returnButton().setOnAction(returnButtonHandler);
         //prepare game
-        initContent(3);
+        initContent(1);
         initialiseLabels();
         appRoot.getChildren().addAll(map.mapRoot());
         for(Object object: map.level().bringtofront()){
