@@ -88,6 +88,8 @@ public class Grid {
 
   private String[] map2 = new String[]{
           "4                            4",
+          "4                            4",
+          "4                            4",
           "3                   H        4",
           "2.H..              OOO   .H.B2",
           "256!8   MV   DD          [@@]1",
@@ -103,6 +105,9 @@ public class Grid {
   };
 
   private String[] map3 = new String[]{
+          "4                    4",
+          "4                    4",
+          "4                    4",
           "4T        4         B4",
           "455 D     4D      D554",
           "#    D    #    D   D 4",
@@ -131,12 +136,26 @@ public class Grid {
           "4444                 4"
   };
 
+  private String[] map4 = new String[]{
+          "                       ",
+          "                       ",
+          "      DDD     DDD      ",
+          "       4       4       ",
+          "           4           ",
+          "           4           ",
+          "     4     4     4     ",
+          "      4         4      ",
+          "       444444444       ",
+          "                       ",
+          "44444444444444444444444",
+  };
 
   /* Constructor */
   Grid(int level) {
     map = map1;
     if (level == 2) map = map2;
     else if (level == 3) map = map3;
+    else if (level == 4) map = map4;
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {

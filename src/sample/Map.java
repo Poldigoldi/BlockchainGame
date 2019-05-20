@@ -34,6 +34,9 @@ public class Map {
         if (level == 3) {
             initialiseLevel3();
         }
+        if (level == 4) {
+            initialiseLevel4();
+        }
     }
 
     private void addToGrid() {
@@ -91,6 +94,15 @@ public class Map {
     private void initialiseLevel3() {
         level = new Grid(3);
         currentLevel = 3;
+        createLayer3Clouds();
+        addAnimatedPlatforms();
+        generalInitialiser();
+        addToGrid();
+    }
+
+    private void initialiseLevel4() {
+        level = new Grid(4);
+        currentLevel = 4;
         createLayer3Clouds();
         addAnimatedPlatforms();
         generalInitialiser();

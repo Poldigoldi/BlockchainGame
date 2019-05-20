@@ -248,6 +248,12 @@ public class Main extends Application {
                 musicStart(Music.LEVEL3);
                 changeLevel(3);
             }
+            if (isPressed(KeyCode.I)) {
+                level = 4;
+                musicStop();
+                musicStart(Music.LEVEL3);
+                changeLevel(4);
+            }
 
             moveScreenY();
             positionLabels();
@@ -347,12 +353,23 @@ public class Main extends Application {
             musicStop();
             musicStart(Music.BOSS);
             changeLevel(level);
-        } else if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
+        }
+        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
             level = 3;
             musicStop();
             musicStart(Music.LEVEL3);
             changeLevel(level);
         }
+        if (map.getCurrentLevel() == 3 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
+            openKeyPad();
+        }
+        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 3) {
+            level = 4;
+            musicStop();
+            musicStart(Music.LEVEL3);
+            changeLevel(level);
+        }
+
     }
 
     private void ListenerHelpPopUp() {
