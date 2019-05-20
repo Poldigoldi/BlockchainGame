@@ -126,7 +126,7 @@ public class HacKing extends Person {
 
     private void increaseSpeed () {
         if (getLives () <= 4) SPEED_MOVE = 3;
-        else  if (getLives () <= 7) SPEED_MOVE = 2;
+        else  if (getLives () <= 10) SPEED_MOVE = 2;
     }
 
     // generate a new random number different from the current given
@@ -157,13 +157,13 @@ public class HacKing extends Person {
 
     // If player too far from King, force king to move closer
     private void listenerTooFarFromPlayer(double x, double y) {
-        if (Math.abs (getX () - x) > 400) {
-            if (getX () > x) { directionIndex = 4; }
-            else { directionIndex = 3; }
-        }
-        if (Math.abs (getY () - y) > 400) {
+        if (Math.abs (getY () - y) > 200) {
             if (getY () > y) { directionIndex = 1; }
             else { directionIndex = 2; }
+        }
+        if (Math.abs (getX () - x) > 200) {
+            if (getX () > x) { directionIndex = 4; }
+            else { directionIndex = 3; }
         }
     }
 
@@ -226,7 +226,7 @@ public class HacKing extends Person {
     /* ------------------------- ATTACKS ------------------------ */
 
     private void increaseShootingFreq (){
-        if (getLives () <= 4 ) shooting_frequency = 3;
+        if (getLives () <= 4 ) shooting_frequency = 5;
         else if (getLives () <= 7) shooting_frequency = 4;
     }
 
