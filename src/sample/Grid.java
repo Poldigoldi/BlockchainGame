@@ -65,9 +65,9 @@ public class Grid {
     private String[] map1 = new String[]{
             "4                     4",
             "4                     4",
-            "4                    B4",
-            "8          MV      4464",
-            "4    <->              3",
+            "4                     4",
+            "8          MV        B4",
+            "4    <->           4463",
             "4 I    MV             2",
             "44444           DDD  T4",
             "6      .....       222£",
