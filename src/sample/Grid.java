@@ -14,12 +14,8 @@ public class Grid {
 
       # Elements #
       " "     == nothing
-
       <    -    >   == platform left, middle, right
-
       .       == grass
-
-
       0       == Dirt/grass
       1       == dirt/Grass meeting Block
       2       == Viny block
@@ -30,9 +26,7 @@ public class Grid {
       7       == Block variant, panel and vines
       8       == Block variant, heavily cracked
       !, £ -> tree variants of Block
-
       [   @   ]       == left / middle /right mixed grass and metal blocks
-
 
       R -> dynamic platform RED
       r -> interactive button RED
@@ -51,8 +45,6 @@ public class Grid {
 
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
-
-
 
                 if(level.map()[y].charAt(x) == 'T') addTerminal(x, y);
                 if(level.map()[y].charAt(x) == 'B') addBigDoor(x, y);
@@ -103,18 +95,19 @@ public class Grid {
     };
 
   private String[] map2 = new String[]{
-          "44444444444444444444444",
-          "4                     4",
-          "4                     4",
-          "4                     4",
-          "4         13   H        4",
-          "4     13      13      4",
-          "4                     4",
-          "4444     1223      4444",
-          "4                     4",
-          "4  W 123      123     4",
-          "4  4     4444         4",
-          "444   4444444444444   4"
+          "444444#44444444444444444444444",
+          "4                            4",
+          "4.H..                    ...B4",
+          "356!8   MV   DD          [@@]4",
+          "4                  MV        4",
+          "4         1#   H             3",
+          "4     13      13      56  .  4",
+          "4 W      ....             4#64",
+          "4434     1223         RR     4",
+          "4             .5    <>   D   4",
+          "4   123  ....123..r       D  4",
+          "4  D     4444000000        .H4",
+          "444   1114444444444  D D D 664"
   };
 
   private String[] map3 = new String[]{
