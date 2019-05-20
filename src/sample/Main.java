@@ -525,7 +525,7 @@ public class Main extends Application {
 
         if (king.isCanAttack()) {
             // send new enemies
-            if (king.getAttackMode() == 1 && map.getEnemies().size() < 10) {
+            if (king.getAttackMode() == 1 && map.getEnemies().size() < 5) {
                 map.addRandomEnemy();
                 map.addRandomEnemy();
             }
@@ -576,7 +576,7 @@ public class Main extends Application {
         if (map.getCurrentLevel() == 1) {
             timeCounter++;
             int WAVE_SIZE = 3;
-            if (map.getEnemies().size() < 10) {
+            if (map.getEnemies().size() < 5) {
                 // 20 seconds
                 int TIME_LIMIT = 60 * 20;
                 if (timeCounter >= TIME_LIMIT && timeCounter % 60 == 0) map.addRandomEnemy();
