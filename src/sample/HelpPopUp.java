@@ -3,15 +3,15 @@ package sample;
 import javafx.scene.paint.Color;
 
 class HelpPopUp {
- //   private Rectangle popUp = new Rectangle(10, 10, Color.GREEN);
+    //   private Rectangle popUp = new Rectangle(10, 10, Color.GREEN);
 
     private Object helper;
     private String string;
 
-    HelpPopUp(int x, int y, String string, boolean faceRight){
+    HelpPopUp(int x, int y, String string, boolean faceRight) {
         helper = new Object(Type.ABSTRACT);
-        helper.setCollisionBox(x*64, y*64, 50, 50, Color.CADETBLUE);
-        if(!faceRight) {
+        helper.setCollisionBox(x * 64, y * 64, 50, 50, Color.CADETBLUE);
+        if (!faceRight) {
             helper.sprite.offset(-36, 0);
             helper.sprite.loadDefaultImages(new Frame("/graphics/helper1.png", 15),
                     new Frame("/graphics/helper2.png", 10),
@@ -25,7 +25,7 @@ class HelpPopUp {
                     new Frame("/graphics/helperoff2.png", 5),
                     new Frame("/graphics/helperoff3.png", 5));
         }
-        if(faceRight) {
+        if (faceRight) {
             helper.sprite.offset(36, 0);
             helper.sprite.loadDefaultImages(new Frame("/graphics/helperright1.png", 15),
                     new Frame("/graphics/helperright2.png", 10),
@@ -41,22 +41,22 @@ class HelpPopUp {
         }
         this.string = string;
     }
+    public String string() {
+        return string;
+    }
 
-    public String string() { return string;}
+    Object helper() {
+        return helper;
+    }
 
-    Object helper() { return helper;}
 
-
-    boolean inRange(double playerx, double playery){
+    boolean inRange(double playerx, double playery) {
         double distance = Math.sqrt(Math.pow((playerx - helper.box.getTranslateX()), 2) + Math.pow((playery - helper.box.getTranslateY()), 2));
-        if(distance < 300){
+        if (distance < 300) {
             helper.sprite.setdefaultanimationchoice(1);
             return true;
         }
         helper.sprite.setdefaultanimationchoice(2);
         return false;
     }
-
-
-
 }

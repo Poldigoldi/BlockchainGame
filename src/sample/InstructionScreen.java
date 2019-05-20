@@ -15,27 +15,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 class InstructionScreen {
-    private int WIDTH, HEIGHT;
-    private boolean returnPressed = false;
-    private Font teenytinyFont, tinyFont, smallFont, mediumFont;
-    Group root = new Group();
-    Button returnButton = new Button("Return to Menu");
+    private Font tinyFont;
+    private Font mediumFont;
+    private Group root = new Group();
+    private Button returnButton = new Button("Return to Menu");
 
     InstructionScreen(int WIDTH, int HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
         initialiseFonts();
 
         //Labels
         Label header = new Label("INSTRUCTIONS:");
         header.setFont(mediumFont);
         header.setTranslateX(250);
-        header.setTranslateY(HEIGHT/30);
+        header.setTranslateY(HEIGHT / 30);
 
         Label instructionsText = new Label(
                 "Controls:\n\n" +
                         "'A' 'W' 'D'  to move the robot.\n" +
-                "'Space' to shoot.\n" +
+                        "'Space' to shoot.\n" +
                         "'E' to interact\n\n" +
                         "Pick up items by walking into them.\n" +
                         "\n\n" +
@@ -52,8 +49,8 @@ class InstructionScreen {
         //Buttons
         returnButton.setFont(tinyFont);
         returnButton.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
-        returnButton.setTranslateX(WIDTH-200);
-        returnButton.setTranslateY(HEIGHT-80);
+        returnButton.setTranslateX(WIDTH - 200);
+        returnButton.setTranslateY(HEIGHT - 80);
 
         //Images
         Image instructionsBackground = new Image("/graphics/menuBackground.png");
@@ -66,14 +63,19 @@ class InstructionScreen {
         //Root
         new AnimationTimer() {
             int i = 0;
+
             public void handle(long now) {
                 i++;
-                if(i < 50){ header.setTextFill(Color.DEEPPINK); }
-                if(i > 50){ header.setTextFill(Color.WHITE); }
-                if(i == 100) i = 0;
+                if (i < 50) {
+                    header.setTextFill(Color.DEEPPINK);
+                }
+                if (i > 50) {
+                    header.setTextFill(Color.WHITE);
+                }
+                if (i == 100) i = 0;
             }
         }.start();
-        root.getChildren().addAll(backgroundView, instructionsText, header,  returnButton);
+        root.getChildren().addAll(backgroundView, instructionsText, header, returnButton);
         returnButton.setOnAction(this::returnPress);
     }
 
@@ -81,23 +83,20 @@ class InstructionScreen {
         return root;
     }
 
-    Button returnButton(){ return returnButton;}
+    Button returnButton() {
+        return returnButton;
+    }
 
     private void returnPress(ActionEvent e) {
         System.out.println("click");
-        returnPressed = true;
     }
 
-    private void initialiseFonts(){
+    private void initialiseFonts() {
         try {
-            teenytinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 8);
             tinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 15);
-            smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);
             mediumFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 54);
         } catch (FileNotFoundException e) {
-            teenytinyFont = Font.font("Verdana", 15);
             tinyFont = Font.font("Verdana", 15);
-            smallFont = Font.font("Verdana", 28);
             mediumFont = Font.font("Verdana", 54);
         }
     }

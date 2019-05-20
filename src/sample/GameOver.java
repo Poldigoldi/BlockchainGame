@@ -1,9 +1,7 @@
 package sample;
 
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +14,7 @@ import java.io.FileNotFoundException;
 
 class GameOver {
     private Font tinyFont, smallFont, mediumFont;
-    Group root = new Group();
+    private Group root = new Group();
 
     GameOver(int WIDTH, int HEIGHT) {
         initialiseFonts();

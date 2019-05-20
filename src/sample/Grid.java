@@ -5,8 +5,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Grid {
-
-
   /*
       This class enables to create a level of the game using an Array od String
       A Grid object will be created when we initialise the game Map
@@ -55,11 +53,6 @@ public class Grid {
                 if(level.map()[y].charAt(x) == 'R') addAttackBot(x, y);
                 if(level.map()[y].charAt(x) == '.') addGrass(x, y);
   */
-
-  private Frame platformleft = new Frame("/graphics/platformleft.png");
-  private Frame platformright = new Frame("/graphics/platformright.png");
-  private Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
-  private Frame block = new Frame("/graphics/block.png");
 
   private ArrayList<Object> bringtofront = new ArrayList<> ();
   private ArrayList<Platform> platforms = new ArrayList<> ();
@@ -151,6 +144,7 @@ public class Grid {
       for (char value : map[y].toCharArray()) {
         //SOLID BLOCKS AND VARIANTS
         if (value == '4' || value == '#') {
+          Frame block = new Frame("/graphics/block.png");
           Platform platform = new Platform(Type.SOLID, block);
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 64, Color.TRANSPARENT);
           platforms.add(platform);
@@ -235,12 +229,12 @@ public class Grid {
           bringtofront.add(platform);
         }
 
-
-
-
         //NON SOLID BLOCKS
+        Frame platformleft = new Frame("/graphics/platformleft.png");
+        Frame platformright = new Frame("/graphics/platformright.png");
         if (value == '<' || value == '-' || value == '>') {
           Platform platform = new Platform(Type.PLATFORM, platformleft);
+          Frame platformmiddle = new Frame("/graphics/platformmiddle.png");
           if (value == '-') platform = new Platform(Type.PLATFORM, platformmiddle);
           if (value == '>') platform = new Platform(Type.PLATFORM, platformright);
           platform.setCollisionBox(x * OBJ_WIDTH, y * 64, OBJ_WIDTH, 10, Color.GREEN);

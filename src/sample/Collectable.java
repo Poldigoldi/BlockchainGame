@@ -1,9 +1,7 @@
 package sample;
 
 public class Collectable extends Object {
-
     /* This parameter specifies that the player can only have once this object  */
-
     private boolean unique;
     private Type itemType;
 
@@ -15,14 +13,6 @@ public class Collectable extends Object {
     void drop (double x, double y) {
         box.setTranslateX (x);
         box.setTranslateY (y);
-    }
-
-    public boolean isUnique() {
-        return unique;
-    }
-
-    public void setUnique(boolean unique) {
-        this.unique = unique;
     }
 
     Type getItemType() {
