@@ -26,11 +26,11 @@ class Person extends Object {
     }
 
     void looseOneLife() {
-        if (this.type == Type.ENEMY || this.type == Type.KING) {
+        if (this.type == Type.ENEMY) {
             this.setspin(true);
             this.lives--;
         }
-        if (this.type == Type.PLAYER) {
+        if (this.type == Type.PLAYER || this.type == Type.KING) {
             if (!getSpin()) {
                 this.lives--;
                 this.setspin(true);

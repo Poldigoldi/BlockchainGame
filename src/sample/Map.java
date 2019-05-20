@@ -71,7 +71,7 @@ public class Map {
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
         addHelper(1, 16, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
                 "Use 'A','W',D' to move", true);
-        addHelper(22, 4, "Press E to interact with the terminal!\nHave you found the password yet?", false);
+        addHelper(20, 7, "Press E to interact with the terminal!\nHave you found the password yet?", false);
         addHelper(0, 4, "Walk into the block to start the Mini Game. \n" +
                 "Complete it and you'll find a key password.", true);
     }
@@ -219,7 +219,7 @@ public class Map {
     private void addBigDoor(int x, int y) {
         Object bigdoor = new Object(Type.DOODAD, new Frame("/graphics/bigdoor1.png"));
         bigdoor.setCollisionBox(x * 64, y * 64, 50, 50, Color.YELLOW);
-        bigdoor.sprite.offset(-45, -85);
+        bigdoor.sprite.offset(-56, -85);
         bigdoor.sprite.loadDefaultImages(new Frame("/graphics/bigdoor1.png", 100),
                 new Frame("/graphics/bigdoor2.png"),
                 new Frame("/graphics/bigdoor3.png"),

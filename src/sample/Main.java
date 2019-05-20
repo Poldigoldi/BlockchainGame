@@ -455,6 +455,7 @@ public class Main extends Application {
             person.looseOneLife();
             enemy1hurtSound.play();
             person.setCanDie(false);
+            if(person.type == Type.PLAYER) infobar.updateHealthEmpty(player.getLives());
         } else {
             person.setCanDie(true);
         }
