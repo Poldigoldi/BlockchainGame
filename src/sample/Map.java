@@ -407,7 +407,6 @@ public class Map {
     }
 
     private void bulletDeath(double x, double y){
-        System.out.println("did");
         Object bulletdeath = new Object(Type.SPRAY);
         bulletdeath.setCollisionBox(x-10, y-20, 0,0,Color.RED);
         bulletdeath.sprite().loadDeathImages(
