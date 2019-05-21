@@ -11,7 +11,6 @@ class Player extends Person {
     private AudioClip jumpSound = new AudioClip(Paths.get("src/sound/jump.wav").toUri().toString());
 
     private Luggage luggage;
-    private String facing;
 
     Player(int STARTX, int STARTY, int START_LIVES) {
         super(Type.PLAYER, START_LIVES);
@@ -20,7 +19,6 @@ class Player extends Person {
         int HEIGHT = 60;
         setCollisionBox(STARTX, STARTY, WIDTH, HEIGHT, Color.BLUE);
         this.luggage = new Luggage();
-        this.facing = "RIGHT";
         initialise();
         //since the image is size 64, but the player collision box is 30/60, some offset is required.
         sprite().offset(-(64 - WIDTH) / 2, -(64 - HEIGHT));

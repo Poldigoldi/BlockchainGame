@@ -51,6 +51,7 @@ public class Object {
         sprite = new Sprite(type, defaultFrame);
         this.type = type;
         this.alive = true;
+        this.facingRight = true;
         sprite.setRotationAxis(Rotate.Y_AXIS);
     }
 
@@ -199,15 +200,6 @@ public class Object {
             this.setY(this.getY() + (movingDown ? 1 : -1));
             isLanded = false;
         }
-    }
-
-    public boolean isCollision(ArrayList<Object> constrains) {
-        for (Object constrain : constrains) {
-            if (box.getBoundsInParent().intersects(constrain.box.getBoundsInParent())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     void died() {
