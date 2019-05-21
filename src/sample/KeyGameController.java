@@ -41,6 +41,9 @@ public class KeyGameController implements Initializable {
     Group b;
 
     @FXML
+    Text escape;
+
+    @FXML
     private Circle myCircle;
 
     @FXML
@@ -56,9 +59,9 @@ public class KeyGameController implements Initializable {
     private Button pPrivateKey;
 
 
-
     boolean isDone = true;
 
+    BlockAnimation ba;
 
     @FXML
     private Button pPublicKey;
@@ -215,12 +218,14 @@ public class KeyGameController implements Initializable {
 
         root.addEventHandler(KeyEvent.KEY_PRESSED, e ->
         {
-            if (e.getCode()==KeyCode.ENTER ) {
+            if (e.getCode() == KeyCode.ENTER ) {
 
                 pressEnter.setVisible(false);
-                if (instructionString < messages.size() && isDone){
-                    textAnimation(messages.get(instructionString));
-                    instructionString++;
+                if (instructionString < messages.size()){
+                    if (ba.getStatus() && isDone) {
+                        textAnimation(messages.get(instructionString));
+                        instructionString++;
+                    }
                 }
                 else {
                     instructionPane.setVisible(false);
@@ -315,55 +320,55 @@ public class KeyGameController implements Initializable {
         switch (instructionString) {
 
             case 1: {
-                BlockAnimation bridgeAnimation = new BlockAnimation();
-                bridgeAnimation.start(b, bridge, 200, 10);
+                ba = new BlockAnimation();
+                ba.start(b, bridge, 200, 10);
                 break;
             }
             case 2: {
-                BlockAnimation messageAnimation2 = new BlockAnimation();
-                messageAnimation2.start(b, message, 200, 10);
+                ba = new BlockAnimation();
+                ba.start(b, message, 200, 10);
                 break;
             }
             case 3: {
-                BlockAnimation messageAnimation3 = new BlockAnimation();
-                messageAnimation3.start(b, message2, 300, 10);
+                ba = new BlockAnimation();
+                ba.start(b, message2, 600, 10);
                 break;
             }
             case 4: {
-                BlockAnimation messageAnimation4 = new BlockAnimation();
-                messageAnimation4.start(b, hello, 200, 10);
+                ba = new BlockAnimation();
+                ba.start(b, hello, 200, 10);
                 break;
             }
             case 5: {
-                BlockAnimation messageAnimation5 = new BlockAnimation();
-                messageAnimation5.start(b, spy, 200, 1);
+                ba = new BlockAnimation();
+                ba.start(b, spy, 200, 1);
                 break;
             }
             case 6: {
-                BlockAnimation messageAnimation6 = new BlockAnimation();
-                messageAnimation6.start(b, keypair, 1000, 500);
+                ba = new BlockAnimation();
+                ba.start(b, keypair, 1000, 500);
                 break;
             }
             case 7: {
-                BlockAnimation messageAnimation6 = new BlockAnimation();
-                messageAnimation6.start(b, pairlock, 400, 500);
+                ba = new BlockAnimation();
+                ba.start(b, pairlock, 400, 500);
                 break;
 
             }
             case 8: {
-                BlockAnimation messageAnimation7 = new BlockAnimation();
-                messageAnimation7.start(b, gen, 400, 200);
+                ba = new BlockAnimation();
+                ba.start(b, gen, 400, 200);
                 break;
 
             }
             case 9: {
-                BlockAnimation messageAnimation2 = new BlockAnimation();
-                messageAnimation2.start(b, unlock, 400, 200);
+                ba = new BlockAnimation();
+                ba.start(b, unlock, 400, 200);
                 break;
             }
             case 10: {
-                BlockAnimation messageAnimation2 = new BlockAnimation();
-                messageAnimation2.start(b, lock, 400, 200);
+                ba = new BlockAnimation();
+                ba.start(b, lock, 400, 200);
                 break;
             }
             case 11: {
@@ -373,10 +378,10 @@ public class KeyGameController implements Initializable {
             }
             case 12: {
                 ImageView i = new ImageView("graphics/minigameimages/animation/instructions.png");
-                i.setFitWidth(600);
+                i.setFitWidth(675);
                 i.setPreserveRatio(true);
                 b.getChildren().clear();
-                b.setTranslateX(-150);
+                b.setTranslateX(-100);
                 b.getChildren().add(i);
             }
 
@@ -397,7 +402,7 @@ public class KeyGameController implements Initializable {
         isDone = false;
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.01), e -> {
+                Duration.seconds(0.04), e -> {
             if (count.get() > s.length()) {
                 animation();
                 timeline.stop();
@@ -419,6 +424,7 @@ public class KeyGameController implements Initializable {
         return false;
 
     }
+
 
 
 
@@ -477,16 +483,10 @@ public class KeyGameController implements Initializable {
         cPublicKey.setOnMouseReleased(buttonOnMouseReleasedEventHandler);
     }
 
-    class NextTask extends TimerTask {
-        public void run() {
-            verify();
-            timer.cancel();
-        }
-    }
 
     boolean checkBounds(int sceneX, int sceneY) {
 
-        int acceptionBound = 10;
+        int acceptionBound = 15;
 
 
         if ((sceneX > (int)signitureBounds.getLayoutX()-acceptionBound  &&
@@ -506,10 +506,7 @@ public class KeyGameController implements Initializable {
         if (source.equals(pPublicKey) && signiture.isVisible()) {
             insideButton = null;
             cPK.setStyle("-fx-background-color: green");
-
-            timer = new Timer();
-            timer.schedule(new NextTask(), 1000);
-
+            escape.setVisible(true);
 
         }
         else if (source.equals(pPublicKey) && signiture.isVisible()) {

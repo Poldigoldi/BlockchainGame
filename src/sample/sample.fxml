@@ -61,7 +61,7 @@
                   <Image url="@../graphics/minigameimages/key.jpg" />
                </image>
             </ImageView>
-            <Label layoutX="-86.0" layoutY="178.0" text="LXVNXM" textFill="WHITE">
+            <Label layoutX="-86.0" layoutY="178.0" text="LXVKXM" textFill="WHITE">
                <font>
                   <Font name="Courier New" size="48.0" />
                </font>
@@ -166,9 +166,14 @@
                   <Font name="Courier New" size="18.0" />
                </font>
             </Label>
+            <Text fx:id="escape" fill="WHITE" layoutX="306.0" layoutY="445.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Well done! Press escape to exit!" visible="false">
+               <font>
+                  <Font name="Courier New" size="17.0" />
+               </font>
+            </Text>
          </children>
       </Group>
-      <Button fx:id="pPrivateKey" alignment="CENTER" contentDisplay="CENTER" layoutX="748.0" layoutY="116.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="131.0" style="-fx-background-color: black; -fx-font-size: 40; -fx-font-family: &quot;Courier New&quot;; -fx-font-weight: bold; -fx-border-color: green; -fx-border-width: 5;" text="3" textFill="WHITE" wrapText="true">
+      <Button fx:id="pPrivateKey" alignment="CENTER" contentDisplay="CENTER" layoutX="748.0" layoutY="116.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="131.0" style="-fx-background-color: black; -fx-font-size: 40; -fx-font-family: &quot;Courier New&quot;; -fx-font-weight: bold; -fx-border-color: green; -fx-border-width: 5;" text="7" textFill="WHITE" wrapText="true">
          <graphic>
             <Label alignment="TOP_LEFT" prefHeight="68.0" prefWidth="119.0" text="Private key:" textFill="WHITE" underline="true">
                <font>
@@ -177,7 +182,7 @@
             </Label>
          </graphic>
       </Button>
-      <Button fx:id="cPublicKey" alignment="CENTER" contentDisplay="CENTER" layoutX="79.0" layoutY="482.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="131.0" style="-fx-background-color: black; -fx-font-size: 40; -fx-font-family: &quot;Courier New&quot;; -fx-font-weight: bold; -fx-border-color: green; -fx-border-width: 5;" text="3" textFill="WHITE" wrapText="true">
+      <Button fx:id="cPublicKey" alignment="CENTER" contentDisplay="CENTER" layoutX="79.0" layoutY="482.0" mnemonicParsing="false" prefHeight="86.0" prefWidth="131.0" style="-fx-background-color: black; -fx-font-size: 40; -fx-font-family: &quot;Courier New&quot;; -fx-font-weight: bold; -fx-border-color: green; -fx-border-width: 5;" text="15" textFill="WHITE" wrapText="true">
          <graphic>
             <Label alignment="TOP_LEFT" prefHeight="70.0" prefWidth="111.0" text="Public key:" textFill="WHITE" underline="true">
                <font>
@@ -210,7 +215,7 @@
       <Rectangle fx:id="signitureBounds" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="86.0" layoutX="407.0" layoutY="280.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="131.0" />
       <Group fx:id="instructionPane">
          <children>
-            <AnchorPane layoutX="54.0" layoutY="55.0" prefHeight="521.0" prefWidth="842.0" style="-fx-background-color: white;">
+            <AnchorPane layoutX="54.0" layoutY="55.0" prefHeight="521.0" prefWidth="831.0" style="-fx-background-color: white;">
                <children>
                   <Text fx:id="instructions" fill="#ffdc14" fontSmoothingType="LCD" layoutX="147.0" layoutY="386.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="672.9999921363469">
                      <font>

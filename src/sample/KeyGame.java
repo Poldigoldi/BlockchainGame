@@ -36,6 +36,7 @@ import static javafx.application.Application.launch;
 public class KeyGame extends Application {
     Scene s;
     AnchorPane root = new AnchorPane();
+    FXMLLoader loader = new FXMLLoader();
 
     KeyGame(){
         Rectangle sweeper = new Rectangle(115, 75, 0, 530);
@@ -44,8 +45,10 @@ public class KeyGame extends Application {
         sweep(sweeper).play();
     }
 
+    @FXML
     AnchorPane returnRoot() throws Exception{
-        root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+
+        root = loader.load(getClass().getResource("sample.fxml"));
         return root;
     }
 
@@ -54,6 +57,8 @@ public class KeyGame extends Application {
         launch(args);
 
     }
+
+
 
     private Timeline sweep(Rectangle rectangle) {
         Timeline timeline = new Timeline();
