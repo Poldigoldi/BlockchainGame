@@ -3,6 +3,7 @@ package sample;
 import javafx.animation.AnimationTimer;
 import javafx.scene.transform.Rotate;
 
+/*animated object with a listener in main for player interaction*/
 class Life extends Collectable {
     Life() {
         setItemType(Type.HEART);
