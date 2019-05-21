@@ -174,10 +174,10 @@ class Enemy extends Person {
                 return false;
             }
             // case 2: enemy has a gap on his RIGHT, small enough to jump
-            if (    platform.getY () >= getY () - 2 * platform.height
-                    && platform.getX () < map.getLevel ().width() - platform.width - OFFSET
-                    && getX () < platform.getX() - platform.width
-                    && getX () > platform.getX () - 2 * platform.width) {
+            if (platform.getY() >= getY() - 2 * platform.height
+                    && platform.getX() < map.getLevel().width() - platform.width - OFFSET
+                    && getX() < platform.getX() - platform.width
+                    && getX() > platform.getX() - 2 * platform.width) {
                 return true;
             }
         }
@@ -205,10 +205,10 @@ class Enemy extends Person {
                 return false;
             }
             // case 2: enemy has a gap on his LEFT, small enough to jump
-            if (    platform.getY () >= getY () - 2 * platform.height
-                    && platform.getX () > platform.width + OFFSET
-                    && getX () < platform.getX () + platform.width * 3
-                    && getX () > platform.getX () + platform.width * 2) {
+            if (platform.getY() >= getY() - 2 * platform.height
+                    && platform.getX() > platform.width + OFFSET
+                    && getX() < platform.getX() + platform.width * 3
+                    && getX() > platform.getX() + platform.width * 2) {
                 return true;
             }
         }
@@ -223,11 +223,11 @@ class Enemy extends Person {
           * if a block is on LEFT, next to him (condition 2 and 3)
           * if the block is just above him (condition 4 and 5)
          */
-        for (Platform platform : map.getLevel ().platforms ()) {
-            if (    getX () + width < map.getLevel ().width() - platform.width - OFFSET
-                    && (platform.getX () > getX() + width)
-                    && (platform.getX () <= getX() + width + OFFSET)
-                    && (platform.getY() + platform.height == getY() + height) ){
+        for (Platform platform : map.getLevel().platforms()) {
+            if (getX() + width < map.getLevel().width() - platform.width - OFFSET
+                    && (platform.getX() > getX() + width)
+                    && (platform.getX() <= getX() + width + OFFSET)
+                    && (platform.getY() + platform.height == getY() + height)) {
                 return true;
             }
         }
@@ -245,10 +245,10 @@ class Enemy extends Person {
         for (Platform platform : map.getLevel().platforms()) {
 
 
-            if (    getX () > platform.width + OFFSET
-                    && (getX () >= platform.getX())
-                    && (getX () <= platform.getX() + platform.width + OFFSET)
-                    && (platform.getY() + platform.height == getY() + height) ){
+            if (getX() > platform.width + OFFSET
+                    && (getX() >= platform.getX())
+                    && (getX() <= platform.getX() + platform.width + OFFSET)
+                    && (platform.getY() + platform.height == getY() + height)) {
                 return true;
             }
         }
@@ -265,9 +265,9 @@ class Enemy extends Person {
         if (rand != 1) {
             for (Platform p : map.getLevel().platforms()) {
                 // only jump if there is a platform so he doesn't die
-                if (p.getY () > getY () + height) {
-                    if (   (side.equals("RIGHT") && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
-                        || (side.equals("LEFT") && getX () > p.getX () + p.width - width && (getX () < p.getX () + p.width + width))   ){
+                if (p.getY() > getY() + height) {
+                    if ((side.equals("RIGHT") && (getX() > p.getX() - width) && (getX() < p.getX() + width))
+                            || (side.equals("LEFT") && getX() > p.getX() + p.width - width && (getX() < p.getX() + p.width + width))) {
                         return false;
                     }
                 }
