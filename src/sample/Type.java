@@ -23,6 +23,12 @@ public enum Type {
     }
 
 
+    public boolean hasHurtAnimation() {
+        if (this == PLAYER) return true;
+        return this == ENEMY;
+    }
+
+
     public boolean hasJumpingAnimation() {
         if (this == PLAYER) return true;
         return this == ENEMY;

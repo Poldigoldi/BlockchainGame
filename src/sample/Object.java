@@ -99,7 +99,7 @@ public class Object {
     void update(Map map) {
         //update Sprite position and animation
         if (spin) spin();
-        sprite.update(facingRight, isMoving, isLanded, movingDown, box.getTranslateX(), box.getTranslateY());
+        sprite.update(spin, facingRight, isMoving, isLanded, movingDown, box.getTranslateX(), box.getTranslateY());
         //for Clouds
         if (type == Type.SPRAY) if (sprite.dead()) map.hideEntity(this);
         if (type == Type.LAYER3) {

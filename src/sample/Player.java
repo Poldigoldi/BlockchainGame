@@ -71,6 +71,8 @@ class Player extends Person {
                 new Frame("/graphics/main_char_jumpLeft1.png", 10));
         sprite.loadjumpRightImages(
                 new Frame("/graphics/main_char_jumpRight1.png", 10));
+        sprite.loadHurtImages(
+                new Frame("/graphics/hurtplayer.png", 10));
 
     }
 

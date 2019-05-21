@@ -10,6 +10,7 @@ import java.util.List;
 public class Sprite extends ImageView {
     private boolean animationactive = true;
     private int defaultAnimationChoice = 1;
+    private List<Frame> hurtAnimation = new ArrayList<>();
     private List<Frame> defaultAnimation1 = new ArrayList<>();
     private List<Frame> defaultAnimation2 = new ArrayList<>();
     private List<Frame> defaultLeftAnimation = new ArrayList<>();
@@ -86,6 +87,10 @@ public class Sprite extends ImageView {
         Collections.addAll(defaultAnimation2, images);
     }
 
+    void loadHurtImages(Frame... images) {
+        Collections.addAll(hurtAnimation, images);
+    }
+
     void loadDeathImages(Frame... images) {
         Collections.addAll(deathAnimation, images);
     }
@@ -140,10 +145,14 @@ public class Sprite extends ImageView {
         }
     }
 
-    public void update(boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
+    public void update(boolean spinning, boolean movingRight, boolean moving, boolean isLanded, boolean movingDown, double x, double y) {
         moveTo(x, y);
         if (dying) {
             animate(deathAnimation);
+            return;
+        }
+        if(spinning && type.hasHurtAnimation()){
+            animate(hurtAnimation);
             return;
         }
         //for non-moving animations

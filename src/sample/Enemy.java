@@ -61,6 +61,8 @@ class Enemy extends Person {
                 new Frame("/graphics/enemy1die10.png", 7),
                 new Frame("/graphics/enemy1die11.png", 8),
                 new Frame("/graphics/enemy1die12.png", 9999));
+        sprite.loadHurtImages(
+                new Frame("/graphics/hurtenemy.png", 10));
         sprite.offset(-5, -16);
     }
 
