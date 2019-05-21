@@ -267,6 +267,7 @@ public class Main extends Application {
             ListenerPlayerUseWeapon();
             ListenerHackingAttack();
             ListenerAttackBots();
+            ListenerTower ();
             ListenerBullets();
             ListenerButtons();
             UpdateAnimatedObjects();
@@ -326,6 +327,15 @@ public class Main extends Application {
     /***************************************************************************
      *                              LISTENERS FOR EVENTS
      * **********************************************************************/
+
+    private void ListenerTower () {
+        for (Tower tower : map.getTowers ()) {
+            if (tower.isCanShoot ()) {
+                shootSound.play ();
+                shootOneBullet (tower, tower.facingRight);
+            }
+        }
+    }
 
     private void ListenerAttackBots() {
         //for attackbots
