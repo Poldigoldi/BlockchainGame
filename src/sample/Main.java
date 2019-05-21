@@ -413,7 +413,7 @@ public class Main extends Application {
                 }
             }
         }
-        /* drop item  TODO: see how to drop WEAPONS - do we still want to drop blocks ? */
+        /* drop item  */
         Block myBlock = player.getLuggage().getblock();
         if (myBlock != null) {
             if (!myBlock.isAlive()) {
