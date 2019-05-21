@@ -66,7 +66,7 @@
                   <Font name="Courier New" size="48.0" />
                </font>
             </Label>
-            <Label layoutX="-128.0" layoutY="229.0" prefHeight="19.0" prefWidth="270.0" text="Press enter to view instructions again" textFill="WHITE">
+            <Label layoutX="-128.0" layoutY="229.0" prefHeight="19.0" prefWidth="270.0" text="Press &quot;i&quot; to view instructions again" textFill="WHITE">
                <font>
                   <Font name="Courier New" size="11.0" />
                </font>
@@ -217,7 +217,7 @@
          <children>
             <AnchorPane layoutX="54.0" layoutY="55.0" prefHeight="521.0" prefWidth="831.0" style="-fx-background-color: white;">
                <children>
-                  <Text fx:id="instructions" fill="#ffdc14" fontSmoothingType="LCD" layoutX="147.0" layoutY="386.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="672.9999921363469">
+                  <Text fx:id="instructions" fill="#ffdc14" fontSmoothingType="LCD" layoutX="147.0" layoutY="386.0" lineSpacing="10.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="672.9999921363469">
                      <font>
                         <Font name="Courier New Bold" size="26.0" />
                      </font>

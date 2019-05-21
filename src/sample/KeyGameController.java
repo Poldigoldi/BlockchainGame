@@ -1,6 +1,8 @@
 package sample;
 
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
@@ -12,108 +14,75 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.ResourceBundle;
 
 
 public class KeyGameController implements Initializable {
-    @FXML
-    private Group encryption;
 
     @FXML
     AnchorPane root;
 
+    //RING OF ENCRYPTION
     @FXML
-    Label hello;
-
-    @FXML
-    Group b;
-
-    @FXML
-    Text escape;
-
+    private Group encryption;
     @FXML
     private Circle myCircle;
-
     @FXML
     private HBox wordBox;
-
-    @FXML
-    private Button cPublicKey;
-
-    @FXML
-    private Rectangle signitureBounds;
-
-    @FXML
-    private Button pPrivateKey;
-
-
-    boolean isDone = true;
-
-    BlockAnimation ba;
-
-    @FXML
-    private Button pPublicKey;
-
-    @FXML
-    private Button cPrivateKey;
-
-
-
-    @FXML
-    private Group instructionPane;
-
-
-
-    @FXML
-    Label pressEnter;
-
-    @FXML
-    private Text instructions;
-
-    @FXML
-    private Group signiture;
-
-    @FXML
-    private AnchorPane cPK, pPK;
-
-    private int instructionString = 1;
-
-    double origTranslateX, origTranslateY, oringinalLocationX, oringinalLocationY, saveX, saveY, newTranslateX, newTranslateY;
-
-    boolean added = false;
-
-    Timer timer;
-
-    private Button insideButton;
-
+    private int index = 0;
+    private int alphaIndex = 0;
     private String word;
 
     {
         word = getWord();
     }
 
+    //ANIMATION
+    @FXML
+    Group b;
+    @FXML
+    private Group instructionPane;
+    @FXML
+    private Text instructions;
+    @FXML
+    private Label pressEnter;
+    private boolean isDone = true;
+    private BlockAnimation ba;
+    private int instructionString = 1;
 
-    private int index=0;
-    private int alphaIndex = 0;
-
-
-
-
-
-    private Coordinate circleCentre;
-
+    //QUIZ
+    @FXML
+    private Group signiture;
+    @FXML
+    Text escape;
+    @FXML
+    private AnchorPane cPK;
+    @FXML
+    private Button cPublicKey, pPrivateKey, cPrivateKey, pPublicKey;
+    @FXML
+    private Rectangle signitureBounds;   //Ensure the button clicks into place
+    private double origTranslateX;        //Drag and drop use of buttons
+    private double origTranslateY;
+    private double oringinalLocationX;
+    private double oringinalLocationY;
+    private double saveX;
+    private double saveY;
+    private Button insideButton;
 
 
     @Override
@@ -123,9 +92,6 @@ public class KeyGameController implements Initializable {
         myCircle.setStroke(Color.BLACK);
         Image alphabet = new Image("/graphics/minigameimages/images.jpg",false);
         myCircle.setFill(new ImagePattern(alphabet));
-        circleCentre = new Coordinate((int)myCircle.getCenterX(), (int)myCircle.getCenterY());
-
-
     }
 
     @FXML
@@ -178,12 +144,8 @@ public class KeyGameController implements Initializable {
         }
         System.out.println(alphaIndex);
     }
-    //TODO : to checks for Hbox labels secret word
 
-
-
-
-    void text() {
+    private void text() {
 
         ArrayList<String> messages = new ArrayList<>();
 
@@ -200,26 +162,13 @@ public class KeyGameController implements Initializable {
         messages.add("Clueso wants to send you a message. You must decrypt the message to use as a password for the next level.");
         messages.add("");
 
-
-      /*  messages.add("This makes it extra secure as you don't need to share your private key.");
-
-
-
-        messages.add("He has locked the message using your public key.");
-        messages.add("You must unlock the message with your private key!");
-        messages.add("The message will be the code for you to get to the next level!");
-        messages.add("Use left and right to move, and space to select the letter");*/
-
         BlockAnimation ba = new BlockAnimation();
         ba.start(b, new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/bridge1.png")), 1, 1);
         textAnimation(messages.get(0));
 
-
-
         root.addEventHandler(KeyEvent.KEY_PRESSED, e ->
         {
             if (e.getCode() == KeyCode.ENTER ) {
-
                 pressEnter.setVisible(false);
                 if (instructionString < messages.size()){
                     if (ba.getStatus() && isDone) {
@@ -230,15 +179,11 @@ public class KeyGameController implements Initializable {
                 else {
                     instructionPane.setVisible(false);
                 }
-
             }
 
             if (e.getCode() == KeyCode.I && !instructionPane.isVisible()) {
                 instructionPane.setVisible(true);
             }
-
-
-
         });
 
     }
@@ -272,8 +217,6 @@ public class KeyGameController implements Initializable {
                 "graphics/minigameimages/animation/hello14.png","graphics/minigameimages/animation/hello15.png",
                 "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png",
                 "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png"
-
-
         ));
 
         ArrayList<String> spy = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/spy1.png",
@@ -372,9 +315,7 @@ public class KeyGameController implements Initializable {
                 break;
             }
             case 11: {
-
                 break;
-
             }
             case 12: {
                 ImageView i = new ImageView("graphics/minigameimages/animation/instructions.png");
@@ -385,33 +326,25 @@ public class KeyGameController implements Initializable {
                 b.getChildren().add(i);
             }
 
-
             default: return;
         }
         isDone = true;
         pressEnter.setVisible(true);
     }
 
-    boolean textAnimation(String s) {
-
-        //Media sound = new Media(new File("graphics/minigameimages/keyPress.mp3").toURI().toString());
-        //MediaPlayer mp = new MediaPlayer(sound);
+    private void textAnimation(String s) {
 
         IntegerProperty count = new SimpleIntegerProperty(0);
         Timeline timeline = new Timeline();
         isDone = false;
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.04), e -> {
+                       Duration.seconds(0.04), e -> {
             if (count.get() > s.length()) {
                 animation();
                 timeline.stop();
-
-
-
             } else {
                 instructions.setText(s.substring(0, count.get()));
-                //mp.play();
                 count.set(count.get()+1);
             }
 
@@ -419,52 +352,27 @@ public class KeyGameController implements Initializable {
         );
         timeline.getKeyFrames().add(kf);
         timeline.setCycleCount(Animation.INDEFINITE);
-
         timeline.play();
-        return false;
-
     }
 
-
-
-
-
-
-
-
-    Boolean compareWord() {
+    private Boolean compareWord() {
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        if (word.charAt(index) == alphabet.charAt(alphaIndex)) {
-            return true;
-        }
-        return false;
+        return word.charAt(index) == alphabet.charAt(alphaIndex);
     }
 
-    String getWord() {
+    private String getWord() {
         return "secret";
     }
 
-    void verify() {
-
-
-/*        if (signiture.isVisible()) {
-            signiture.setVisible(false);
-            cPrivateKey.setTranslateX(0);
-            cPrivateKey.setTranslateY(0);
-
-        }*/
-
+    private void verify() {
         if (encryption.isVisible()){
             encryption.setVisible(false);
             signiture.setVisible(true);
         }
-
-
         pPrivateKey.setCursor(Cursor.HAND);
         cPrivateKey.setCursor(Cursor.HAND);
         cPublicKey.setCursor(Cursor.HAND);
         pPublicKey.setCursor(Cursor.HAND);
-
 
         pPrivateKey.setOnMousePressed(buttonOnMousePressedEventHandler);
         pPrivateKey.setOnMouseDragged(buttonOnMouseDraggedEventHandler);
@@ -484,52 +392,30 @@ public class KeyGameController implements Initializable {
     }
 
 
-    boolean checkBounds(int sceneX, int sceneY) {
+    private boolean checkBounds(int sceneX, int sceneY) {
 
         int acceptionBound = 15;
 
-
-        if ((sceneX > (int)signitureBounds.getLayoutX()-acceptionBound  &&
-                sceneX < (int)signitureBounds.getLayoutX()+acceptionBound) ||
-                (sceneY > (int)signitureBounds.getLayoutY()-acceptionBound  &&
-                        sceneY < (int)signitureBounds.getLayoutY()+acceptionBound)) {
-            return true;
-        }
-        return false;
-
-
+        return  (sceneX > (int) signitureBounds.getLayoutX() - acceptionBound &&
+                 sceneX < (int) signitureBounds.getLayoutX() + acceptionBound)||
+                (sceneY > (int) signitureBounds.getLayoutY() - acceptionBound &&
+                 sceneY < (int) signitureBounds.getLayoutY() + acceptionBound);
     }
 
     @FXML
-    void checker(Button source) {
+    private void checker(Button source) {
 
         if (source.equals(pPublicKey) && signiture.isVisible()) {
             insideButton = null;
             cPK.setStyle("-fx-background-color: green");
             escape.setVisible(true);
-
-        }
-        else if (source.equals(pPublicKey) && signiture.isVisible()) {
-            pPK.setStyle("-fx-background-color: green");
-
         }
         else {
-            added = true;
             cPK.setStyle("-fx-background-color: red");
-            pPK.setStyle("-fx-background-color: red");
         }
-
     }
 
-    @FXML
-    void changeText() {
-
-
-
-    }
-
-
-    EventHandler<MouseEvent> buttonOnMousePressedEventHandler =
+    private EventHandler<MouseEvent> buttonOnMousePressedEventHandler =
             new EventHandler<MouseEvent>() {
 
                 @Override
@@ -545,7 +431,7 @@ public class KeyGameController implements Initializable {
                 }
             };
 
-    EventHandler<MouseEvent> buttonOnMouseDraggedEventHandler =
+    private EventHandler<MouseEvent> buttonOnMouseDraggedEventHandler =
             new EventHandler<MouseEvent>()  {
 
                 @Override
@@ -553,8 +439,8 @@ public class KeyGameController implements Initializable {
                     if (!encryption.isVisible()) {
                         double offsetX = t.getSceneX() - oringinalLocationX;
                         double offsetY = t.getSceneY() - oringinalLocationY;
-                        newTranslateX = origTranslateX + offsetX;
-                        newTranslateY = origTranslateY + offsetY;
+                        double newTranslateX = origTranslateX + offsetX;
+                        double newTranslateY = origTranslateY + offsetY;
 
                         ((Button)(t.getSource())).setTranslateX(newTranslateX);
                         ((Button)(t.getSource())).setTranslateY(newTranslateY);
@@ -563,7 +449,7 @@ public class KeyGameController implements Initializable {
             };
 
 
-    EventHandler<MouseEvent> buttonOnMouseReleasedEventHandler =
+    private EventHandler<MouseEvent> buttonOnMouseReleasedEventHandler =
             new EventHandler<MouseEvent>() {
 
                 @Override
@@ -594,67 +480,3 @@ public class KeyGameController implements Initializable {
                 }
             };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /*   @FXML
-    void spinWheel(MouseEvent event) {
-
-        if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
-            Coordinate placeHolder = new Coordinate((int)event.getX(), (int)event.getY());
-            startAngle = getAngle(circleCentre, placeHolder);
-
-            System.out.println("press occured!");
-
-            Coordinate currentPoint = new Coordinate((int)event.getX(), (int)event.getY());
-            double currentAngle = getAngle(circleCentre, currentPoint);
-            myCircle.setRotate(currentAngle-startAngle);
-
-
-        }
-
-    }
-
-    int getAngle(Coordinate origin, Coordinate other) {
-
-        int angle;
-        int dy = other.getY() - origin.getY();
-        int dx = other.getX() - origin.getX();
-
-
-        if (dx == 0) {
-             angle = (int)(dy >= 0? PI/2: -PI/2);
-        }
-        else {
-            angle = (int)Math.atan(dy/dx);
-            if (dx < 0) {
-                angle += PI;
-            }
-        }
-        if (angle <0) {
-            angle += 2*PI;
-        }
-
-        return angle;
-
-    }*/
-
-
-/* A block is a peice of information.
-   Contains a time stamp -> created bloch HASH
-   has hash of previous block.
- */
