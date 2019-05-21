@@ -32,7 +32,7 @@ public class HacKing extends Person {
     private int counter_shield;
     private int counter_heal;
     private final int MAX_LIFE_DECREMENT = 4;
-    private final int TIME_HEALING = 300;
+    private final int TIME_HEALING = 100;
 
     /* Attack variables */
     private final int ATTACK_BULLETS_AMOUNT = 2;
@@ -45,7 +45,7 @@ public class HacKing extends Person {
 
     /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 8);
+        super (Type.KING, 9);
         this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
         sprite.loadDefaultRightImages(
                 new Frame("/graphics/hackkingright1.png"));
