@@ -68,7 +68,6 @@ public class Main extends Application {
     private Stage stage;
     private int timeCounter = 0;
     private TextArea popUp = new TextArea("");
-    private boolean doorunlocked = false;
     private InfoBar infobar;
     private Object speaker;
     private Object warning;
@@ -190,7 +189,6 @@ public class Main extends Application {
 
     /*Changes the level based on level number. New levels can be created in Grid class*/
     private void changeLevel(int level) {
-        doorunlocked = false;
         map.removePlayer(player);
         for (Object barcontents : infobar.infoBarList()) {
             map.mapRoot().getChildren().remove(barcontents.box);
@@ -484,7 +482,6 @@ public class Main extends Application {
             enemy1dieSound.play();
             person.died();
             if (person instanceof HacKing) {
-                doorunlocked = true;
                 doorOpenSound.play();
                 map.bigdoor().sprite.setanimation(true);
             }
@@ -778,7 +775,6 @@ public class Main extends Application {
             if (keyPad.getDisplayText().equals("secret")) {
                 mainScene.setRoot(appRoot);
                 keyPad.setCodeCorrect(true);
-                doorunlocked = true;
                 mode = Mode.PLATFORMGAME;
                 terminalcloseSound.play();
             } else {
@@ -816,15 +812,15 @@ public class Main extends Application {
             menuMediaPlayer.play();
         } else if (level == 1 || level == 2) {
             level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level1MediaPlayer.setVolume(0.3);
+            level1MediaPlayer.setVolume(0.5);
             level1MediaPlayer.play();
         } else if (level == 3) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            bossMediaPlayer.setVolume(1);
+            bossMediaPlayer.setVolume(0.7);
             bossMediaPlayer.play();
         } else if (level == 4) {
             level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level3MediaPlayer.setVolume(0.3);
+            level3MediaPlayer.setVolume(0.7);
             level3MediaPlayer.play();
         }
     }
