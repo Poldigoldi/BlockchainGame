@@ -75,7 +75,7 @@ class InstructionScreen {
                 if (i == 100) i = 0;
             }
         }.start();
-        root.getChildren().addAll(backgroundView, instructionsText, header, returnButton);
+        root.getChildren().addAll(instructionsText, header, returnButton);
         returnButton.setOnAction(this::returnPress);
     }
 

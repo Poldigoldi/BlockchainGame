@@ -52,6 +52,14 @@ public class Main extends Application {
     private AudioClip playerhurtSound = new AudioClip(Paths.get("src/sound/playerhurt.wav").toUri().toString());
     private AudioClip enemy1hurtSound = new AudioClip(Paths.get("src/sound/enemy1hurt.wav").toUri().toString());
     private AudioClip enemy1dieSound = new AudioClip(Paths.get("src/sound/enemy1die.wav").toUri().toString());
+    private AudioClip buttonClickSound = new AudioClip(Paths.get("src/sound/buttonpress.wav").toUri().toString());
+    private AudioClip lasershootSound = new AudioClip(Paths.get("src/sound/lasershoot.wav").toUri().toString());
+    private AudioClip tunnelstepSound = new AudioClip(Paths.get("src/sound/tunnelstep.wav").toUri().toString());
+    private AudioClip terminalopenSound = new AudioClip(Paths.get("src/sound/terminalopen.wav").toUri().toString());
+    private AudioClip terminalcloseSound = new AudioClip(Paths.get("src/sound/terminalclose.wav").toUri().toString());
+    private AudioClip wrongcodeSound = new AudioClip(Paths.get("src/sound/wrongcode.wav").toUri().toString());
+    private AudioClip pickupSound = new AudioClip(Paths.get("src/sound/pickup.wav").toUri().toString());
+    private AudioClip disappearSound = new AudioClip(Paths.get("src/sound/disappear.wav").toUri().toString());
 
     //global variables
     private int WIDTH, HEIGHT;
@@ -101,9 +109,8 @@ public class Main extends Application {
         gameMenu = new GameMenu(WIDTH, HEIGHT);
         instructionScreen = new InstructionScreen(WIDTH, HEIGHT);
         //SET THE SCENE
-        musicStart(Music.MENU);
         mainScene = new Scene(gameMenu.returnRoot(), WIDTH, HEIGHT);
-        mainScene.setFill(Color.BLACK);
+        mainScene.setFill(Color.LIGHTSTEELBLUE);
         mainScene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
         mainScene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
         //RUN
@@ -116,6 +123,7 @@ public class Main extends Application {
         //prepare game
         initContent(1);
         initialiseLabels();
+        musicStart();
         appRoot.getChildren().addAll(map.mapRoot());
         for (Object object : map.level().bringtofront()) {
             object.sprite.toFront();
@@ -159,7 +167,7 @@ public class Main extends Application {
         speaker.sprite.setOpacity(0);
         map.addAnimatedObjects(speaker, warning);
         map.mapRoot().getChildren().addAll(popUp, infobar.infoBarGroup());
-        if(map.levelHasBoss(level)){
+        if(map.levelHasBoss()){
             bossHealthBar = new BossHealthBar(map.getKing().getLives());
             map.mapRoot().getChildren().add(bossHealthBar.group());
         }
@@ -194,6 +202,7 @@ public class Main extends Application {
         infobar.updateHealthFill(4);
         infobar.updateWeapon(player.hasWeapon());
         appRoot.getChildren().addAll(map.mapRoot());
+        musicStart();
     }
 
     private void runGame(Stage stage) {
@@ -242,25 +251,10 @@ public class Main extends Application {
             if (isPressed(KeyCode.W) || (isPressed(KeyCode.UP))) {
                 player.jump();
             }
-            if (isPressed(KeyCode.P)) {
-                level = 2;
-                musicStop();
-                musicStart(Music.BOSS);
+            if (isPressed(KeyCode.R)) {
+                level++;
                 changeLevel(level);
             }
-            if (isPressed(KeyCode.O)) {
-                level = 3;
-                musicStop();
-                musicStart(Music.LEVEL3);
-                changeLevel(3);
-            }
-            if (isPressed(KeyCode.I)) {
-                level = 4;
-                musicStop();
-                musicStart(Music.LEVEL3);
-                changeLevel(4);
-            }
-
             moveScreenY();
             positionLabels();
             ListenerEnemies();
@@ -296,7 +290,7 @@ public class Main extends Application {
         warning.setY(-map.mapRoot().getTranslateY() + HEIGHT - 100);
         warning.box.setVisible(false);
         warning.sprite.toFront();
-        if(map.levelHasBoss(level)){
+        if(map.levelHasBoss()){
             bossHealthBar.group().setTranslateX(-map.mapRoot().getTranslateX() + WIDTH - 155);
             bossHealthBar.group().setTranslateY(-map.mapRoot().getTranslateY() + 106);
             bossHealthBar.group().toFront();
@@ -335,6 +329,7 @@ public class Main extends Application {
         //for attackbots
         for (AttackBot attackBot : map.attackbots()) {
             if (attackBot.moveLaser(player.getX(), player.getY()) && player.isCanDie() && !player.getSpin()) {
+                lasershootSound.play();
                 player.looseOneLife();
                 player.setCanDie(false);
                 playerhurtSound.play();
@@ -359,31 +354,15 @@ public class Main extends Application {
     }
 
     private void ListenerDoodads() {
-        if (map.getCurrentLevel() == 1 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
+        if (map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
+            terminalopenSound.play();
             openKeyPad();
         }
-        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 1) {
-            level = 2;
-            musicStop();
-            musicStart(Music.BOSS);
+        if (map.inRangeOfBigDoor(player.getX(), player.getY()) && map.bigdoor().sprite().isAnimationActive()){
+            tunnelstepSound.play();
+            level++;
             changeLevel(level);
         }
-        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 2) {
-            level = 3;
-            musicStop();
-            musicStart(Music.LEVEL3);
-            changeLevel(level);
-        }
-        if (map.getCurrentLevel() == 3 && map.inRangeOfTerminal(player.getX(), player.getY()) && isPressed(KeyCode.E)) {
-            openKeyPad();
-        }
-        if (doorunlocked && map.inRangeOfBigDoor(player.getX(), player.getY()) && map.getCurrentLevel() == 3) {
-            level = 4;
-            musicStop();
-            musicStart(Music.LEVEL3);
-            changeLevel(level);
-        }
-
     }
 
     private void ListenerHelpPopUp() {
@@ -416,6 +395,7 @@ public class Main extends Application {
             if ((this.player.box.getBoundsInParent()).intersects(item.box.getBoundsInParent())) {
                 /* pickup item */
                 if (item.isAlive() && item.getItemType() != Type.HEART) {
+                    pickupSound.play();
                     player.getLuggage().take(item);
                     map.hideEntity(item);
                     infobar.updateWeapon(true);
@@ -424,6 +404,7 @@ public class Main extends Application {
                     }
                 } else if (item.isAlive() && item.getItemType() == Type.HEART) {
                     if (player.getLives() < 4) {
+                        pickupSound.play();
                         map.hideEntity(item);
                         item.setAlive(false);
                         player.addLife();
@@ -530,7 +511,7 @@ public class Main extends Application {
 
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack() {
-        if(!map.levelHasBoss(level)) return;
+        if(!map.levelHasBoss()) return;
         HacKing king = map.getKing();
         if (king.sprite().dead()) map.hideEntity(king);
         if (king == null || !king.isAlive()) {
@@ -591,7 +572,7 @@ public class Main extends Application {
     // New enemies are sent 1 by 1 (every second)
     // will keep going until there is more 10 enemies on the map
     private void ListenerTimeBeforeNewEnemyWave() {
-        if (map.getCurrentLevel() == 1) {
+        if (map.getCurrentLevel() == 2) {
             timeCounter++;
             int WAVE_SIZE = 3;
             if (map.getEnemies().size() < 5) {
@@ -622,6 +603,7 @@ public class Main extends Application {
                     }
                 }
                 button.setPressed(true);
+                buttonClickSound.play();
             }
         }
     }
@@ -639,6 +621,7 @@ public class Main extends Application {
                 if (platform.disappearing() && platform.matchUpdate(updateCount)) {
                     platform.setAlive(false);
                     platform.setDisappear(false);
+                    disappearSound.play();
                     platform.setCollisionBox(0, 0, 0, 0, Color.RED);
                     platform.calculateUpdate(updateCount);
                 }
@@ -681,13 +664,7 @@ public class Main extends Application {
 
     private void gameOver() {
         if (isPressed(KeyCode.SPACE)) {
-            if (level == 1) {
-                musicStart(Music.LEVEL1);
-            } else if (level == 2) { //Play song for boss level!
-                musicStart(Music.BOSS);
-            } else if (level == 3) {
-                musicStart(Music.LEVEL3);
-            }
+            musicStart();
             player.getLuggage().removeWeapon();
             infobar.updateWeapon(false);
             mainScene.setRoot(appRoot);
@@ -705,10 +682,10 @@ public class Main extends Application {
     private EventHandler<ActionEvent> startButtonHandler = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
+            mainScene.setFill(Color.BLACK);
             mode = Mode.PLATFORMGAME;
             mainScene.setRoot(appRoot);
-            musicStop();
-            musicStart(Music.LEVEL1);
+            musicStart();
             timeCounter = 0;
         }
     };
@@ -798,6 +775,7 @@ public class Main extends Application {
         keyPad.getExit().setOnAction(event -> {
             mainScene.setRoot(appRoot);
             mode = Mode.PLATFORMGAME;
+            terminalcloseSound.play();
         });
         keyPad.getEnter().setOnAction(event -> {
             if (keyPad.getDisplayText().equals("secret")) {
@@ -805,8 +783,10 @@ public class Main extends Application {
                 keyPad.setCodeCorrect(true);
                 doorunlocked = true;
                 mode = Mode.PLATFORMGAME;
+                terminalcloseSound.play();
             } else {
                 keyPad.setDisplayText("WRONG CODE!");
+                wrongcodeSound.play();
             }
         });
     }
@@ -826,25 +806,28 @@ public class Main extends Application {
 
     private void musicStop() {
         level1MediaPlayer.stop();
+        level3MediaPlayer.stop();
         menuMediaPlayer.stop();
         bossMediaPlayer.stop();
     }
 
-    private void musicStart(Music music) {
-        if (music == Music.MENU) {
+    private void musicStart() {
+        musicStop();
+        if (mode == Mode.STARTMENU) {
+            menuMediaPlayer.setVolume(0.2);
             menuMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             menuMediaPlayer.play();
-        } else if (music == Music.LEVEL1) {
+        } else if (level == 1) {
             level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level1MediaPlayer.setVolume(0.5);
+            level1MediaPlayer.setVolume(0.2);
             level1MediaPlayer.play();
-        } else if (music == Music.LEVEL3) {
+        } else if (level == 2) {
             level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level3MediaPlayer.setVolume(0.5);
+            level3MediaPlayer.setVolume(0.2);
             level3MediaPlayer.play();
-        } else if (music == Music.BOSS) {
+        } else if (level == 3) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            bossMediaPlayer.setVolume(0.5);
+            bossMediaPlayer.setVolume(0.2);
             bossMediaPlayer.play();
         }
     }

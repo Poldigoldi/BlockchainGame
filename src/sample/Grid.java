@@ -40,6 +40,8 @@ public class Grid {
       # -> attackbot + solid block
       H -> LIFE collectible
 
+      E -> Enemy will spawn here
+
       # Constructor #
       reads the array and creates Node object for every platform found, and store them in an ArrayList
 
@@ -62,8 +64,23 @@ public class Grid {
   int height;
   String [] map;
 
-    private String[] map1 = new String[]{
-            "4                     4",
+
+  private String[] map1 = new String[]{
+          "4                                            2",
+          "4                                            3",
+          "£                                            4",
+          "4                                            4",
+          "4                                            7",
+          "4           485                 65           4",
+          "4                                   DDD      4",
+          "3                               W       448!£4",
+          "2        !      OOO     RRR    <->           4",
+          "1.......11.. o       r            E     E   B4",
+          "000000000000000     273     23432443£444444544",
+  };
+
+    private String[] map2 = new String[]{
+            "7                     8",
             "4                     4",
             "4                     4",
             "8          MV        B4",
@@ -76,20 +93,20 @@ public class Grid {
             "4  RR                 1",
             "5               [@@@@]1",
             "4       <---->  8     5",
-            "£               4    r7",
-            "2  W4 RR        4   o45",
+            "£               #    r7",
+            "2  W  RR        4   o45",
             "3               3OOO33£",
             "!8 DDD                3",
-            "2   ...    # MV       2",
+            "2   ...      MV       2",
             "2   <->           DD  7",
             "1.....     H   ......11",
             "00000000000000000000000",
     };
 
-  private String[] map2 = new String[]{
+  private String[] map3 = new String[]{
           "4                            4",
           "4                            4",
-          "1                            4",
+          "1                            £",
           "3                   H        4",
           "2.H..              OOO   .H.B2",
           "2<-->   MV   DD          [@@]1",
@@ -100,18 +117,18 @@ public class Grid {
           "3<-->    <-->         RR     3",
           "2             ..    <->  D   2",
           "2  H<->  ....<->..r       D  7",
-          "1  D     4444000000        .H1",
+          "1  D     1144[@@@@]        .H1",
           "000   0000000000000 DD D D 000"
   };
 
-  private String[] map3 = new String[]{
+  private String[] map4 = new String[]{
           "4         3          4",
           "4         2          4",
           "4         2          4",
           "4T        4         B4",
-          "455 D     4D      D554",
-          "3    D    3    D   D 4",
-          "2     OO  4  D     D #",
+          "855 D     4D      D554",
+          "3    D    3    D   D £",
+          "2     OO  7  D     D #",
           "# o D     2      D   4",
           "4<->      2D         #",
           "4   D  RR #    D     4",
@@ -119,24 +136,24 @@ public class Grid {
           "4  o   OR 3      D   2",
           "# ROO         D      4",
           "4......r........     4",
-          "4444444444444444     4",
-          "4                DD  #",
-          "#          DDDDD     4",
+          "[@@@@@@@@@@@@@@]     4",
+          "!                DD  #",
+          "#          DDDDD     2",
           "4  D  D  D DDDDD    o4",
           "4D                  -4",
           "4  D      #          #",
           "4D                R  4",
           "#               R    4",
-          "4   OO  D         R r4",
+          "6   OO  D         R r4",
           "4          OO       -4",
-          "4             MV     4",
+          "5             MV     7",
           "#                MV  4",
-          "4             MV     4",
+          "4             MV     8",
           "4  DDDDDDDDDD        #",
           "4444                 4"
   };
 
-  private String[] map4 = new String[]{
+  private String[] map5 = new String[]{
           "                       ",
           "                       ",
           "      DDD     DDD      ",

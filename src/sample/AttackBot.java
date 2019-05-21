@@ -1,11 +1,15 @@
 package sample;
 
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+
+import java.nio.file.Paths;
 
 class AttackBot extends Object {
     private int counter;
     private Polygon laser = new Polygon();
+    private AudioClip lockonSound = new AudioClip(Paths.get("src/sound/lockon.wav").toUri().toString());
 
     AttackBot(Type type, Frame... frame) {
         super(type);
@@ -68,7 +72,10 @@ class AttackBot extends Object {
                 }
                 //locking on
                 if(counter>200 && counter<300){
-                    if(counter % 5 == 0) laser.setFill(new Color(1, 0.9, 0.9, 0.7));
+                    if(counter % 5 == 0){
+                        laser.setFill(new Color(1, 0.9, 0.9, 0.7));
+                        lockonSound.play();
+                    }
                     else laser.setFill(new Color(1, 0.5, 0.5, 1));
                 }
                 //firing

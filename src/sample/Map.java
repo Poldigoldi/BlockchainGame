@@ -2,9 +2,11 @@ package sample;
 
 import javafx.scene.Group;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
@@ -22,6 +24,7 @@ public class Map {
     private ArrayList<HelpPopUp> helpers = new ArrayList<>();
     private int WIDTH;
     private ArrayList<PlatformButton> buttons = new ArrayList<>();
+    private AudioClip bulletspraySound = new AudioClip(Paths.get("src/sound/bulletspray.wav").toUri().toString());
 
     public Map(int level, int WIDTH) {
         this.WIDTH = WIDTH;
@@ -51,9 +54,13 @@ public class Map {
                 if (level.map()[y].charAt(x) == 'H') addLife(x, y);
                 if (level.map()[y].charAt(x) == '.') addGrass(x, y);
                 if (level.map()[y].charAt(x) == '#') addAttackBot(x, y);
+                if (level.map()[y].charAt(x) == 'E') addAnEnemy(x, y);
             }
         }
     }
+
+    //ORDERING IS IMPORTANT!
+
 
     //ORDERING IS IMPORTANT!
     private void initialiseLevel1() {
@@ -67,22 +74,52 @@ public class Map {
         createLayer2Mountains();
 
         */
+       // createEnemies();
+        addAnimatedPlatforms();
+        generalInitialiser();
+        addToGrid();
+        if(bigdoor!=null)bigdoor.sprite.setanimation(true);
+        addHelper(0, 7, "Hello there! My name is Bitty, " +
+                "come and find me dotted around the map for hints and tips!" +
+                " Start exploring by using 'A' ,'W' ,D' or ARROW KEYS to move and jump. ", true);
+        addHelper(12, 5, "You'll want to avoid that gap ahead. I wonder what pressing the button will do?"
+                , false);
+        addHelper(33, 5, "Good job! But that's not the only peril that awaits you. All manner of evil roams " +
+                        "these lands. If you find a 'Attack weapon' you can use SPACEBAR to fire codes to defend yourself."
+                , false);
+        addHelper(40, 7, "To continue your adventure, look for open doors like these! See you on the other side."
+                , true);
+
+    }
+
+    private void initialiseLevel2() {
+        level = new Grid(2);
+        currentLevel = 2;
+        createLayer3Clouds();
+        createLayer1Clouds();
+        /*
+        createLayer4Mountains();
+        createLayer2Mountains();
+        */
         createEnemies();
         addAnimatedPlatforms();
         generalInitialiser();
         addToGrid();
         addHelper(16, 15, "Jump on the Button to make platforms disappear!", false);
-        addHelper(1, 16, "Welcome to our world! Come find me dotted around the map for hints and tips.\n" +
-                "Use 'A','W',D' to move and 'Space' to shoot (collect gun first!)", true);
+        addHelper(1, 16, "Hello again. Just some quick advice -- watch out for Sentry Bots! Once they lock their eye " +
+                "on you, a deadly laser beam is sure to follow.", true);
         addHelper(20, 7, "Press E to interact with the terminal when you're close to it!\n" +
                 "Have you found the password yet?", false);
         addHelper(0, 4, "Walk into the block to start the Mini Game. \n" +
                 "Complete it and you'll find a key password.", true);
     }
 
-    private void initialiseLevel2() {
-        level = new Grid(2);
-        currentLevel = 2;
+
+
+
+    private void initialiseLevel3() {
+        level = new Grid(3);
+        currentLevel = 3;
         createLayer3Clouds();
         addAnimatedPlatforms();
         generalInitialiser();
@@ -92,18 +129,18 @@ public class Map {
                 "You need to defeat him to get to the next level.", true);
     }
 
-    private void initialiseLevel3() {
-        level = new Grid(3);
-        currentLevel = 3;
+    private void initialiseLevel4() {
+        level = new Grid(4);
+        currentLevel = 4;
         createLayer3Clouds();
         addAnimatedPlatforms();
         generalInitialiser();
         addToGrid();
     }
 
-    private void initialiseLevel4() {
-        level = new Grid(4);
-        currentLevel = 4;
+    private void initialiseLevel5() {
+        level = new Grid(5);
+        currentLevel = 5;
         createLayer3Clouds();
         addAnimatedPlatforms();
         generalInitialiser();
@@ -145,6 +182,7 @@ public class Map {
     void removeBullet(Bullet bullet) {
         bullet.setAlive(false);
         bulletDeath(bullet.getX(), bullet.getY());
+        bulletspraySound.play();
         animatedObjects.remove(bullet);
         mapRoot.getChildren().remove(bullet.label());
         hideEntity(bullet);
@@ -176,6 +214,13 @@ public class Map {
         addEnemy(0);
         addEnemy(1);
         addEnemy(2);
+    }
+
+    private void addAnEnemy(int x, int y) {
+        Enemy enemy = enemy = new Enemy(x * 64, y * 64, true, 800, 10);
+        addAnimatedObjects(enemy);
+        enemies.add(enemy);
+        level.bringtofront().add(enemy);
     }
 
     private void addEnemy(int typeId) {
@@ -381,8 +426,8 @@ public class Map {
     /* ----------------- GETTERS & SETTERS --------------- */
 
     /** CHANGE THIS IF BOSS IS IN LEVEL*/
-    public boolean levelHasBoss(int level){
-        if(level==2) return true;
+    public boolean levelHasBoss(){
+        if(king!=null) return true;
         return false;
     }
 

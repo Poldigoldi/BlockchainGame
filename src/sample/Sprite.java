@@ -60,6 +60,8 @@ public class Sprite extends ImageView {
         animationactive = active;
     }
 
+    public boolean isAnimationActive(){return animationactive;}
+
     void setdefaultanimationchoice(int choice) {
         if (defaultAnimationChoice != choice) {
             defaultAnimationChoice = choice;
