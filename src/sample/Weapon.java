@@ -10,6 +10,7 @@ public class Weapon extends Collectable {
     private int bullets;
     private int bulletShot;
 
+    /* Defines maximum shooting level before player capped */
     private final int MAX_BULLET_SHOT = 30;
 
     Weapon(String name, int bullets) {
@@ -32,11 +33,11 @@ public class Weapon extends Collectable {
         this.bulletShot = 0;
     }
 
-
-    String getName() {
-        return name;
+    void doesntShoot (){
+        if (bulletShot > 0) {
+            bulletShot--;
+        }
     }
-
     private boolean isMaxShootReached () {
         return bulletShot >= MAX_BULLET_SHOT;
     }
@@ -55,7 +56,7 @@ public class Weapon extends Collectable {
         this.canShoot = canShoot;
     }
 
-    public void winOneBullet() {
+    void winOneBullet() {
         bullets++;
     }
 
@@ -68,9 +69,8 @@ public class Weapon extends Collectable {
         return bullets;
     }
 
-    void doesntShoot (){
-        if (bulletShot > 0) {
-            bulletShot--;
-        }
+
+    String getName() {
+        return name;
     }
 }
