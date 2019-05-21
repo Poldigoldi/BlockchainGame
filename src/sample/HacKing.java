@@ -8,12 +8,18 @@ import java.util.Random;
  *  The way he works:
  *
  * @motion:
+ *   * by default, random pattern
+ *   * if about to get out of bound or player too far, change direction
+ *   * as his life gets lower, his speed increases
  *
+ * @defense:
+ *   * heal himself depending on his health level
+ *   * creates a protecting shield around himself (NOT FINISHED)
  *
  * @attack:
- *  1st attack: sends a wave of enemy
- *  2nd attack: send a serie of bullets
- *
+ *   * 1st attack: sends a wave of enemy
+ *   * 2nd attack: send a serie of bullets
+ *   * as his life gets lower, his shooting frequency increases
  */
 
 public class HacKing extends Person {
@@ -99,10 +105,8 @@ public class HacKing extends Person {
     /* ------------------------- MOTION ------------------------- */
 
     public void move (Map map, double playerX, double playerY) {
-        // TODO: check if Hacking too far from center, move back toward center
-        //  - needs a special attack
 
-        /** This method allow the king to moves automatically around
+        /** This method allow the king to moves automatically around the map
          *
          * @logic:
          *
@@ -132,10 +136,10 @@ public class HacKing extends Person {
                 move_X (-SPEED_MOVE, map);
                 break;
         }
-        nextDirection ();
+        waitsNextDirection ();
     }
 
-    private void nextDirection () {
+    private void waitsNextDirection () {
         counter_moves++;
         if (counter_moves >= randomNumber (LIMIT_MOVES) + 100 ) {
             counter_moves = 0;
@@ -144,8 +148,9 @@ public class HacKing extends Person {
     }
 
     private void increaseSpeed () {
-        if (getLives () <= 4) SPEED_MOVE = 3;
-        else  if (getLives () <= 10) SPEED_MOVE = 2;
+        if (getLives () == 1) SPEED_MOVE = 4;
+        else if (getLives () <= 4) SPEED_MOVE = 3;
+        else  if (getLives () <= 8) SPEED_MOVE = 2;
     }
 
     // generate a new random number different from the current given
@@ -158,7 +163,6 @@ public class HacKing extends Person {
     }
 
     private int randomNumber (int limit) {
-        // between 1 and limit
         return new Random ().nextInt(limit) + 1;
     }
 
@@ -190,7 +194,7 @@ public class HacKing extends Person {
 
     void listenerDefense () {
         heal ();
-        shield ();
+       // shield ();
     }
 
     // If King life not full, will start a counter to gain one life
@@ -247,7 +251,8 @@ public class HacKing extends Person {
     /* ------------------------- ATTACKS ------------------------ */
 
     private void increaseShootingFreq (){
-        if (getLives () <= 4 ) shooting_frequency = 5;
+        if (getLives () == 1) shooting_frequency = 6;
+        else if (getLives () <= 4 ) shooting_frequency = 5;
         else if (getLives () <= 7) shooting_frequency = 4;
     }
 
@@ -272,6 +277,7 @@ public class HacKing extends Person {
             counter = 0;
             return true;
         }
+        // Shoots a serie of bullet before switching attack mode
         if (attack_mode > 1
                 && counter >= TIME_BETWEEN_ATTACK
                 && (counter-TIME_BETWEEN_ATTACK) % TIME_BETWEEN_BULLETS == 0) {
