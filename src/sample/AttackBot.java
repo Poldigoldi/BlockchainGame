@@ -10,7 +10,9 @@ class AttackBot extends Object {
     private int counter;
     private Polygon laser = new Polygon();
     private AudioClip lockonSound = new AudioClip(Paths.get("src/sound/lockon.wav").toUri().toString());
-    boolean hasLockedOn = false;
+    private AudioClip lasershootSound = new AudioClip(Paths.get("src/sound/lasershoot.wav").toUri().toString());
+    private boolean hasLockedOn = false;
+    private boolean hasFired = false;
 
 
     AttackBot(Type type, Frame... frame) {
@@ -80,7 +82,10 @@ class AttackBot extends Object {
             }
             //firing
             if (counter > 300 && counter < 320) {
-                hasLockedOn = false;
+                if (!hasFired) {
+                    lasershootSound.play();
+                }
+                hasFired = true;
                 laser.setFill(new Color(1, 0.9, 0.9, 1));
                 return true;
             }
@@ -90,6 +95,7 @@ class AttackBot extends Object {
         } else {
             laser.setVisible(false);
             hasLockedOn = false;
+            hasFired = false;
             counter = 0;
         }
         return false;

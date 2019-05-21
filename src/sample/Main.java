@@ -329,7 +329,6 @@ public class Main extends Application {
         //for attackbots
         for (AttackBot attackBot : map.attackbots()) {
             if (attackBot.moveLaser(player.getX(), player.getY()) && player.isCanDie() && !player.getSpin()) {
-                lasershootSound.play();
                 player.looseOneLife();
                 player.setCanDie(false);
                 playerhurtSound.play();
