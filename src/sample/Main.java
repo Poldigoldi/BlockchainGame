@@ -115,6 +115,7 @@ public class Main extends Application {
         //RUN
         primaryStage.setScene(mainScene);
         primaryStage.show();
+        stage.setFullScreen (true);
         runGame(primaryStage);
         gameMenu.instructions().setOnAction(instructionButtonHandler);
         gameMenu.startGame().setOnAction(startButtonHandler);
