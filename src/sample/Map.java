@@ -15,6 +15,7 @@ public class Map {
     private ArrayList<Object> animatedObjects = new ArrayList<>();
     private ArrayList<Collectable> items = new ArrayList<>();
     private ArrayList<AttackBot> attackbots = new ArrayList<>();
+    private ArrayList<Tower> towers = new ArrayList<>();
     private ArrayList<Person> enemies = new ArrayList<>();
     private HacKing king;
     private Group mapRoot = new Group();
@@ -58,6 +59,7 @@ public class Map {
                 if (level.map()[y].charAt(x) == '.') addGrass(x, y);
                 if (level.map()[y].charAt(x) == '#') addAttackBot(x, y);
                 if (level.map()[y].charAt(x) == 'E') addAnEnemy(x, y);
+                if (level.map()[y].charAt(x) == 'M') addTower(x, y);
             }
         }
     }
@@ -261,6 +263,13 @@ public class Map {
         attackbots.add(attackBot);
     }
 
+    private void addTower (int x, int y) {
+        Tower tower = new Tower (true);
+        tower.setCollisionBox(x * 64, y * 64, 50, 50, Color.PURPLE);
+        addAnimatedObjects(tower);
+        towers.add(tower);
+    }
+
     private void addHelper(int x, int y, String string, Boolean faceRight) {
         HelpPopUp popup = new HelpPopUp(x, y, string, faceRight);
         helpers.add(popup);
@@ -449,6 +458,8 @@ public class Map {
     ArrayList<AttackBot> attackbots() {
         return attackbots;
     }
+
+    ArrayList<Tower> getTowers () { return  towers; }
 
     ArrayList<Object> animatedObjects() {
         return animatedObjects;

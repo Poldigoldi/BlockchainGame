@@ -114,6 +114,7 @@ public class Main extends Application {
         //RUN
         primaryStage.setScene(mainScene);
         primaryStage.show();
+        stage.setFullScreen (true);
         runGame(primaryStage);
         gameMenu.instructions().setOnAction(instructionButtonHandler);
         gameMenu.startGame().setOnAction(startButtonHandler);
@@ -265,6 +266,7 @@ public class Main extends Application {
             ListenerPlayerUseWeapon();
             ListenerHackingAttack();
             ListenerAttackBots();
+            ListenerTower ();
             ListenerBullets();
             ListenerButtons();
             UpdateAnimatedObjects();
@@ -324,6 +326,15 @@ public class Main extends Application {
     /***************************************************************************
      *                              LISTENERS FOR EVENTS
      * **********************************************************************/
+
+    private void ListenerTower () {
+        for (Tower tower : map.getTowers ()) {
+            if (tower.isCanShoot ()) {
+                shootSound.play ();
+                shootOneBullet (tower, tower.facingRight);
+            }
+        }
+    }
 
     private void ListenerAttackBots() {
         //for attackbots
