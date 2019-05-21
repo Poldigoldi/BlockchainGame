@@ -199,7 +199,6 @@ public class HacKing extends Person {
 
     // If King life not full, will start a counter to gain one life
     private void heal () {
-        System.out.println (max_lives);
         if (! isLifeMax ()) {
             counter_heal++;
         }

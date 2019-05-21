@@ -82,7 +82,6 @@ public class Object {
 
     public void add(Group group) {
         if (box == null) {
-            System.out.println("please set a collision box for this object");
             box = new Rectangle(5, 5, Color.BLACK);
         }
         group.getChildren().addAll(sprite, box);

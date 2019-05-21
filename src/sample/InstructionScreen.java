@@ -88,7 +88,6 @@ class InstructionScreen {
     }
 
     private void returnPress(ActionEvent e) {
-        System.out.println("click");
     }
 
     private void initialiseFonts() {

@@ -139,7 +139,6 @@ class Enemy extends Person {
                 return false;
             }
         }
-        print ("GAP RIGHT TOO BIG");
         return true;
     }
     private boolean isGapLeftTooBig (Map map) {
@@ -153,7 +152,6 @@ class Enemy extends Person {
                 return false;
             }
         }
-        print ("GAP LEFT TOO BIG");
         return true;
     }
 
@@ -179,7 +177,6 @@ class Enemy extends Person {
                     && platform.getX () < map.getLevel ().width() - platform.width - OFFSET
                     && getX () < platform.getX() - platform.width
                     && getX () > platform.getX () - 2 * platform.width) {
-                print ("CAN JUMP GAP RIGHT");
                 return true;
             }
         }
@@ -214,7 +211,6 @@ class Enemy extends Person {
                     && platform.getX () > platform.width + OFFSET
                     && getX () < platform.getX () + platform.width * 3
                     && getX () > platform.getX () + platform.width * 2) {
-                print ("CAN JUMP GAP LEFT");
                 return true;
             }
         }
@@ -234,7 +230,6 @@ class Enemy extends Person {
                     && (platform.getX () > getX() + width)
                     && (platform.getX () <= getX() + width + OFFSET)
                     && (platform.getY() + platform.height == getY() + height) ){
-                print ("CAN JUMP RIGHT");
                 return true;
             }
         }
@@ -256,7 +251,6 @@ class Enemy extends Person {
                     && (getX () >= platform.getX())
                     && (getX () <= platform.getX() + platform.width + OFFSET)
                     && (platform.getY() + platform.height == getY() + height) ){
-                print ("CAN JUMP LEFT");
                 return true;
             }
         }
@@ -276,12 +270,10 @@ class Enemy extends Person {
                 if (p.getY () > getY () + height) {
                     if (   (side.equals("RIGHT") && (getX () > p.getX () - width) && (getX () <  p.getX () + width))
                         || (side.equals("LEFT") && getX () > p.getX () + p.width - width && (getX () < p.getX () + p.width + width))   ){
-                        print ("SAFE TO ABORT JUMP " + side);
                         return false;
                     }
                 }
             }
-            print("WASN'T SAFE TO NOT JUMP " + side);
         }
         return true;
     }
@@ -293,10 +285,4 @@ class Enemy extends Person {
     }
 
 
-    /* PRINTING */
-
-    private void print(String string){
-        boolean print = false;
-        if(print) System.out.println(string);
-    }
 }
