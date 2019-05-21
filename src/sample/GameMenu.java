@@ -16,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+
+/*Geme Menu Winow that appears at the start of the game*/
 class GameMenu {
     private Font teenytinyFont;
     private Font tinyFont;
@@ -27,15 +29,15 @@ class GameMenu {
     private ArrayList<Object> clouds = new ArrayList<>();
 
     GameMenu(int WIDTH, int HEIGHT) {
-        this.WIDTH =WIDTH;
+        this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         initialiseFonts();
 
         //Labels
         Label gameInfo = new Label("Learn Blockchain the fun way!");
         gameInfo.setFont(smallFont);
-        gameInfo.setTranslateX(WIDTH/2-300);
-        gameInfo.setTranslateY(HEIGHT/2+220);
+        gameInfo.setTranslateX(WIDTH / 2 - 300);
+        gameInfo.setTranslateY(HEIGHT / 2 + 220);
 
         Label creators = new Label("An educational game created by the Inglorious Basterds:\n\n" +
                 "Nick Wilson\n" +
@@ -51,26 +53,26 @@ class GameMenu {
         //Buttons
         startGame.setFont(tinyFont);
         startGame.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
-        startGame.setTranslateX(WIDTH/2-50);
-        startGame.setTranslateY(HEIGHT/2+100);
+        startGame.setTranslateX(WIDTH / 2 - 50);
+        startGame.setTranslateY(HEIGHT / 2 + 100);
 
         instructions.setFont(tinyFont);
         instructions.setStyle("-fx-background-color: #000000;  -fx-text-fill: #39ff14; -fx-opacity: 1;");
-        instructions.setTranslateX(WIDTH/2-80);
-        instructions.setTranslateY(HEIGHT/2+150);
+        instructions.setTranslateX(WIDTH / 2 - 80);
+        instructions.setTranslateY(HEIGHT / 2 + 150);
 
         //Images
         Image blockchainAdventure = new Image("/graphics/blockchainAdventure.png");
         ImageView adventureView = new ImageView(blockchainAdventure);
-        adventureView.setFitWidth(WIDTH-500);
-        adventureView.setFitHeight(HEIGHT-300);
+        adventureView.setFitWidth(WIDTH - 500);
+        adventureView.setFitHeight(HEIGHT - 300);
         adventureView.setTranslateX(250);
         adventureView.setTranslateY(50);
         ImageView sampleBackground = new ImageView("/graphics/background3.png");
-        sampleBackground.setTranslateX((WIDTH*0.5) - (580*0.5));
+        sampleBackground.setTranslateX((WIDTH * 0.5) - (580 * 0.5));
         sampleBackground.setRotationAxis(Rotate.Y_AXIS);
         ImageView menuBackground = new ImageView("/graphics/title.png");
-        menuBackground.setTranslateX(-(1700-WIDTH)*0.5);
+        menuBackground.setTranslateX(-(1700 - WIDTH) * 0.5);
         menuBackground.setTranslateY(-200);
 
         createLayer3Clouds();
@@ -80,36 +82,45 @@ class GameMenu {
         //Root
         new AnimationTimer() {
             int i = 0;
+
             public void handle(long now) {
-                i+=0.1;
-                for(Object cloud: clouds){
+                i += 0.1;
+                for (Object cloud : clouds) {
                     circumnavigate(cloud);
                 }
-                if(i < 50){ gameInfo.setTextFill(Color.DEEPPINK); }
-                if(i > 50){ gameInfo.setTextFill(Color.WHITE); }
-                if(i == 100) i = 0;
+                if (i < 50) {
+                    gameInfo.setTextFill(Color.DEEPPINK);
+                }
+                if (i > 50) {
+                    gameInfo.setTextFill(Color.WHITE);
+                }
+                if (i == 100) i = 0;
             }
         }.start();
         new AnimationTimer() {
             double i;
 
             public void handle(long now) {
-               // i += 0.3;
+                // i += 0.3;
                 sampleBackground.setRotate(i);
             }
         }.start();
         root.getChildren().addAll(creators, startGame, instructions);
     }
 
-    Button startGame(){ return startGame; }
+    Button startGame() {
+        return startGame;
+    }
 
-    Button instructions(){ return instructions; }
+    Button instructions() {
+        return instructions;
+    }
 
     Group returnRoot() {
         return root;
     }
 
-    private void initialiseFonts(){
+    private void initialiseFonts() {
         try {
             teenytinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 8);
             tinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 15);
@@ -151,11 +162,11 @@ class GameMenu {
 
     private void circumnavigate(Object object) {
         double speed;
-        if(object.type == Type.LAYER1){
+        if (object.type == Type.LAYER1) {
             speed = 0.2;
         } else speed = 0.05;
-        object.sprite.setTranslateX( object.sprite.getTranslateX() + speed);
-        if ( object.sprite.getTranslateX() > WIDTH)    object.sprite.setTranslateX(-object.sprite.getImage().getWidth());
+        object.sprite.setTranslateX(object.sprite.getTranslateX() + speed);
+        if (object.sprite.getTranslateX() > WIDTH) object.sprite.setTranslateX(-object.sprite.getImage().getWidth());
     }
 
     public static double random(double min, double max) {

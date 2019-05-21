@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,25 +28,30 @@ class GameOver {
         insertLabel.setFont(smallFont);
         tryagainLabel.setFont(tinyFont);
         tryagainLabel.setTextFill(Color.ANTIQUEWHITE);
-        gameOverLabel.setTranslateX((WIDTH/2)-170);
+        gameOverLabel.setTranslateX((WIDTH / 2) - 170);
         gameOverLabel.setTranslateY(150);
         insertLabel.setTranslateX(150);
-        insertLabel.setTranslateY(HEIGHT/2+200);
-        tryagainLabel.setTranslateX(WIDTH/2-150);
-        tryagainLabel.setTranslateY(HEIGHT/2+150);
+        insertLabel.setTranslateY(HEIGHT / 2 + 200);
+        tryagainLabel.setTranslateX(WIDTH / 2 - 150);
+        tryagainLabel.setTranslateY(HEIGHT / 2 + 150);
         //Images
         Image brokenBoy = new Image("/graphics/gameover.png");
         ImageView brokenBoyView = new ImageView(brokenBoy);
-        brokenBoyView.setTranslateX(WIDTH/2 - 150);
-        brokenBoyView.setTranslateY(HEIGHT/2-80);
+        brokenBoyView.setTranslateX(WIDTH / 2 - 150);
+        brokenBoyView.setTranslateY(HEIGHT / 2 - 80);
         //Root
         new AnimationTimer() {
             int i = 0;
+
             public void handle(long now) {
                 i++;
-                if(i < 50){ insertLabel.setTextFill(Color.YELLOW); }
-                if(i > 50){ insertLabel.setTextFill(Color.WHITE); }
-                if(i == 100) i = 0;
+                if (i < 50) {
+                    insertLabel.setTextFill(Color.YELLOW);
+                }
+                if (i > 50) {
+                    insertLabel.setTextFill(Color.WHITE);
+                }
+                if (i == 100) i = 0;
             }
         }.start();
         root.getChildren().addAll(brokenBoyView, gameOverLabel, insertLabel, tryagainLabel);
@@ -55,7 +61,7 @@ class GameOver {
         return root;
     }
 
-    private void initialiseFonts(){
+    private void initialiseFonts() {
         try {
             tinyFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 16);
             smallFont = Font.loadFont(new FileInputStream(new File("src/graphics/Fleftex_M.ttf")), 28);

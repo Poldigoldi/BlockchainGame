@@ -23,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.net.URL;
 import java.util.*;
 
@@ -56,7 +57,6 @@ public class KeyGameController implements Initializable {
     private Button pPrivateKey;
 
 
-
     boolean isDone = true;
 
 
@@ -67,10 +67,8 @@ public class KeyGameController implements Initializable {
     private Button cPrivateKey;
 
 
-
     @FXML
     private Group instructionPane;
-
 
 
     @FXML
@@ -102,15 +100,11 @@ public class KeyGameController implements Initializable {
     }
 
 
-    private int index=0;
+    private int index = 0;
     private int alphaIndex = 0;
 
 
-
-
-
     private Coordinate circleCentre;
-
 
 
     @Override
@@ -118,9 +112,9 @@ public class KeyGameController implements Initializable {
         text();
 
         myCircle.setStroke(Color.BLACK);
-        Image alphabet = new Image("/graphics/minigameimages/images.jpg",false);
+        Image alphabet = new Image("/graphics/minigameimages/images.jpg", false);
         myCircle.setFill(new ImagePattern(alphabet));
-        circleCentre = new Coordinate((int)myCircle.getCenterX(), (int)myCircle.getCenterY());
+        circleCentre = new Coordinate((int) myCircle.getCenterX(), (int) myCircle.getCenterY());
 
 
     }
@@ -132,15 +126,13 @@ public class KeyGameController implements Initializable {
 
             if (alphaIndex == 1) {
                 myCircle.setRotate(0);
-            }
-            else {
+            } else {
                 myCircle.setRotate(myCircle.getRotate() + SPIN_VALUE);
             }
 
             if (alphaIndex == 0) {
                 alphaIndex = 25;
-            }
-            else {
+            } else {
                 alphaIndex--;
             }
         }
@@ -149,12 +141,10 @@ public class KeyGameController implements Initializable {
             if (alphaIndex == 25) {
                 alphaIndex = 0;
                 myCircle.setRotate(0);
-            }
-            else {
+            } else {
                 if (myCircle.getRotate() > SPIN_VALUE) {
                     myCircle.setRotate(myCircle.getRotate() - SPIN_VALUE);
-                }
-                else {
+                } else {
                     myCircle.setRotate(myCircle.getRotate() + 360 - SPIN_VALUE);
                 }
 
@@ -168,16 +158,13 @@ public class KeyGameController implements Initializable {
                 if (index == word.length()) {
                     verify();
                 }
-            }
-            else {
+            } else {
                 System.out.print("Game over, try a new word");
             }
         }
         System.out.println(alphaIndex);
     }
     //TODO : to checks for Hbox labels secret word
-
-
 
 
     void text() {
@@ -212,17 +199,15 @@ public class KeyGameController implements Initializable {
         textAnimation(messages.get(0));
 
 
-
         root.addEventHandler(KeyEvent.KEY_PRESSED, e ->
         {
-            if (e.getCode()==KeyCode.ENTER ) {
+            if (e.getCode() == KeyCode.ENTER) {
 
                 pressEnter.setVisible(false);
-                if (instructionString < messages.size() && isDone){
+                if (instructionString < messages.size() && isDone) {
                     textAnimation(messages.get(instructionString));
                     instructionString++;
-                }
-                else {
+                } else {
                     instructionPane.setVisible(false);
                 }
 
@@ -233,7 +218,6 @@ public class KeyGameController implements Initializable {
             }
 
 
-
         });
 
     }
@@ -242,15 +226,15 @@ public class KeyGameController implements Initializable {
     void animation() {
         ArrayList<String> bridge = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/bridge1.png",
                 "graphics/minigameimages/animation/bridge2.png", "graphics/minigameimages/animation/bridge3.png",
-                "graphics/minigameimages/animation/bridge4.png","graphics/minigameimages/animation/bridge5.png",
-                "graphics/minigameimages/animation/bridge6.png","graphics/minigameimages/animation/bridge7.png",
-                "graphics/minigameimages/animation/bridge8.png","graphics/minigameimages/animation/bridge9.png",
-                "graphics/minigameimages/animation/bridge10.png","graphics/minigameimages/animation/bridge11.png",
-                "graphics/minigameimages/animation/bridge12.png","graphics/minigameimages/animation/bridge13.png"
+                "graphics/minigameimages/animation/bridge4.png", "graphics/minigameimages/animation/bridge5.png",
+                "graphics/minigameimages/animation/bridge6.png", "graphics/minigameimages/animation/bridge7.png",
+                "graphics/minigameimages/animation/bridge8.png", "graphics/minigameimages/animation/bridge9.png",
+                "graphics/minigameimages/animation/bridge10.png", "graphics/minigameimages/animation/bridge11.png",
+                "graphics/minigameimages/animation/bridge12.png", "graphics/minigameimages/animation/bridge13.png"
         ));
         ArrayList<String> message = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message1.png",
                 "graphics/minigameimages/animation/message2.png", "graphics/minigameimages/animation/message3.png",
-                "graphics/minigameimages/animation/message4.png","graphics/minigameimages/animation/message5.png",
+                "graphics/minigameimages/animation/message4.png", "graphics/minigameimages/animation/message5.png",
                 "graphics/minigameimages/animation/message8.png"
         ));
         ArrayList<String> message2 = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/message6.png",
@@ -259,28 +243,28 @@ public class KeyGameController implements Initializable {
 
         ArrayList<String> hello = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/hello1.png",
                 "graphics/minigameimages/animation/hello2.png", "graphics/minigameimages/animation/hello3.png",
-                "graphics/minigameimages/animation/hello4.png","graphics/minigameimages/animation/hello5.png",
-                "graphics/minigameimages/animation/hello6.png","graphics/minigameimages/animation/hello7.png",
-                "graphics/minigameimages/animation/hello8.png","graphics/minigameimages/animation/hello9.png",
-                "graphics/minigameimages/animation/hello10.png","graphics/minigameimages/animation/hello11.png",
-                "graphics/minigameimages/animation/hello12.png","graphics/minigameimages/animation/hello13.png",
-                "graphics/minigameimages/animation/hello14.png","graphics/minigameimages/animation/hello15.png",
-                "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png",
-                "graphics/minigameimages/animation/hello16.png","graphics/minigameimages/animation/hello15.png"
+                "graphics/minigameimages/animation/hello4.png", "graphics/minigameimages/animation/hello5.png",
+                "graphics/minigameimages/animation/hello6.png", "graphics/minigameimages/animation/hello7.png",
+                "graphics/minigameimages/animation/hello8.png", "graphics/minigameimages/animation/hello9.png",
+                "graphics/minigameimages/animation/hello10.png", "graphics/minigameimages/animation/hello11.png",
+                "graphics/minigameimages/animation/hello12.png", "graphics/minigameimages/animation/hello13.png",
+                "graphics/minigameimages/animation/hello14.png", "graphics/minigameimages/animation/hello15.png",
+                "graphics/minigameimages/animation/hello16.png", "graphics/minigameimages/animation/hello15.png",
+                "graphics/minigameimages/animation/hello16.png", "graphics/minigameimages/animation/hello15.png"
 
 
         ));
 
         ArrayList<String> spy = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/spy1.png",
                 "graphics/minigameimages/animation/spy2.png", "graphics/minigameimages/animation/spy3.png",
-                "graphics/minigameimages/animation/spy4.png","graphics/minigameimages/animation/spy5.png",
-                "graphics/minigameimages/animation/spy6.png","graphics/minigameimages/animation/spy7.png",
-                "graphics/minigameimages/animation/spy8.png","graphics/minigameimages/animation/spy9.png",
-                "graphics/minigameimages/animation/spy10.png","graphics/minigameimages/animation/spy11.png",
-                "graphics/minigameimages/animation/spy12.png","graphics/minigameimages/animation/spy13.png",
-                "graphics/minigameimages/animation/spy14.png","graphics/minigameimages/animation/spy15.png",
-                "graphics/minigameimages/animation/spy16.png","graphics/minigameimages/animation/spy17.png",
-                "graphics/minigameimages/animation/spy18.png","graphics/minigameimages/animation/spy19.png",
+                "graphics/minigameimages/animation/spy4.png", "graphics/minigameimages/animation/spy5.png",
+                "graphics/minigameimages/animation/spy6.png", "graphics/minigameimages/animation/spy7.png",
+                "graphics/minigameimages/animation/spy8.png", "graphics/minigameimages/animation/spy9.png",
+                "graphics/minigameimages/animation/spy10.png", "graphics/minigameimages/animation/spy11.png",
+                "graphics/minigameimages/animation/spy12.png", "graphics/minigameimages/animation/spy13.png",
+                "graphics/minigameimages/animation/spy14.png", "graphics/minigameimages/animation/spy15.png",
+                "graphics/minigameimages/animation/spy16.png", "graphics/minigameimages/animation/spy17.png",
+                "graphics/minigameimages/animation/spy18.png", "graphics/minigameimages/animation/spy19.png",
                 "graphics/minigameimages/animation/spy20.png", "graphics/minigameimages/animation/spy21.png",
                 "graphics/minigameimages/animation/spy22.png", "graphics/minigameimages/animation/spy23.png"
         ));
@@ -294,22 +278,22 @@ public class KeyGameController implements Initializable {
         ));
         ArrayList<String> gen = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/gen1.png",
                 "graphics/minigameimages/animation/gen2.png", "graphics/minigameimages/animation/gen3.png",
-                "graphics/minigameimages/animation/gen4.png","graphics/minigameimages/animation/gen5.png",
-                "graphics/minigameimages/animation/gen6.png","graphics/minigameimages/animation/gen5.png",
-                "graphics/minigameimages/animation/gen7.png","graphics/minigameimages/animation/gen5.png",
-                "graphics/minigameimages/animation/gen6.png","graphics/minigameimages/animation/gen5.png",
-                "graphics/minigameimages/animation/gen8.png","graphics/minigameimages/animation/gen9.png",
-                "graphics/minigameimages/animation/gen10.png",  "graphics/minigameimages/animation/gen11.png"
+                "graphics/minigameimages/animation/gen4.png", "graphics/minigameimages/animation/gen5.png",
+                "graphics/minigameimages/animation/gen6.png", "graphics/minigameimages/animation/gen5.png",
+                "graphics/minigameimages/animation/gen7.png", "graphics/minigameimages/animation/gen5.png",
+                "graphics/minigameimages/animation/gen6.png", "graphics/minigameimages/animation/gen5.png",
+                "graphics/minigameimages/animation/gen8.png", "graphics/minigameimages/animation/gen9.png",
+                "graphics/minigameimages/animation/gen10.png", "graphics/minigameimages/animation/gen11.png"
         ));
         ArrayList<String> unlock = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/keyu1.png",
                 "graphics/minigameimages/animation/keyu2.png", "graphics/minigameimages/animation/keyu3.png",
-                "graphics/minigameimages/animation/keyu4.png","graphics/minigameimages/animation/keyu5.png",
-                "graphics/minigameimages/animation/keyu6.png","graphics/minigameimages/animation/keyu7.png"
+                "graphics/minigameimages/animation/keyu4.png", "graphics/minigameimages/animation/keyu5.png",
+                "graphics/minigameimages/animation/keyu6.png", "graphics/minigameimages/animation/keyu7.png"
         ));
         ArrayList<String> lock = new ArrayList<>(Arrays.asList("graphics/minigameimages/animation/keyl1.png",
                 "graphics/minigameimages/animation/keyl2.png", "graphics/minigameimages/animation/keyl3.png",
-                "graphics/minigameimages/animation/keyl4.png","graphics/minigameimages/animation/keyl5.png",
-                "graphics/minigameimages/animation/keyl6.png","graphics/minigameimages/animation/keyl7.png"
+                "graphics/minigameimages/animation/keyl4.png", "graphics/minigameimages/animation/keyl5.png",
+                "graphics/minigameimages/animation/keyl6.png", "graphics/minigameimages/animation/keyl7.png"
         ));
 
         switch (instructionString) {
@@ -381,7 +365,8 @@ public class KeyGameController implements Initializable {
             }
 
 
-            default: return;
+            default:
+                return;
         }
         isDone = true;
         pressEnter.setVisible(true);
@@ -403,11 +388,10 @@ public class KeyGameController implements Initializable {
                 timeline.stop();
 
 
-
             } else {
                 instructions.setText(s.substring(0, count.get()));
                 //mp.play();
-                count.set(count.get()+1);
+                count.set(count.get() + 1);
             }
 
         }
@@ -421,17 +405,9 @@ public class KeyGameController implements Initializable {
     }
 
 
-
-
-
-
-
     Boolean compareWord() {
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        if (word.charAt(index) == alphabet.charAt(alphaIndex)) {
-            return true;
-        }
-        return false;
+        return word.charAt(index) == alphabet.charAt(alphaIndex);
     }
 
     String getWord() {
@@ -448,7 +424,7 @@ public class KeyGameController implements Initializable {
 
         }*/
 
-        if (encryption.isVisible()){
+        if (encryption.isVisible()) {
             encryption.setVisible(false);
             signiture.setVisible(true);
         }
@@ -489,13 +465,10 @@ public class KeyGameController implements Initializable {
         int acceptionBound = 10;
 
 
-        if ((sceneX > (int)signitureBounds.getLayoutX()-acceptionBound  &&
-                sceneX < (int)signitureBounds.getLayoutX()+acceptionBound) ||
-                (sceneY > (int)signitureBounds.getLayoutY()-acceptionBound  &&
-                        sceneY < (int)signitureBounds.getLayoutY()+acceptionBound)) {
-            return true;
-        }
-        return false;
+        return (sceneX > (int) signitureBounds.getLayoutX() - acceptionBound &&
+                sceneX < (int) signitureBounds.getLayoutX() + acceptionBound) ||
+                (sceneY > (int) signitureBounds.getLayoutY() - acceptionBound &&
+                        sceneY < (int) signitureBounds.getLayoutY() + acceptionBound);
 
 
     }
@@ -511,12 +484,10 @@ public class KeyGameController implements Initializable {
             timer.schedule(new NextTask(), 1000);
 
 
-        }
-        else if (source.equals(pPublicKey) && signiture.isVisible()) {
+        } else if (source.equals(pPublicKey) && signiture.isVisible()) {
             pPK.setStyle("-fx-background-color: green");
 
-        }
-        else {
+        } else {
             added = true;
             cPK.setStyle("-fx-background-color: red");
             pPK.setStyle("-fx-background-color: red");
@@ -528,7 +499,6 @@ public class KeyGameController implements Initializable {
     void changeText() {
 
 
-
     }
 
 
@@ -537,19 +507,19 @@ public class KeyGameController implements Initializable {
 
                 @Override
                 public void handle(MouseEvent t) {
-                    if(!encryption.isVisible()) {
+                    if (!encryption.isVisible()) {
                         oringinalLocationX = t.getSceneX();
                         oringinalLocationY = t.getSceneY();
-                        saveX = ((Button)(t.getSource())).getLayoutX();
-                        saveY = ((Button)(t.getSource())).getLayoutY();
-                        origTranslateX = ((Button)(t.getSource())).getTranslateX();
-                        origTranslateY = ((Button)(t.getSource())).getTranslateY();
+                        saveX = ((Button) (t.getSource())).getLayoutX();
+                        saveY = ((Button) (t.getSource())).getLayoutY();
+                        origTranslateX = ((Button) (t.getSource())).getTranslateX();
+                        origTranslateY = ((Button) (t.getSource())).getTranslateY();
                     }
                 }
             };
 
     EventHandler<MouseEvent> buttonOnMouseDraggedEventHandler =
-            new EventHandler<MouseEvent>()  {
+            new EventHandler<MouseEvent>() {
 
                 @Override
                 public void handle(MouseEvent t) {
@@ -559,8 +529,8 @@ public class KeyGameController implements Initializable {
                         newTranslateX = origTranslateX + offsetX;
                         newTranslateY = origTranslateY + offsetY;
 
-                        ((Button)(t.getSource())).setTranslateX(newTranslateX);
-                        ((Button)(t.getSource())).setTranslateY(newTranslateY);
+                        ((Button) (t.getSource())).setTranslateX(newTranslateX);
+                        ((Button) (t.getSource())).setTranslateY(newTranslateY);
                     }
                 }
             };
@@ -572,26 +542,24 @@ public class KeyGameController implements Initializable {
                 @Override
                 public void handle(MouseEvent t) {
 
-                    int placeX = (int)(saveX + ((Button)(t.getSource())).getTranslateX());
-                    int placeY = (int)((saveY + ((Button)(t.getSource())).getTranslateY()));
+                    int placeX = (int) (saveX + ((Button) (t.getSource())).getTranslateX());
+                    int placeY = (int) ((saveY + ((Button) (t.getSource())).getTranslateY()));
 
-                    if (checkBounds(placeX,placeY) && insideButton == null){
+                    if (checkBounds(placeX, placeY) && insideButton == null) {
                         System.out.println("if");
-                        ((Button)(t.getSource())).setTranslateX(407-saveX);
-                        ((Button)(t.getSource())).setTranslateY(280-saveY);
-                        insideButton = (Button)(t.getSource());
-                        checker((Button)(t.getSource()));
-                    }
-                    else if (checkBounds(placeX,placeY) && insideButton != null) {
+                        ((Button) (t.getSource())).setTranslateX(407 - saveX);
+                        ((Button) (t.getSource())).setTranslateY(280 - saveY);
+                        insideButton = (Button) (t.getSource());
+                        checker((Button) (t.getSource()));
+                    } else if (checkBounds(placeX, placeY) && insideButton != null) {
                         System.out.println("else if");
-                        ((Button)(t.getSource())).setTranslateX(0);
-                        ((Button)(t.getSource())).setTranslateY(0);
-                    }
-                    else {
+                        ((Button) (t.getSource())).setTranslateX(0);
+                        ((Button) (t.getSource())).setTranslateY(0);
+                    } else {
                         System.out.println("else   : " + signitureBounds.getLayoutX());
                         insideButton = null;
-                        ((Button)(t.getSource())).setTranslateX(0);
-                        ((Button)(t.getSource())).setTranslateY(0);
+                        ((Button) (t.getSource())).setTranslateX(0);
+                        ((Button) (t.getSource())).setTranslateY(0);
                         cPK.setStyle("-fx-background-color: #1fffec");
                     }
                 }

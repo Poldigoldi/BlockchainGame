@@ -41,6 +41,7 @@ class HelpPopUp {
         }
         this.string = string;
     }
+
     public String string() {
         return string;
     }

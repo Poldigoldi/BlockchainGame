@@ -60,7 +60,9 @@ public class Sprite extends ImageView {
         animationactive = active;
     }
 
-    public boolean isAnimationActive(){return animationactive;}
+    public boolean isAnimationActive() {
+        return animationactive;
+    }
 
     void setdefaultanimationchoice(int choice) {
         if (defaultAnimationChoice != choice) {
@@ -152,12 +154,12 @@ public class Sprite extends ImageView {
         //for moving animations
         //jumping
         if (type.hasMovementAnimation()) {
-            if(!movingDown && type.hasJumpingAnimation()) {
+            if (!movingDown && type.hasJumpingAnimation()) {
                 if (movingRight) animate(jumpRightAnimation);
                 else animate(jumpLeftAnimation);
             }
             //falling
-            else if(!isLanded && type.hasFallingAnimation()) {
+            else if (!isLanded && type.hasFallingAnimation()) {
                 if (movingRight) animate(fallRightAnimation);
                 else animate(fallLeftAnimation);
             }

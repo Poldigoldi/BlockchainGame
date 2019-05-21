@@ -33,18 +33,19 @@ public class Weapon extends Collectable {
         this.bulletShot = 0;
     }
 
-    void doesntShoot (){
+    void doesntShoot() {
         if (bulletShot > 0) {
             bulletShot--;
         }
     }
-    private boolean isMaxShootReached () {
+
+    private boolean isMaxShootReached() {
         return bulletShot >= MAX_BULLET_SHOT;
     }
 
     // Player shooting frequency capped to a certain level
     boolean isCanShoot() {
-        return canShoot && ! isMaxShootReached ();
+        return canShoot && !isMaxShootReached();
     }
 
     void setCanShoot(boolean canShoot) {

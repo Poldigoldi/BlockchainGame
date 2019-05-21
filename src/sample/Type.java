@@ -7,29 +7,25 @@ public enum Type {
     public boolean hasGravity() {
         if (this == PLAYER) return true;
         if (this == ITEM) return true;
-        if (this == ENEMY) return true;
-        return false;
+        return this == ENEMY;
     }
 
     //used in update to see whether to look for the last movement for animations (e.g. left or right?)
-    public boolean hasMovementAnimation(){
-        if(this==PLAYER) return true;
-        if(this== ENEMY) return true;
-        if(this== KING) return true;
-        return false;
+    public boolean hasMovementAnimation() {
+        if (this == PLAYER) return true;
+        if (this == ENEMY) return true;
+        return this == KING;
     }
 
-    public boolean hasFallingAnimation(){
-        if(this==PLAYER) return true;
-        if(this== ENEMY) return true;
-        return false;
+    public boolean hasFallingAnimation() {
+        if (this == PLAYER) return true;
+        return this == ENEMY;
     }
 
 
-    public boolean hasJumpingAnimation(){
-        if(this==PLAYER) return true;
-        if(this== ENEMY) return true;
-        return false;
+    public boolean hasJumpingAnimation() {
+        if (this == PLAYER) return true;
+        return this == ENEMY;
     }
 
 }

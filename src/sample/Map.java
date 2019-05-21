@@ -77,11 +77,11 @@ public class Map {
         createLayer2Mountains();
 
         */
-       // createEnemies();
+        // createEnemies();
         addAnimatedPlatforms();
         generalInitialiser();
         addToGrid();
-        if(bigdoor!=null)bigdoor.sprite.setanimation(true);
+        if (bigdoor != null) bigdoor.sprite.setanimation(true);
         addHelper(0, 7, "Hello there! My name is Bitty, " +
                 "come and find me dotted around the map for hints and tips!" +
                 " Start exploring by using 'A' ,'W' ,D' or ARROW KEYS to move and jump. ", true);
@@ -116,8 +116,6 @@ public class Map {
         addHelper(0, 4, "Walk into the block to start the Mini Game. \n" +
                 "Complete it and you'll find a key password.", true);
     }
-
-
 
 
     private void initialiseLevel3() {
@@ -338,15 +336,13 @@ public class Map {
     boolean inRangeOfTerminal(double playerx, double playery) {
         if (terminal == null) return false;
         double distance = Math.sqrt(Math.pow((playerx - terminal.box.getTranslateX()), 2) + Math.pow((playery - terminal.box.getTranslateY()), 2));
-        if (distance < 60) return true;
-        return false;
+        return distance < 60;
     }
 
     boolean inRangeOfBigDoor(double playerx, double playery) {
         if (bigdoor == null) return false;
         double distance = Math.sqrt(Math.pow((playerx - bigdoor.box.getTranslateX()), 2) + Math.pow((playery - bigdoor.box.getTranslateY()), 2));
-        if (distance < 10) return true;
-        return false;
+        return distance < 10;
     }
 
 
@@ -406,9 +402,10 @@ public class Map {
         addAnimatedObjects(mountain, mountain2, mountain3);
     }
 
-    private void bulletDeath(double x, double y){
+    private void bulletDeath(double x, double y) {
+        System.out.println("did");
         Object bulletdeath = new Object(Type.SPRAY);
-        bulletdeath.setCollisionBox(x-10, y-20, 0,0,Color.RED);
+        bulletdeath.setCollisionBox(x - 10, y - 20, 0, 0, Color.RED);
         bulletdeath.sprite().loadDeathImages(
                 new Frame("/graphics/bulletdie1.png", 2),
                 new Frame("/graphics/bulletdie2.png", 2),
@@ -426,10 +423,11 @@ public class Map {
 
     /* ----------------- GETTERS & SETTERS --------------- */
 
-    /** CHANGE THIS IF BOSS IS IN LEVEL*/
-    public boolean levelHasBoss(){
-        if(king!=null) return true;
-        return false;
+    /**
+     * CHANGE THIS IF BOSS IS IN LEVEL
+     */
+    public boolean levelHasBoss() {
+        return king != null;
     }
 
     Group mapRoot() {

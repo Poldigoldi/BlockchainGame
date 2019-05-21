@@ -1,19 +1,16 @@
 package sample;
 
 /* interactable items that the player can use to their advantage - including guns and lives*/
-public class Collectable extends Object {
-    /* This parameter specifies that the player can only have once this object  */
-    private boolean unique;
+class Collectable extends Object {
     private Type itemType;
 
-    Collectable (Frame ... frames ) {
-        super (Type.ITEM, frames);
-        this.unique = false;
+    Collectable(Frame... frames) {
+        super(Type.ITEM, frames);
     }
 
-    void drop (double x, double y) {
-        box.setTranslateX (x);
-        box.setTranslateY (y);
+    void drop(double x, double y) {
+        box.setTranslateX(x);
+        box.setTranslateY(y);
     }
 
     Type getItemType() {

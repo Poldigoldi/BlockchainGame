@@ -14,7 +14,7 @@ class AttackBot extends Object {
     private boolean hasLockedOn = false;
     private boolean hasFired = false;
 
-
+    /*Set up images for robots*/
     AttackBot(Type type, Frame... frame) {
         super(type);
         sprite.loadDefaultImages(new Frame("graphics/attackbot1.png", 8),
@@ -36,6 +36,7 @@ class AttackBot extends Object {
     }
 
 
+    /*This tracks the laser that locks on and fires at player if in range*/
     boolean moveLaser(double playerx, double playery) {
         double distance = Math.sqrt(Math.pow((playerx - box.getTranslateX()), 2) + Math.pow((playery - box.getTranslateY()), 2));
         counter++;
@@ -110,7 +111,6 @@ class AttackBot extends Object {
         //angle = angle + Math.ceil( -angle / 360 ) * 360;
         return Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
     }
-
 
     Polygon laser() {
         return laser;

@@ -100,7 +100,7 @@ public class Object {
         if (spin) spin();
         sprite.update(facingRight, isMoving, isLanded, movingDown, box.getTranslateX(), box.getTranslateY());
         //for Clouds
-        if( type == Type.SPRAY) if(sprite.dead()) map.hideEntity(this);
+        if (type == Type.SPRAY) if (sprite.dead()) map.hideEntity(this);
         if (type == Type.LAYER3) {
             circumnavigate(0.05, map);
         }

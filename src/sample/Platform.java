@@ -128,7 +128,6 @@ public class Platform extends Object {
     }
 
     boolean matchUpdate(int updateCount) {
-        if (this.updateCount == updateCount) return true;
-        return false;
+        return this.updateCount == updateCount;
     }
 }

@@ -6,14 +6,16 @@ public class Frame extends Image {
     private int DEFAULTFRAMERATE = 5;
     private int framerate = DEFAULTFRAMERATE;
 
-    public Frame(String imageURL, int framerate){
+    public Frame(String imageURL, int framerate) {
         super(imageURL);
         this.framerate = framerate;
     }
 
-    public Frame(String imageURL){
+    public Frame(String imageURL) {
         super(imageURL);
     }
 
-    int framerate(){return framerate;}
+    int framerate() {
+        return framerate;
+    }
 }

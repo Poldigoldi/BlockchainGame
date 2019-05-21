@@ -4,22 +4,18 @@ import javafx.scene.paint.Color;
 
 import java.util.Random;
 
-/** This class defines the features of the Big Boss - aka -'HacKing'
- *  The way he works:
+/**
+ * This class defines the features of the Big Boss - aka -'HacKing'
+ * The way he works:
  *
- * @motion:
- *   * by default, random pattern
- *   * if about to get out of bound or player too far, change direction
- *   * as his life gets lower, his speed increases
- *
- * @defense:
- *   * heal himself depending on his health level
- *   * creates a protecting shield around himself (NOT FINISHED)
- *
- * @attack:
- *   * 1st attack: sends a wave of enemy
- *   * 2nd attack: send a serie of bullets
- *   * as his life gets lower, his shooting frequency increases
+ * @motion: * by default, random pattern
+ * * if about to get out of bound or player too far, change direction
+ * * as his life gets lower, his speed increases
+ * @defense: * heal himself depending on his health level
+ * * creates a protecting shield around himself (NOT FINISHED)
+ * @attack: * 1st attack: sends a wave of enemy
+ * * 2nd attack: send a serie of bullets
+ * * as his life gets lower, his shooting frequency increases
  */
 
 public class HacKing extends Person {
@@ -50,14 +46,14 @@ public class HacKing extends Person {
     private int attack_bullet_count;
 
     /* Constructor */
-    public HacKing (int startx, int starty) {
-        super (Type.KING, 8);
-        this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
+    public HacKing(int startx, int starty) {
+        super(Type.KING, 8);
+        this.setCollisionBox(startx, starty, 80, 60, Color.INDIANRED);
         sprite.loadDefaultRightImages(
                 new Frame("/graphics/hackkingright1.png"));
         sprite.loadDefaultLeftImages(
                 new Frame("/graphics/hackkingleft1.png"));
-                sprite.loadRightMotionImages(
+        sprite.loadRightMotionImages(
                 new Frame("/graphics/hackkingright1.png"),
                 new Frame("/graphics/hackkingright2.png"),
                 new Frame("/graphics/hackkingright3.png"),
@@ -104,7 +100,7 @@ public class HacKing extends Person {
 
     /* ------------------------- MOTION ------------------------- */
 
-    public void move (Map map, double playerX, double playerY) {
+    public void move(Map map, double playerX, double playerY) {
 
         /** This method allow the king to moves automatically around the map
          *
@@ -117,97 +113,101 @@ public class HacKing extends Person {
          *  *  If gets too close from bounds, changes direction
          */
         increaseSpeed();
-        if (isGoingOutOfBound (map.getLevel ().height(), map.getLevel ().width)) {
-            directionIndex = newRandom (directionIndex);
+        if (isGoingOutOfBound(map.getLevel().height(), map.getLevel().width)) {
+            directionIndex = newRandom(directionIndex);
         }
-        listenerTooFarFromPlayer (playerX, playerY);
+        listenerTooFarFromPlayer(playerX, playerY);
 
         switch (directionIndex) {
             case 1: // Up
-                move_Y (-SPEED_MOVE, map);
+                move_Y(-SPEED_MOVE, map);
                 break;
             case 2: // Down
-                move_Y (SPEED_MOVE, map);
+                move_Y(SPEED_MOVE, map);
                 break;
             case 3: // Right
-                move_X (SPEED_MOVE, map);
+                move_X(SPEED_MOVE, map);
                 break;
             case 4: // Left
-                move_X (-SPEED_MOVE, map);
+                move_X(-SPEED_MOVE, map);
                 break;
         }
-        waitsNextDirection ();
+        waitsNextDirection();
     }
 
-    private void waitsNextDirection () {
+    private void waitsNextDirection() {
         counter_moves++;
-        if (counter_moves >= randomNumber (LIMIT_MOVES) + 100 ) {
+        if (counter_moves >= randomNumber(LIMIT_MOVES) + 100) {
             counter_moves = 0;
-            directionIndex = newRandom (directionIndex);
+            directionIndex = newRandom(directionIndex);
         }
     }
 
-    private void increaseSpeed () {
-        if (getLives () == 1) SPEED_MOVE = 4;
-        else if (getLives () <= 4) SPEED_MOVE = 3;
-        else  if (getLives () <= 8) SPEED_MOVE = 2;
+    private void increaseSpeed() {
+        if (getLives() == 1) SPEED_MOVE = 4;
+        else if (getLives() <= 4) SPEED_MOVE = 3;
+        else if (getLives() <= 8) SPEED_MOVE = 2;
     }
 
     // generate a new random number different from the current given
-    private int newRandom (int current) {
+    private int newRandom(int current) {
         int next;
         do {
-            next = randomNumber (4);
+            next = randomNumber(4);
         } while (next == current);
         return next;
     }
 
-    private int randomNumber (int limit) {
-        return new Random ().nextInt(limit) + 1;
+    private int randomNumber(int limit) {
+        return new Random().nextInt(limit) + 1;
     }
 
     // Returns true, if player gets too close from map bounds
-    private boolean isGoingOutOfBound (int mapHeight, int mapWidth) {
+    private boolean isGoingOutOfBound(int mapHeight, int mapWidth) {
         int OFFSET = 150;
-        if (   (directionIndex == 1 && getY () <= OFFSET)
-            || (directionIndex == 2 && getY () >= mapHeight - OFFSET)
-            || (directionIndex == 3 && getX () >= mapWidth - OFFSET)
-            || (directionIndex == 4 && getX () <= OFFSET) ) {
-            return true;
-        }
-        return false;
+        return (directionIndex == 1 && getY() <= OFFSET)
+                || (directionIndex == 2 && getY() >= mapHeight - OFFSET)
+                || (directionIndex == 3 && getX() >= mapWidth - OFFSET)
+                || (directionIndex == 4 && getX() <= OFFSET);
     }
 
     // If player too far from King, force king to move closer
     private void listenerTooFarFromPlayer(double x, double y) {
-        if (Math.abs (getX () - x) > 500) {
-            if (getX () > x) { directionIndex = 4; }
-            else { directionIndex = 3; }
+        if (Math.abs(getX() - x) > 500) {
+            if (getX() > x) {
+                directionIndex = 4;
+            } else {
+                directionIndex = 3;
+            }
         }
-        if (Math.abs (getY () - y) > 500) {
-            if (getY () > y) { directionIndex = 1; }
-            else { directionIndex = 2; }
+        if (Math.abs(getY() - y) > 500) {
+            if (getY() > y) {
+                directionIndex = 1;
+            } else {
+                directionIndex = 2;
+            }
         }
     }
 
     /* ------------------------- DEFENSE ------------------------ */
 
-    void listenerDefense () {
-        heal ();
-       // shield ();
+    void listenerDefense() {
+        heal();
+        // shield ();
     }
 
     // If King life not full, will start a counter to gain one life
-    private void heal () {
-        if (! isLifeMax ()) {
+    private void heal() {
+        System.out.println(max_lives);
+        if (!isLifeMax()) {
             counter_heal++;
         }
         if (counter_heal == TIME_HEALING) {
             counter_heal = 0;
-            if (getLives () < max_lives) {
-                winOneLive ();
+            if (getLives() < max_lives) {
+                winOneLive();
             }
-            if (getLives () >= max_lives) {
+            if (getLives() >= max_lives) {
                 max_lives -= MAX_LIFE_DECREMENT;
             }
         }
@@ -215,16 +215,16 @@ public class HacKing extends Person {
 
     // If life very low, create a temporary shield around him
     private void shield() {
-        if (! isLifeLow ()) {
+        if (!isLifeLow()) {
             return;
         }
         if (shieldState) {
             // do something
         }
-        nextShieldState ();
+        nextShieldState();
     }
 
-    private void nextShieldState () {
+    private void nextShieldState() {
         counter_shield++;
         // shield is ON
         if (shieldState && counter_shield == 120) {
@@ -238,28 +238,28 @@ public class HacKing extends Person {
         }
     }
 
-    private boolean isLifeMax () {
-        return this.getLives () >= max_lives;
+    private boolean isLifeMax() {
+        return this.getLives() >= max_lives;
     }
 
-    private boolean isLifeLow () {
-        return this.getLives () <= MAX_LIFE_DECREMENT;
+    private boolean isLifeLow() {
+        return this.getLives() <= MAX_LIFE_DECREMENT;
     }
 
 
     /* ------------------------- ATTACKS ------------------------ */
 
-    private void increaseShootingFreq (){
-        if (getLives () == 1) shooting_frequency = 6;
-        else if (getLives () <= 4 ) shooting_frequency = 5;
-        else if (getLives () <= 7) shooting_frequency = 4;
+    private void increaseShootingFreq() {
+        if (getLives() == 1) shooting_frequency = 6;
+        else if (getLives() <= 4) shooting_frequency = 5;
+        else if (getLives() <= 7) shooting_frequency = 4;
     }
 
     public int getAttackMode() {
         return attack_mode;
     }
 
-    public void nextAttackMode () {
+    public void nextAttackMode() {
         increaseShootingFreq();
         if (this.attack_mode > 1 && attack_bullet_count < ATTACK_BULLETS_AMOUNT) {
             attack_bullet_count++;
@@ -269,7 +269,7 @@ public class HacKing extends Person {
         this.attack_mode = this.attack_mode % (shooting_frequency + 1) + 1;
     }
 
-    public boolean isCanAttack () {
+    public boolean isCanAttack() {
         counter++;
 
         if (attack_mode == 1 && counter == TIME_BETWEEN_ATTACK) {
@@ -279,7 +279,7 @@ public class HacKing extends Person {
         // Shoots a serie of bullet before switching attack mode
         if (attack_mode > 1
                 && counter >= TIME_BETWEEN_ATTACK
-                && (counter-TIME_BETWEEN_ATTACK) % TIME_BETWEEN_BULLETS == 0) {
+                && (counter - TIME_BETWEEN_ATTACK) % TIME_BETWEEN_BULLETS == 0) {
             if (counter == TIME_BETWEEN_ATTACK + (ATTACK_BULLETS_AMOUNT) * TIME_BETWEEN_BULLETS) {
                 counter = 0;
             }

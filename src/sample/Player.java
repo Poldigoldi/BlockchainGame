@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import java.nio.file.Paths;
 
 /*Nick made major changes to this class. A player is an Object that can JUMP and hold items */
-public class Player extends Person {
+class Player extends Person {
     //sounds
     private AudioClip jumpSound = new AudioClip(Paths.get("src/sound/jump.wav").toUri().toString());
 
@@ -40,10 +40,7 @@ public class Player extends Person {
     }
 
     boolean canUseWeapon() {
-        if (luggage.getWeapon().isCanShoot() && luggage.getWeapon().getBullets() > 0) {
-            return true;
-        }
-        return false;
+        return luggage.getWeapon().isCanShoot() && luggage.getWeapon().getBullets() > 0;
     }
 
     //set up the images for walking etc.

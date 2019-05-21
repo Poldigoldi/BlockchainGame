@@ -6,7 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-public class BlockAnimation2  {
+public class BlockAnimation2 {
     public void start(Group bridge) {
         final ImageView bridge1 = new ImageView("graphics/minigameimages/animation/message1.png");
         bridge1.setFitWidth(400);
@@ -32,23 +32,23 @@ public class BlockAnimation2  {
         Timeline tl = new Timeline();
         tl.setCycleCount(1);
 
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(100),  e -> {
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(100), e -> {
             bridge.getChildren().setAll(bridge1);
         }
         ));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(900),  e -> {
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(900), e -> {
             bridge.getChildren().setAll(bridge2);
         }
         ));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1100), ( e) -> {
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1100), (e) -> {
             bridge.getChildren().setAll(bridge3);
         }
         ));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1300), ( e) -> {
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1300), (e) -> {
             bridge.getChildren().setAll(bridge4);
         }
         ));
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1500), ( e) -> {
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(1500), (e) -> {
             bridge.getChildren().setAll(bridge5);
         }
         ));

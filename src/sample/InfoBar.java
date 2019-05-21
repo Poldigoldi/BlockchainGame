@@ -2,6 +2,7 @@ package sample;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 
 class InfoBar {

@@ -20,6 +20,7 @@ class Coordinate {
     int getX() {
         return this.x;
     }
+
     int getY() {
         return this.y;
     }

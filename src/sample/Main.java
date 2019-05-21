@@ -638,12 +638,9 @@ public class Main extends Application {
      * **********************************************************************/
 
     private boolean isObjectOutOfBounds(Object object) {
-        if (object.getY() > map.level().height()
+        return object.getY() > map.level().height()
                 || object.getX() >= map.level().width() - map.level().getOBJ_WIDTH()
-                || object.getX() < 0) {
-            return true;
-        }
-        return false;
+                || object.getX() < 0;
     }
 
     private void ListenerGameOver() {

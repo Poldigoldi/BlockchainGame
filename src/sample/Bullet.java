@@ -5,19 +5,20 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/*Sets up simple Bullet when fired*/
 public class Bullet extends Object {
-    // GLOBAL VARIABLES
-    private final int WIDHT = 20;
-    private final int HEIGHT = 15;
-    private final int SPEED_MAGNITUDE = 6;
 
     private final boolean playerFacingRight;
     private final boolean isPlayerShooting;
     private Label label = new Label("01010");
 
-    Bullet (double startx, double starty, boolean facingRight, boolean shooter) {
+    /*Creates bullet and start position is set by object position*/
+    Bullet(double startx, double starty, boolean facingRight, boolean shooter) {
         super(Type.BULLET, new Frame("/graphics/item1.png"));
-        setCollisionBox (startx, starty, WIDHT, HEIGHT, Color.BLACK);
+        // GLOBAL VARIABLES
+        int WIDHT = 20;
+        int HEIGHT = 15;
+        setCollisionBox(startx, starty, WIDHT, HEIGHT, Color.BLACK);
         this.playerFacingRight = facingRight;
         this.isPlayerShooting = shooter;
         String style = "  -fx-background-color: rgba(0,0,0,0.5);  -fx-text-fill: #39ff14;";
@@ -28,12 +29,16 @@ public class Bullet extends Object {
         label.setText(randomText());
     }
 
-    public Label label(){ return label; }
+    public Label label() {
+        return label;
+    }
 
+    /*Moves bullet along map*/
     void move(Map map) {
-        if(isAlive()) {
+        if (isAlive()) {
             label.setTranslateX(box.getTranslateX());
             label.setTranslateY(box.getTranslateY() - 5);
+            int SPEED_MAGNITUDE = 6;
             int speed = (playerFacingRight ? 1 : -1) * SPEED_MAGNITUDE;
             if (!move_X(speed, map)) {
                 setAlive(false);
@@ -42,17 +47,18 @@ public class Bullet extends Object {
         }
     }
 
-    private String randomText(){
+    /*Sets up random binary text that appears on the bullet*/
+    private String randomText() {
         String text =
-                    rc() + rc() + rc() +rc() + rc() + rc() + rc() + rc() + "\n" +
-                    rc() + rc() + rc() +rc() + rc() + rc() + rc() + rc() + "\n" ;
+                rc() + rc() + rc() + rc() + rc() + rc() + rc() + rc() + "\n" +
+                        rc() + rc() + rc() + rc() + rc() + rc() + rc() + rc() + "\n";
         return text;
     }
 
-    public static String rc(){
+    public static String rc() {
         double x = (int) (Math.random() * ((5 - 0) + 1));
-        if(x==0 || x==1) return "0";
-        if(x==3 || x==4) return "1";
+        if (x == 0 || x == 1) return "0";
+        if (x == 3 || x == 4) return "1";
         return " ";
     }
 
