@@ -53,7 +53,6 @@ public class Main extends Application {
     private AudioClip enemy1hurtSound = new AudioClip(Paths.get("src/sound/enemy1hurt.wav").toUri().toString());
     private AudioClip enemy1dieSound = new AudioClip(Paths.get("src/sound/enemy1die.wav").toUri().toString());
     private AudioClip buttonClickSound = new AudioClip(Paths.get("src/sound/buttonpress.wav").toUri().toString());
-    private AudioClip lasershootSound = new AudioClip(Paths.get("src/sound/lasershoot.wav").toUri().toString());
     private AudioClip tunnelstepSound = new AudioClip(Paths.get("src/sound/tunnelstep.wav").toUri().toString());
     private AudioClip terminalopenSound = new AudioClip(Paths.get("src/sound/terminalopen.wav").toUri().toString());
     private AudioClip terminalcloseSound = new AudioClip(Paths.get("src/sound/terminalclose.wav").toUri().toString());
@@ -230,7 +229,10 @@ public class Main extends Application {
             map.bigdoor().sprite.setanimation(true);
 
         }
-        if (mode == GAMEOVER) gameOver();
+        if (mode == GAMEOVER) {
+            musicStop();
+            gameOver();
+        }
         if (mode == Mode.KEYPAD) handleKeyPad();
         if (mode == Mode.MINIGAME) {
             if (isPressed(KeyCode.ESCAPE)) {
