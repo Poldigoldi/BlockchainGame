@@ -355,8 +355,7 @@ public class Map {
         }
     }
 
-//Nick's functions for making the background graphics
-
+    //Nick's functions for making the background graphics
     private void createLayer3Clouds() {
         Object cloud = new Object(Type.LAYER3, new Frame("/graphics/clouds1.png"));
         cloud.setCollisionBox(random(0, level.width()), random(0, (level.height() * 0.8)), 5, 5, Color.CORAL);
