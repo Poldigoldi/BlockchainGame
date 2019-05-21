@@ -45,7 +45,7 @@ public class HacKing extends Person {
 
     /* Constructor */
     public HacKing (int startx, int starty) {
-        super (Type.KING, 9);
+        super (Type.KING, 8);
         this.setCollisionBox(startx, starty , 80, 60, Color.INDIANRED);
         sprite.loadDefaultRightImages(
                 new Frame("/graphics/hackkingright1.png"));
