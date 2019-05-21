@@ -167,7 +167,7 @@ public class Main extends Application {
         speaker.sprite.setOpacity(0);
         map.addAnimatedObjects(speaker, warning);
         map.mapRoot().getChildren().addAll(popUp, infobar.infoBarGroup());
-        if(map.levelHasBoss()){
+        if (map.levelHasBoss()) {
             bossHealthBar = new BossHealthBar(map.getKing().getLives());
             map.mapRoot().getChildren().add(bossHealthBar.group());
         }
@@ -290,13 +290,13 @@ public class Main extends Application {
         warning.setY(-map.mapRoot().getTranslateY() + HEIGHT - 100);
         warning.box.setVisible(false);
         warning.sprite.toFront();
-        if(map.levelHasBoss()){
+        if (map.levelHasBoss()) {
             bossHealthBar.group().setTranslateX(-map.mapRoot().getTranslateX() + WIDTH - 155);
             bossHealthBar.group().setTranslateY(-map.mapRoot().getTranslateY() + 106);
             bossHealthBar.group().toFront();
             bossHealthBar.updatePosition(0, 0);
             bossHealthBar.updateAppearance(map.getKing().getLives());
-            stage.setTitle(map.getKing().getLives()+"");
+            stage.setTitle(map.getKing().getLives() + "");
         }
     }
 
@@ -358,7 +358,7 @@ public class Main extends Application {
             terminalopenSound.play();
             openKeyPad();
         }
-        if (map.inRangeOfBigDoor(player.getX(), player.getY()) && map.bigdoor().sprite().isAnimationActive()){
+        if (map.inRangeOfBigDoor(player.getX(), player.getY()) && map.bigdoor().sprite().isAnimationActive()) {
             tunnelstepSound.play();
             level++;
             changeLevel(level);
@@ -461,19 +461,19 @@ public class Main extends Application {
             // User can only shoot 1 bullet when press key (un-press & press again to shoot)
             if (!isPressed(KeyCode.SPACE)) {
                 player.getLuggage().getWeapon().setCanShoot(true);
-                player.getLuggage ().getWeapon ().doesntShoot ();
+                player.getLuggage().getWeapon().doesntShoot();
             }
         }
     }
 
     private void waitsSomeoneHitBullet(Bullet bullet, Person person) {
-        if(!bullet.isAlive()) return;
+        if (!bullet.isAlive()) return;
         if (person.isCanDie() && person.box.getBoundsInParent().intersects(bullet.box.getBoundsInParent()) && person.isAlive()) {
             map.removeBullet(bullet);
             person.looseOneLife();
             enemy1hurtSound.play();
             person.setCanDie(false);
-            if(person.type == Type.PLAYER) infobar.updateHealthEmpty(player.getLives());
+            if (person.type == Type.PLAYER) infobar.updateHealthEmpty(player.getLives());
         } else {
             person.setCanDie(true);
         }
@@ -511,7 +511,7 @@ public class Main extends Application {
 
     /* ----------- ENEMIES ------------ */
     private void ListenerHackingAttack() {
-        if(!map.levelHasBoss()) return;
+        if (!map.levelHasBoss()) return;
         HacKing king = map.getKing();
         if (king.sprite().dead()) map.hideEntity(king);
         if (king == null || !king.isAlive()) {
@@ -547,7 +547,6 @@ public class Main extends Application {
         map.mapRoot().getChildren().addAll(bullet.label(), bullet.box, bullet.sprite);
         bulletsFired.add(bullet);
     }
-
 
 
     private void ListenerEnemies() {
@@ -826,9 +825,9 @@ public class Main extends Application {
             bossMediaPlayer.setVolume(1);
             bossMediaPlayer.play();
         } else if (level == 4) {
-        level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        level3MediaPlayer.setVolume(1);
-        level3MediaPlayer.play();
+            level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            level3MediaPlayer.setVolume(1);
+            level3MediaPlayer.play();
         }
     }
 }
