@@ -10,6 +10,8 @@ class AttackBot extends Object {
     private int counter;
     private Polygon laser = new Polygon();
     private AudioClip lockonSound = new AudioClip(Paths.get("src/sound/lockon.wav").toUri().toString());
+    boolean hasLockedOn = false;
+
 
     AttackBot(Type type, Frame... frame) {
         super(type);
@@ -32,78 +34,79 @@ class AttackBot extends Object {
     }
 
 
-    boolean moveLaser(double playerx, double playery){
+    boolean moveLaser(double playerx, double playery) {
         double distance = Math.sqrt(Math.pow((playerx - box.getTranslateX()), 2) + Math.pow((playery - box.getTranslateY()), 2));
         counter++;
         //reset
-        if(counter>400){
+        if (counter > 400) {
             counter = 0;
         }
-        if(distance < 300 || counter> 300) {
+        if (distance < 300 || counter > 300) {
             laser.setVisible(true);
-                //move if not attacking
-
-                if(counter<300) {
-                    int laserXOffset;
-                    if (facingRight) laserXOffset = 55;
-                    else laserXOffset = 20;
-                    double angle1 = getAngle(getX() + laserXOffset, getY() + 28,playerx-10, playery+25);
-                    double xstep1 = Math.cos(Math.toRadians(-angle1));
-                    double ystep1 = Math.sin(Math.toRadians(-angle1+180));
-                    double pointX1 = (getX() + laserXOffset)  + (2000 * xstep1 );
-                    double pointY1 = getY() + 28 + (2000 * ystep1);
-                    double angle2 = getAngle(getX() + laserXOffset, getY() + 28,playerx+15, playery+35);
-                    double xstep2 = Math.cos(Math.toRadians(-angle2));
-                    double ystep2 = Math.sin(Math.toRadians(-angle2+180));
-                    double pointX2 = (getX() + laserXOffset)  + (2000 * xstep2 );
-                    double pointY2 = getY() + 28 + (2000 * ystep2);
-                    laser.getPoints().clear();
-                   laser.getPoints().addAll(getX() + laserXOffset + 12, getY() + 26,
-                           getX() + laserXOffset, getY() + 28,
-                           pointX1, pointY1,
-                           pointX2, pointY2);
-
-
-
-                }
-                //before locking
-                if(counter<200){
-                    laser.setFill(new Color(1, 0, 0, 0.7));
-                }
-                //locking on
-                if(counter>200 && counter<300){
-                    if(counter % 5 == 0){
-                        laser.setFill(new Color(1, 0.9, 0.9, 0.7));
-                        lockonSound.play();
-                    }
-                    else laser.setFill(new Color(1, 0.5, 0.5, 1));
-                }
-                //firing
-                if(counter>300 && counter<320){
-                    laser.setFill(new Color(1, 0.9, 0.9, 1));
-                    return true;
-                }
-                if(counter>320){
-                    laser.setVisible(false);
-                }
+            if (!hasLockedOn) {
+                lockonSound.play();
+                hasLockedOn = true;
             }
-        else{
+            //move if not attacking
+            if (counter < 300) {
+                int laserXOffset;
+                if (facingRight) laserXOffset = 55;
+                else laserXOffset = 20;
+                double angle1 = getAngle(getX() + laserXOffset, getY() + 28, playerx - 10, playery + 25);
+                double xstep1 = Math.cos(Math.toRadians(-angle1));
+                double ystep1 = Math.sin(Math.toRadians(-angle1 + 180));
+                double pointX1 = (getX() + laserXOffset) + (2000 * xstep1);
+                double pointY1 = getY() + 28 + (2000 * ystep1);
+                double angle2 = getAngle(getX() + laserXOffset, getY() + 28, playerx + 15, playery + 35);
+                double xstep2 = Math.cos(Math.toRadians(-angle2));
+                double ystep2 = Math.sin(Math.toRadians(-angle2 + 180));
+                double pointX2 = (getX() + laserXOffset) + (2000 * xstep2);
+                double pointY2 = getY() + 28 + (2000 * ystep2);
+                laser.getPoints().clear();
+                laser.getPoints().addAll(getX() + laserXOffset + 12, getY() + 26,
+                        getX() + laserXOffset, getY() + 28,
+                        pointX1, pointY1,
+                        pointX2, pointY2);
+            }
+            //before locking
+            if (counter < 200) {
+                laser.setFill(new Color(1, 0, 0, 0.7));
+            }
+            //locking on
+            if (counter > 200 && counter < 300) {
+                if (counter % 5 == 0) {
+                    laser.setFill(new Color(1, 0.9, 0.9, 0.7));
+                } else laser.setFill(new Color(1, 0.5, 0.5, 1));
+            }
+            //firing
+            if (counter > 300 && counter < 320) {
+                hasLockedOn = false;
+                laser.setFill(new Color(1, 0.9, 0.9, 1));
+                return true;
+            }
+            if (counter > 320) {
+                laser.setVisible(false);
+            }
+        } else {
             laser.setVisible(false);
+            hasLockedOn = false;
             counter = 0;
         }
         return false;
-        }
+    }
 
 
+    int counter() {
+        return counter;
+    }
 
-    int counter(){ return counter;}
-
-    private static double getAngle(double x1, double y1, double x2, double y2)
-    {
+    private static double getAngle(double x1, double y1, double x2, double y2) {
         //angle = angle + Math.ceil( -angle / 360 ) * 360;
         return Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
     }
 
 
-    Polygon laser(){ return laser;}
+    Polygon laser() {
+        return laser;
+    }
 }
