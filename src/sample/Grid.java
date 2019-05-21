@@ -173,6 +173,7 @@ public class Grid {
     if (level == 2) map = map2;
     else if (level == 3) map = map3;
     else if (level == 4) map = map4;
+    else if (level == 5) map = map5;
     width = map[0].length();
     height = map.length;
     for (int y = 0; y < height; y++) {

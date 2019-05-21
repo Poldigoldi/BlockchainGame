@@ -1,5 +1,6 @@
 package sample;
 
+/* interactable items that the player can use to their advantage - including guns and lives*/
 public class Collectable extends Object {
     /* This parameter specifies that the player can only have once this object  */
     private boolean unique;

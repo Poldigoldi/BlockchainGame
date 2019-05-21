@@ -40,6 +40,9 @@ public class Map {
         if (level == 4) {
             initialiseLevel4();
         }
+        if (level == 5) {
+            initialiseLevel5();
+        }
     }
 
     private void addToGrid() {

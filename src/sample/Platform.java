@@ -5,7 +5,9 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-
+/*Objects of class platform provide the constructs for the player to stand on and interact with.
+there are a number of different types of platforms, which are classified using an array of different constructors.
+ */
 public class Platform extends Object {
     private boolean disappearing = false;
     private String colour;
@@ -14,12 +16,13 @@ public class Platform extends Object {
     private boolean movingRight = true;
     private int updateCount;
 
-
+    /*default platforms*/
     Platform(Type type, Frame... frame) {
         super(type);
         sprite = new Sprite(type, frame);
     }
 
+    /*dissapearing platforms*/
     Platform(Type type, boolean timed) {
         super(type);
         this.timed = timed;
@@ -33,6 +36,7 @@ public class Platform extends Object {
         sprite = new Sprite(type, frame);
     }
 
+    /*dynamic button activated platforms*/
     Platform(Type type, String colour) {
         super(type);
         this.colour = colour;
@@ -55,6 +59,7 @@ public class Platform extends Object {
         }
     }
 
+    /*moving platforms*/
     Platform(Type type, int movement, Frame... frame) {
         super(type, frame);
         isMoving = true;
@@ -85,7 +90,7 @@ public class Platform extends Object {
         this.updateCount = updateCount + 50;
     }
 
-
+    /*required to store platform collision box locations which are changed or removed during play*/
     void setCollisionValues(int x, int y, int width, int height) {
         collisionValues.add(x);
         collisionValues.add(y);
