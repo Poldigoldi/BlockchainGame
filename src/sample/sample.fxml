@@ -49,7 +49,7 @@
       </HBox>
       <Group fx:id="encryption" layoutX="467.0" layoutY="320.0">
          <children>
-            <Label layoutX="-119.0" layoutY="151.0" prefHeight="35.0" prefWidth="251.0" text="Inspector Clueoso would like to send you a secret message..." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+            <Label layoutX="-118.0" layoutY="-205.0" prefHeight="35.0" prefWidth="251.0" text="Clue! Use the letters below and spin RIGHT!" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="Courier New" size="12.0" />
                </font>
@@ -61,7 +61,7 @@
                   <Image url="@../graphics/minigameimages/key.jpg" />
                </image>
             </ImageView>
-            <Label layoutX="-86.0" layoutY="178.0" text="LHVUXW" textFill="WHITE">
+            <Label layoutX="-86.0" layoutY="178.0" text="LXVNXM" textFill="WHITE">
                <font>
                   <Font name="Courier New" size="48.0" />
                </font>
@@ -152,7 +152,7 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="104.0" prefWidth="152.0" style="-fx-background-color: green;">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="9.0" prefHeight="87.0" prefWidth="131.0" style="-fx-background-color: black;" text="Signiture" textAlignment="RIGHT" textFill="WHITE">
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="9.0" prefHeight="87.0" prefWidth="131.0" style="-fx-background-color: black;" text="SECURE" textAlignment="RIGHT" textFill="WHITE">
                            <font>
                               <Font name="Courier New Bold" size="22.0" />
                            </font>
@@ -166,72 +166,6 @@
                   <Font name="Courier New" size="18.0" />
                </font>
             </Label>
-         </children>
-      </Group>
-      <Group fx:id="verify" layoutX="59.0" layoutY="-5.0" visible="false">
-         <children>
-            <HBox layoutX="104.0" layoutY="275.0" prefHeight="104.0" prefWidth="673.0">
-               <children>
-                  <AnchorPane prefHeight="104.0" prefWidth="152.0" style="-fx-background-color: green;">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="9.0" prefHeight="87.0" prefWidth="131.0" style="-fx-background-color: black;" text="Message" textAlignment="RIGHT" textFill="WHITE">
-                           <font>
-                              <Font name="Courier New Bold" size="22.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="104.0" prefWidth="85.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="50.0" layoutX="35.0" layoutY="27.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="11.0" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="50.0" layoutX="35.0" layoutY="27.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="11.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="pPK" prefHeight="95.0" prefWidth="147.0" style="-fx-background-color: #1fffec;">
-                     <children>
-                        <AnchorPane layoutX="7.0" layoutY="9.0" prefHeight="86.0" prefWidth="131.0" style="-fx-border-color: green; -fx-border-width: 5; -fx-background-color: black;">
-                           <children>
-                              <Label layoutX="57.0" layoutY="14.0" text="?" textFill="WHITE">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="104.0" prefWidth="81.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="50.0" layoutX="36.0" layoutY="29.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="11.0" />
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="50.0" layoutX="35.0" layoutY="29.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="11.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="104.0" prefWidth="152.0" style="-fx-background-color: green;">
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="9.0" prefHeight="87.0" prefWidth="131.0" style="-fx-background-color: black;" text="Signiture" textAlignment="RIGHT" textFill="WHITE">
-                           <font>
-                              <Font name="Courier New Bold" size="22.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </HBox>
-            <Label layoutX="272.0" layoutY="222.0" prefHeight="23.0" prefWidth="290.0" text="Let's verify this message!" textFill="WHITE">
-               <font>
-                  <Font name="Courier New" size="18.0" />
-               </font>
-            </Label>
-            <AnchorPane layoutX="320.0" layoutY="431.0" prefHeight="76.0" prefWidth="177.0" style="-fx-border-color: WHITE; -fx-border-width: 10;">
-               <children>
-                  <ImageView fx:id="tickOrCross" fitHeight="63.0" fitWidth="122.0" layoutX="26.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="30.0" layoutY="14.0" prefHeight="23.0" prefWidth="109.0" text="Verify box" textFill="WHITE">
-                     <font>
-                        <Font name="Courier New" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
          </children>
       </Group>
       <Button fx:id="pPrivateKey" alignment="CENTER" contentDisplay="CENTER" layoutX="748.0" layoutY="116.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="131.0" style="-fx-background-color: black; -fx-font-size: 40; -fx-font-family: &quot;Courier New&quot;; -fx-font-weight: bold; -fx-border-color: green; -fx-border-width: 5;" text="3" textFill="WHITE" wrapText="true">
@@ -274,40 +208,28 @@
          </cursor>
       </Button>
       <Rectangle fx:id="signitureBounds" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="86.0" layoutX="407.0" layoutY="280.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="131.0" />
-      <Group disable="true" layoutX="452.0" layoutY="159.0" visible="false">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#434343" height="435.0" layoutX="-205.0" layoutY="-54.0" stroke="BLACK" strokeType="INSIDE" width="464.0" />
-         </children>
-      </Group>
       <Group fx:id="instructionPane">
          <children>
-            <AnchorPane layoutX="54.0" layoutY="55.0" prefHeight="521.0" prefWidth="842.0" style="-fx-background-color: #FFFFFF;">
+            <AnchorPane layoutX="54.0" layoutY="55.0" prefHeight="521.0" prefWidth="842.0" style="-fx-background-color: white;">
                <children>
-                  <Text fx:id="instructions" fontSmoothingType="LCD" layoutX="122.0" layoutY="345.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="688.0000043189157">
+                  <Text fx:id="instructions" fill="#ffdc14" fontSmoothingType="LCD" layoutX="147.0" layoutY="386.0" lineSpacing="10.0" onKeyPressed="#changeText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="672.9999921363469">
                      <font>
                         <Font name="Courier New Bold" size="26.0" />
                      </font>
                   </Text>
-                  <Label fx:id="pressEnter" layoutX="362.0" layoutY="472.0" prefHeight="28.0" prefWidth="409.0" text="Press Enter to continue..." textFill="#ffcf00" visible="false">
+                  <Label fx:id="pressEnter" layoutX="434.0" layoutY="479.0" prefHeight="37.0" prefWidth="379.0" text="Press Enter to continue..." textFill="#ffcf00" visible="false">
                      <font>
                         <Font name="Courier New" size="24.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="keyImage1" fitHeight="266.0" fitWidth="122.0" layoutX="4.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
+                  <AnchorPane layoutX="132.0" layoutY="14.0" prefHeight="306.0" prefWidth="588.0" style="-fx-background-color: white;">
+                     <children>
+                        <Group fx:id="b" layoutX="55.0" layoutY="20.0" />
+                     </children>
+                  </AnchorPane>
+                  <ImageView fx:id="keyImage1" fitHeight="266.0" fitWidth="122.0" layoutX="14.0" layoutY="353.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../graphics/minigameimages/privateKeyMa.png" />
-                     </image>
-                  </ImageView>
-                  <Group fx:id="b" layoutX="160.0" layoutY="5.0" />
-                  <ImageView fitHeight="379.0" fitWidth="173.0" layoutX="669.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/minigameimages/blocks.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="379.0" fitWidth="173.0" layoutX="-22.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../graphics/minigameimages/blocks2.png" />
                      </image>
                   </ImageView>
                </children>
