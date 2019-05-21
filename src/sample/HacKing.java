@@ -149,8 +149,7 @@ public class HacKing extends Person {
 
     private void increaseSpeed () {
         if (getLives () == 1) SPEED_MOVE = 4;
-        else if (getLives () <= 4) SPEED_MOVE = 3;
-        else  if (getLives () <= 8) SPEED_MOVE = 2;
+        else if (getLives () <= 4) SPEED_MOVE = 2;
     }
 
     // generate a new random number different from the current given
@@ -207,7 +206,7 @@ public class HacKing extends Person {
             if (getLives () < max_lives) {
                 winOneLive ();
             }
-            if (getLives () >= max_lives) {
+            if (max_lives >= MAX_LIFE_DECREMENT) {
                 max_lives -= MAX_LIFE_DECREMENT;
             }
         }
@@ -251,8 +250,7 @@ public class HacKing extends Person {
 
     private void increaseShootingFreq (){
         if (getLives () == 1) shooting_frequency = 6;
-        else if (getLives () <= 4 ) shooting_frequency = 5;
-        else if (getLives () <= 7) shooting_frequency = 4;
+        else if (getLives () <= 4 ) shooting_frequency = 4;
     }
 
     public int getAttackMode() {
