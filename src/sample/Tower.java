@@ -11,7 +11,7 @@ public class Tower extends Person {
     public Tower(boolean facing) {
         super(Type.TOWER, 1);
         this.facingRight = facing;
-        sprite.loadDefaultImages(new Frame("graphics/attackbot1.png"));
+        sprite.loadDefaultImages(new Frame("graphics/tower.png"));
         this.canShoot = false;
         this.waitCount = 0;
     }
