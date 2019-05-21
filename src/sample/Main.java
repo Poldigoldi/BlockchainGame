@@ -814,21 +814,21 @@ public class Main extends Application {
     private void musicStart() {
         musicStop();
         if (mode == Mode.STARTMENU) {
-            menuMediaPlayer.setVolume(0.2);
             menuMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            menuMediaPlayer.setVolume(1);
             menuMediaPlayer.play();
-        } else if (level == 1) {
+        } else if (level == 1 || level == 2) {
             level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level1MediaPlayer.setVolume(0.2);
+            level1MediaPlayer.setVolume(1);
             level1MediaPlayer.play();
-        } else if (level == 2) {
-            level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level3MediaPlayer.setVolume(0.2);
-            level3MediaPlayer.play();
         } else if (level == 3) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            bossMediaPlayer.setVolume(0.2);
+            bossMediaPlayer.setVolume(1);
             bossMediaPlayer.play();
+        } else if (level == 4) {
+        level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        level3MediaPlayer.setVolume(1);
+        level3MediaPlayer.play();
         }
     }
 }
