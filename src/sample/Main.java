@@ -818,7 +818,7 @@ public class Main extends Application {
             menuMediaPlayer.play();
         } else if (level == 1 || level == 2) {
             level1MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level1MediaPlayer.setVolume(1);
+            level1MediaPlayer.setVolume(0.3);
             level1MediaPlayer.play();
         } else if (level == 3) {
             bossMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -826,7 +826,7 @@ public class Main extends Application {
             bossMediaPlayer.play();
         } else if (level == 4) {
             level3MediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            level3MediaPlayer.setVolume(1);
+            level3MediaPlayer.setVolume(0.3);
             level3MediaPlayer.play();
         }
     }
