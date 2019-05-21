@@ -236,7 +236,7 @@ public class Map {
                 enemy = new Enemy(600, 500, true, 800, 10);
                 break;
             case 3:
-                enemy = new HacKing(700, 350);
+                enemy = new HacKing(800, 350);
                 level.bringtofront().add(enemy);
                 this.king = (HacKing) enemy;
                 break;

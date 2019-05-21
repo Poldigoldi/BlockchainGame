@@ -90,7 +90,7 @@ public class HacKing extends Person {
                 new Frame("/graphics/hackkingdie18.png", 12));
         sprite.offset(-60, -80);
         this.attack_mode = 2;
-        this.directionIndex = 1;
+        this.directionIndex = 3;
         this.shieldState = true;
         this.max_lives = 8;
 
