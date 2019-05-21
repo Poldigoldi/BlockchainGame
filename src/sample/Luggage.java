@@ -5,7 +5,6 @@ class Luggage {
     private Block block;
     private Weapon weapon;
 
-
     Luggage() {
         this.block = null;
         this.weapon = null;
@@ -25,7 +24,6 @@ class Luggage {
     }
 
     void drop(Collectable item, double x, double y) {
-        /* TODO: SEE HOW DO WE DROP DIFFERENT ITEMS */
         item.setAlive(true);
         item.drop(x, y - 20);
         if (item.getItemType() == Type.BLOCK) {
