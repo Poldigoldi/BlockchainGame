@@ -44,12 +44,7 @@ public class Weapon extends Collectable {
 
     // Player shooting frequency capped to a certain level
     boolean isCanShoot() {
-        if (canShoot) {
-            if (! isMaxShootReached ()) {
-                return true;
-            }
-        }
-        return false;
+        return canShoot && ! isMaxShootReached ();
     }
 
     void setCanShoot(boolean canShoot) {
