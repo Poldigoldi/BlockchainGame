@@ -41,6 +41,7 @@ class AttackBot extends Object {
         double distance = Math.sqrt(Math.pow((playerx - box.getTranslateX()), 2) + Math.pow((playery - box.getTranslateY()), 2));
         counter++;
         //reset
+
         if (counter > 400) {
             counter = 0;
         }

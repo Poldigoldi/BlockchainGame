@@ -59,7 +59,7 @@ public class Map {
                 if (level.map()[y].charAt(x) == '.') addGrass(x, y);
                 if (level.map()[y].charAt(x) == '#') addAttackBot(x, y);
                 if (level.map()[y].charAt(x) == 'E') addAnEnemy(x, y);
-                if (level.map()[y].charAt(x) == 'M') addTower(x, y);
+                if (level.map()[y].charAt(x) == 'A') addTower(x, y);
             }
         }
     }

@@ -64,14 +64,13 @@ public class Grid {
   int height;
   String [] map;
 
-
   private String[] map1 = new String[]{
           "4                                            2",
           "4                                            3",
           "£                                            4",
           "4                                            4",
-          "4                                            7",
-          "M           485                 65           4",
+          "4    E   <->                                 7",
+          "A   <-->    485                 65           4",
           "4                                   DDD      4",
           "4                               W       448!£4",
           "2        !      OOO     RRR    <->           4",
