@@ -330,7 +330,6 @@ public class Main extends Application {
     private void ListenerTower () {
         for (Tower tower : map.getTowers ()) {
             if (tower.isCanShoot ()) {
-                shootSound.play ();
                 shootOneBullet (tower, tower.facingRight);
             }
         }
@@ -503,17 +502,16 @@ public class Main extends Application {
         // moves existing bullets
         for (Bullet bullet : bulletsFired) {
             bullet.move(map);
-            for (Person enemy : map.getEnemies()) {
-                // if Hacking shooting, his bullets won't hurt the enemies
-                if (!bullet.isPlayerShooting()) {
-                    waitsSomeoneHitBullet(bullet, player);
-                }
-                // if player shooting, his bullets wont hurt himself
-                else {
-                    waitsSomeoneHitBullet(bullet, enemy);
+            // if Hacking shooting, his bullets won't hurt the enemies
+            if (!bullet.isPlayerShooting()) {
+                waitsSomeoneHitBullet(bullet, player);
+            }
+            // if player shooting, his bullets wont hurt himself
+            else {
+                for (Person enemy : map.getEnemies ()) {
+                    waitsSomeoneHitBullet (bullet, enemy);
                 }
             }
-
         }
         bulletsFired.removeIf(bullet -> !bullet.isAlive());
     }
